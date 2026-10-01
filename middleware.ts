@@ -1,7 +1,19 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
+
+import { MOCK_MODE } from "@/lib/mock/flags";
 import { updateSession } from "@/lib/supabase/middleware";
 
+/**
+ * Mock mode short-circuits here: no Supabase client, no `getClaims()`, no
+ * redirect. Route guarding for the demo lives client-side in
+ * `components/mock-guard.tsx`, which reads the local session.
+ *
+ * With `NEXT_PUBLIC_MOCK_MODE=false` this behaves exactly as before.
+ */
 export async function middleware(request: NextRequest) {
+  if (MOCK_MODE) {
+    return NextResponse.next({ request });
+  }
   return await updateSession(request);
 }
 

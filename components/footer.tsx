@@ -33,12 +33,6 @@ export function Footer() {
               Features
             </button>
             <button
-              onClick={() => scrollToSection("career-paths")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Career Paths
-            </button>
-            <button
               type="button"
               onClick={(event) => openAuth("login", event.currentTarget)}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"

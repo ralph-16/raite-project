@@ -280,3 +280,33 @@ export function resetDemoData(): void {
     /* ignore */
   }
 }
+
+/**
+ * Clears the student's demo content (onboarding, profile, matches,
+ * bookmarks, roadmap progress) while keeping the account book, the current
+ * session and the theme. Used when a *new* email signs up, so that account
+ * starts its own run.
+ */
+export function clearDemoContent(): void {
+  const local = store();
+  if (!local) return;
+  try {
+    const doomed: string[] = [];
+    for (let index = 0; index < local.length; index += 1) {
+      const key = local.key(index);
+      if (!key) continue;
+      if (
+        key === STORAGE_KEYS.onboarding ||
+        key === STORAGE_KEYS.profile ||
+        key === STORAGE_KEYS.matches ||
+        key === STORAGE_KEYS.bookmarks ||
+        key.startsWith(`${DEMO_PREFIX}progress.`)
+      ) {
+        doomed.push(key);
+      }
+    }
+    for (const key of doomed) local.removeItem(key);
+  } catch {
+    /* ignore */
+  }
+}

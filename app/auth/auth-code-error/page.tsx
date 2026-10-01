@@ -18,7 +18,7 @@ export default function AuthCodeErrorPage() {
         <div className="flex flex-col gap-3">
           <Link
             href="/?auth=login"
-            className="text-sm font-medium text-primary hover:underline"
+            className="text-sm font-medium text-primary hover:underline dark:text-foreground"
           >
             Try again
           </Link>

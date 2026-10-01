@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuthDrawer } from "@/components/auth/auth-drawer-provider";
 import { scrollToSection } from "@/lib/utils";
 
@@ -31,7 +32,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6">
           <button
             onClick={() => scrollTo("how-it-works")}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -44,6 +45,7 @@ export function Navbar() {
           >
             Features
           </button>
+          <ThemeToggle />
           <button
             type="button"
             onClick={(event) => openFromNav("login", event.currentTarget)}
@@ -61,6 +63,7 @@ export function Navbar() {
 
         {/* Mobile controls */}
         <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
           <button
             className="p-2 text-muted-foreground hover:text-foreground"
             onClick={() => setMobileOpen(!mobileOpen)}

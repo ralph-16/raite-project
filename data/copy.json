@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "eyebrow": "AI-Powered Student Career Navigator",
+    "headlineBefore": "Not sure what's next? Find your",
+    "headlineAccent": "direction.",
+    "headlineAfter": "",
+    "subhead": "Answer a few friendly questions. See careers that fit you. Follow a game-style map to get there.",
+    "primaryCta": "Start My Journey",
+    "secondaryCta": "Log In",
+    "trustLine": "Free to try. No wrong answers. Skip anything."
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "intro": "Three short steps. You can stop and come back any time.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Tell Lory about you",
+        "description": "A quick chat-free walkthrough, about 3 minutes."
+      },
+      {
+        "number": "02",
+        "title": "See careers that fit",
+        "description": "Matched to your interests, skills and goals."
+      },
+      {
+        "number": "03",
+        "title": "Level up your skills",
+        "description": "A skill-tree map with real learning resources."
+      }
+    ]
+  },
+  "features": {
+    "title": "What you get",
+    "intro": "Everything you need to explore a path — nothing you have to pay for.",
+    "items": [
+      {
+        "title": "Careers matched to you",
+        "description": "See paths that line up with your answers, and the reason why."
+      },
+      {
+        "title": "Skill-tree roadmaps",
+        "description": "A game-style map of what to learn and in what order."
+      },
+      {
+        "title": "Free learning resources",
+        "description": "Every step links to free, well-known material you can open today."
+      },
+      {
+        "title": "Bookmark your path",
+        "description": "Save the careers you like and pick up where you left off."
+      }
+    ]
+  },
+  "finalCta": {
+    "headline": "Your path doesn't have to be a guess.",
+    "button": "Start My Journey"
+  }
+}

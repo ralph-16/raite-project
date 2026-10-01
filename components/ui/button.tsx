@@ -11,15 +11,18 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         loryBlue: "bg-primary text-primary-foreground hover:bg-primary/90",
-        loryYellow: "bg-lory-yellow text-foreground hover:bg-lory-yellow/90",
+        loryYellow:
+          "bg-lory-yellow text-accent-foreground hover:bg-lory-yellow/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input bg-background hover:bg-accent/20 hover:text-accent-foreground",
+          "border border-input bg-background hover:bg-accent/20 hover:text-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent/20 hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        ghost: "hover:bg-accent/20 hover:text-foreground",
+        /* On the dark canvas Kind Berry drops to ~3.9:1 as text, so the link
+           falls back to foreground and keeps the blue as the underline. */
+        link: "text-primary underline-offset-4 hover:underline dark:text-foreground dark:decoration-primary",
       },
       size: {
         /* 44px minimum touch target (§9). */

@@ -2,14 +2,18 @@ import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/components/hero-section";
 import { HowItWorks } from "@/components/how-it-works";
 import { Features } from "@/components/features";
-import { CareerExploration } from "@/components/career-exploration";
-import { LearningStructure } from "@/components/learning-structure";
-import { ProofBasedLearning } from "@/components/proof-based-learning";
-import { KaLakbayIntroduction } from "@/components/ka-lakbay-introduction";
 import { CTASection } from "@/components/cta-section";
 import { Footer } from "@/components/footer";
 import { AuthDrawerProvider } from "@/components/auth/auth-drawer-provider";
 
+/**
+ * Landing page — deliberately short: nav, hero, how it works, features,
+ * final CTA, footer.
+ *
+ * career-exploration, learning-structure, proof-based-learning and
+ * ka-lakbay-introduction still exist in `components/` but are no longer
+ * rendered here (drop them back into <main> to restore them).
+ */
 export default function Home() {
   return (
     // The provider owns the authentication drawer so the landing page stays
@@ -20,10 +24,6 @@ export default function Home() {
         <HeroSection />
         <HowItWorks />
         <Features />
-        <CareerExploration />
-        <LearningStructure />
-        <ProofBasedLearning />
-        <KaLakbayIntroduction />
         <CTASection />
       </main>
       <Footer />

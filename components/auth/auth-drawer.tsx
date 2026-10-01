@@ -106,27 +106,6 @@ export function AuthDrawer({
         {/* Form */}
         {mode === "signup" ? <SignUpForm /> : <LogInForm />}
 
-        {/* Alternative authentication — reserved, honestly disabled */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3" aria-hidden="true">
-            <span className="h-px flex-1 bg-border" />
-            <span className="text-xs text-muted-foreground">or</span>
-            <span className="h-px flex-1 bg-border" />
-          </div>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            disabled
-            aria-describedby="alternative-auth-note"
-          >
-            Continue with Google
-          </Button>
-          <p id="alternative-auth-note" className="text-xs text-muted-foreground">
-            Google sign-in isn&apos;t available yet — it&apos;s coming soon.
-          </p>
-        </div>
-
         {/* Mode switch */}
         <p className="mt-auto text-center text-sm text-muted-foreground">
           {mode === "signup" ? "Already have an account? " : "Don't have an account? "}

@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { signUp } from "@/lib/auth/actions";
-import { postAuthRoute } from "@/lib/auth/routes";
+import { postAuthRoute, defaultRouteFor } from "@/lib/auth/routes";
 import type { FieldErrors, SignUpValues } from "@/lib/auth/types";
 import {
   PASSWORD_MIN_LENGTH,
@@ -15,6 +15,8 @@ import {
   validateSignUpField,
   withFieldError,
 } from "@/lib/auth/validation";
+import { MOCK_MODE } from "@/lib/mock/flags";
+import { mockSignUp } from "@/lib/mock/auth";
 import { FormField } from "./form-field";
 
 const INITIAL_VALUES: SignUpValues = {
@@ -75,12 +77,15 @@ export function SignUpForm() {
 
     setFormError(null);
     setIsSubmitting(true);
-    const result = await signUp(values);
+    // Mock mode never reaches the server action: same AuthResult contract,
+    // same validation, no network call.
+    const result = MOCK_MODE ? await mockSignUp(values) : await signUp(values);
     setIsSubmitting(false);
 
     if (result.ok) {
-      // Intended destination: /onboarding (or a preserved `?next=` target).
-      router.push(postAuthRoute("signup"));
+      // Intended destination: /onboarding. Mock mode has no post-auth
+      // cookie, so it goes straight to the mode's default route.
+      router.push(MOCK_MODE ? defaultRouteFor("signup") : postAuthRoute("signup"));
       return;
     }
     setFormError(result.message);

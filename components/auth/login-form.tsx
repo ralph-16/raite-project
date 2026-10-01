@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { logIn } from "@/lib/auth/actions";
-import { postAuthRoute } from "@/lib/auth/routes";
+import { postAuthRoute, defaultRouteFor } from "@/lib/auth/routes";
 import type { FieldErrors, LogInValues } from "@/lib/auth/types";
 import {
   hasErrors,
@@ -14,6 +14,8 @@ import {
   validateLogInField,
   withFieldError,
 } from "@/lib/auth/validation";
+import { MOCK_MODE } from "@/lib/mock/flags";
+import { mockLogIn } from "@/lib/mock/auth";
 import { FormField } from "./form-field";
 
 const INITIAL_VALUES: LogInValues = { email: "", password: "" };
@@ -60,12 +62,14 @@ export function LogInForm() {
 
     setFormError(null);
     setIsSubmitting(true);
-    const result = await logIn(values);
+    // Mock mode never reaches the server action: same AuthResult contract,
+    // same validation, no network call.
+    const result = MOCK_MODE ? await mockLogIn(values) : await logIn(values);
     setIsSubmitting(false);
 
     if (result.ok) {
       // Intended destination: /home (or a preserved `?next=` target).
-      router.push(postAuthRoute("login"));
+      router.push(MOCK_MODE ? defaultRouteFor("login") : postAuthRoute("login"));
       return;
     }
     setFormError(result.message);
