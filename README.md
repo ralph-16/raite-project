@@ -137,33 +137,56 @@ Authentication is a **drawer over the landing page**, not a separate page.
 - **Route protection:** `PROTECTED_PREFIXES` in `lib/supabase/middleware.ts`
   (`/home`, `/onboarding`) refreshes the Supabase session and sends
   unauthenticated visitors to `/?auth=login&next=<destination>`.
-- **After authentication (once a provider is connected):**
+- **After authentication:**
 
-  | Action  | Destination   |
-  | ------- | ------------- |
-  | Sign Up | `/onboarding` |
-  | Log In  | `/home`       |
+  | Action  | Destination                                                       |
+  | ------- | ------------------------------------------------------------------ |
+  | Sign Up | `/onboarding`                                                      |
+  | Log In  | `/home` — or `/onboarding` while onboarding is incomplete          |
 
-  Both routes exist as placeholders; `lib/auth/routes.ts` resolves the target
-  and honours a preserved `?next=`.
+  `lib/auth/routes.ts` resolves the target: the server's decision cookie
+  first (the onboarding gate), then a preserved `?next=` — always validated
+  as a same-origin relative path — then the mode's default route.
 
-### Authentication status: not connected
+### Authentication status: connected (email + password)
 
-Supabase Auth is intentionally **not** wired up yet. The UI talks to
-`lib/auth/actions.ts`, which is a stub: it creates no account, sends no
-credentials anywhere, and reports "Authentication isn't connected yet" so the
-interface never pretends to have succeeded.
+`lib/auth/actions.ts` holds real server actions (`"use server"`) using the
+server Supabase client. The forms, drawer and `AuthResult` contract are
+unchanged:
 
-To implement it later, replace the bodies of `signUp()` / `logIn()` with
-Supabase calls and map the result onto `AuthResult` — the forms, drawer and
-routing do not change.
+- **Sign Up** calls `supabase.auth.signUp` with `full_name` metadata — the key
+  the `on_auth_user_created` trigger reads for the required
+  `profiles.display_name` (the email local part is only a fallback). Email
+  confirmation must stay **disabled** in the dashboard; if no session comes
+  back, the form reports that confirmation is still enabled instead of
+  pretending success.
+- **Log In** calls `signInWithPassword`. Errors map to plain copy: wrong
+  credentials, too many attempts, network trouble. Wrong password and unknown
+  address return the *identical* message, so an email's existence is never
+  revealed. Raw provider text stays server-side; no password or token is
+  ever logged.
+- **Onboarding gate:** on login, a student whose `profiles.onboarding_completed`
+  is false — or who has no per-device completion record — goes to
+  `/onboarding` instead of `/home`.
+- **Log out:** `logOut()` plus the visible button on `/home`.
+- **Session:** middleware refreshes the cookie for `/home` and `/onboarding`;
+  API routes read the same cookie (the profiler saves the signed-in student's
+  profile, `next-question` returns their `userId`).
+- **Database note:** `profiles.onboarding_completed` is service-role-only
+  (guard trigger). With `SUPABASE_SERVICE_ROLE_KEY` set, the profiler writes
+  it on completion; without it, completion is recorded per device
+  (`kl_onboarded`, value = user id) and other devices re-enter onboarding.
 
 ## Supabase Setup
 
 1. Create a new project at [supabase.com](https://supabase.com)
 2. Go to **Project Settings > API** to find your project URL and publishable key
-3. Add the credentials to your `.env.local` file
+3. Add the credentials to your `.env.local` file (optionally the service role
+   key too — needed only for the server-reserved writes: `profiles.ai_context`
+   and `profiles.onboarding_completed`)
 4. Apply the migration in `supabase/migrations/`
+5. Under **Authentication → Sign In / Providers → Email**, turn
+   **Confirm email** off (Ka-Lakbay signs students in immediately)
 
 ## Learn More
 

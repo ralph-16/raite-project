@@ -8,8 +8,8 @@ import "server-only";
  *   Student Profiler ─┐
  *   Career Matcher  ──┤
  *   Roadmap Generator ┼──► ai.generateText(...)  ──►  AIProvider
- *   Learning Companion┤                          ──►  MockProvider (today)
- *   Skill Evaluator  ──┘
+ *   Learning Companion┤                          ──►  MockProvider (tests)
+ *   Skill Evaluator  ──┘                          ──►  GeminiProvider (real use)
  *
  * The service owns the four things a provider adapter should not have to repeat:
  * configuration validation, provider resolution, response normalization, and

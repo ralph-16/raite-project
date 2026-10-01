@@ -3,12 +3,13 @@ import "server-only";
 /**
  * Provider factory.
  *
- * The one place that knows which provider adapters exist. Adding Gemini, OpenAI
+ * The one place that knows which provider adapters exist. Adding OpenAI
  * or Anthropic later means adding a file under `lib/ai/providers/` and one case
  * here — no application code changes, and no feature ever imports an SDK.
  */
 
 import { aiConfigurationError } from "./errors";
+import { GeminiProvider } from "./providers/gemini";
 import { MockProvider } from "./providers/mock";
 import type { AIProvider, AIProviderId } from "./types";
 
@@ -36,6 +37,8 @@ function createProvider(id: AIProviderId): AIProvider {
   switch (id) {
     case "mock":
       return new MockProvider();
+    case "gemini":
+      return new GeminiProvider();
     default:
       throw aiConfigurationError(`AI provider "${id}" is not implemented.`, {
         provider: id,
@@ -48,7 +51,7 @@ function createProvider(id: AIProviderId): AIProvider {
  * enumerate what this build supports.
  */
 export function listAIProviders(): AIProviderId[] {
-  return ["mock"];
+  return ["mock", "gemini"];
 }
 
 /**

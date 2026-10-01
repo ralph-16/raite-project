@@ -1,0 +1,470 @@
+{
+  "schema_version": 1,
+  "career_slug": "data-analyst",
+  "version": 1,
+  "title": "Data Analyst skill tree",
+  "description": "Three lanes: wrangling the data, analysing it, and telling the story. The branches meet twice before the final milestone. Sample roadmap.",
+  "nodes": [
+    {
+      "key": "spreadsheet-basics",
+      "type": "skill",
+      "title": "Spreadsheets and tidy data",
+      "description": "Clean a messy table, sort and pivot it, and keep the original safe.",
+      "skill_slug": "spreadsheets",
+      "tier": 0,
+      "lane": 1,
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "type": "course",
+          "title": "Google Data Analytics Professional Certificate",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/professional-certificates/google-data-analytics",
+          "duration_minutes": 600,
+          "difficulty": 2
+        },
+        {
+          "type": "tutorial",
+          "title": "Google Sheets help",
+          "provider": "Google",
+          "url": "https://support.google.com/docs/",
+          "duration_minutes": 45,
+          "difficulty": 1
+        },
+        {
+          "type": "article",
+          "title": "Data analysis courses",
+          "provider": "Kaggle Learn",
+          "url": "https://www.kaggle.com/learn",
+          "duration_minutes": 120,
+          "difficulty": 1
+        }
+      ]
+    },
+    {
+      "key": "sql-basics",
+      "type": "skill",
+      "title": "SQL basics",
+      "description": "Select, filter, group and join — ask the database the question directly.",
+      "skill_slug": "sql",
+      "tier": 1,
+      "lane": 0,
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "type": "tutorial",
+          "title": "SQLBolt exercises",
+          "provider": "SQLBolt",
+          "url": "https://sqlbolt.com/",
+          "duration_minutes": 90,
+          "difficulty": 1
+        },
+        {
+          "type": "documentation",
+          "title": "The PostgreSQL Tutorial",
+          "provider": "PostgreSQL",
+          "url": "https://www.postgresql.org/docs/current/tutorial.html",
+          "duration_minutes": 60,
+          "difficulty": 1
+        },
+        {
+          "type": "course",
+          "title": "SQL courses",
+          "provider": "edX",
+          "url": "https://www.edx.org/learn/sql",
+          "duration_minutes": 180,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "python-basics",
+      "type": "skill",
+      "title": "Python basics",
+      "description": "Enough Python to load a file, transform it, and print what you found.",
+      "skill_slug": null,
+      "tier": 1,
+      "lane": 1,
+      "estimated_hours": 16,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "The Python Tutorial",
+          "provider": "Python",
+          "url": "https://docs.python.org/3/tutorial/",
+          "duration_minutes": 180,
+          "difficulty": 1
+        },
+        {
+          "type": "tutorial",
+          "title": "Python track",
+          "provider": "Exercism",
+          "url": "https://exercism.org/tracks/python",
+          "duration_minutes": 240,
+          "difficulty": 2
+        },
+        {
+          "type": "course",
+          "title": "Google's Python Class",
+          "provider": "Google",
+          "url": "https://developers.google.com/edu/python",
+          "duration_minutes": 240,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "data-storytelling",
+      "type": "skill",
+      "title": "Telling the story",
+      "description": "One chart, one sentence: what changed, why it matters, what to do.",
+      "skill_slug": "communication",
+      "tier": 1,
+      "lane": 2,
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "type": "course",
+          "title": "Data Visualization",
+          "provider": "Kaggle Learn",
+          "url": "https://www.kaggle.com/learn/data-visualization",
+          "duration_minutes": 180,
+          "difficulty": 2
+        },
+        {
+          "type": "course",
+          "title": "Google Data Analytics Professional Certificate",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/professional-certificates/google-data-analytics",
+          "duration_minutes": 600,
+          "difficulty": 2
+        },
+        {
+          "type": "article",
+          "title": "Data analysis and visualization courses",
+          "provider": "edX",
+          "url": "https://www.edx.org/search",
+          "duration_minutes": 120,
+          "difficulty": 1
+        }
+      ]
+    },
+    {
+      "key": "data-modeling",
+      "type": "skill",
+      "title": "Model the data",
+      "description": "Turn flat columns into tables that can answer follow-up questions.",
+      "skill_slug": "sql",
+      "tier": 2,
+      "lane": 0,
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "PostgreSQL queries",
+          "provider": "PostgreSQL",
+          "url": "https://www.postgresql.org/docs/current/queries.html",
+          "duration_minutes": 60,
+          "difficulty": 2
+        },
+        {
+          "type": "tutorial",
+          "title": "SQLBolt exercises",
+          "provider": "SQLBolt",
+          "url": "https://sqlbolt.com/",
+          "duration_minutes": 90,
+          "difficulty": 2
+        },
+        {
+          "type": "course",
+          "title": "Data modelling courses",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/browse",
+          "duration_minutes": 240,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "statistics",
+      "type": "skill",
+      "title": "Statistics you actually use",
+      "description": "Distributions, sampling, confidence, and how to spot a chart that lies.",
+      "skill_slug": "statistics",
+      "tier": 2,
+      "lane": 1,
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "type": "course",
+          "title": "Statistics and probability",
+          "provider": "Khan Academy",
+          "url": "https://www.khanacademy.org/math/statistics-probability",
+          "duration_minutes": 600,
+          "difficulty": 2
+        },
+        {
+          "type": "tutorial",
+          "title": "Seeing Theory",
+          "provider": "Brown University",
+          "url": "https://seeing-theory.brown.edu/",
+          "duration_minutes": 90,
+          "difficulty": 2
+        },
+        {
+          "type": "course",
+          "title": "Introductory Statistics",
+          "provider": "OpenStax",
+          "url": "https://openstax.org/details/books/introductory-statistics",
+          "duration_minutes": 480,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "dashboards",
+      "type": "skill",
+      "title": "Dashboards and charts",
+      "description": "Build one view a teammate can read without asking you a question.",
+      "skill_slug": "data-analysis",
+      "tier": 2,
+      "lane": 2,
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "type": "course",
+          "title": "Data Visualization",
+          "provider": "Kaggle Learn",
+          "url": "https://www.kaggle.com/learn/data-visualization",
+          "duration_minutes": 180,
+          "difficulty": 2
+        },
+        {
+          "type": "documentation",
+          "title": "Google Sheets help",
+          "provider": "Google",
+          "url": "https://support.google.com/docs/",
+          "duration_minutes": 45,
+          "difficulty": 1
+        },
+        {
+          "type": "article",
+          "title": "Data analytics courses",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/browse",
+          "duration_minutes": 120,
+          "difficulty": 1
+        }
+      ]
+    },
+    {
+      "key": "proof-case",
+      "type": "proof",
+      "title": "Prove it: one-page case study",
+      "description": "Two lanes meet here. Take a real dataset and defend one conclusion in a page.",
+      "skill_slug": "data-analysis",
+      "tier": 3,
+      "lane": 0,
+      "estimated_hours": 6,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "PostgreSQL queries",
+          "provider": "PostgreSQL",
+          "url": "https://www.postgresql.org/docs/current/queries.html",
+          "duration_minutes": 60,
+          "difficulty": 2
+        },
+        {
+          "type": "assessment",
+          "title": "Data analysis courses and self-checks",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/browse",
+          "duration_minutes": 60,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "project-analysis",
+      "type": "project",
+      "title": "Analyse a real dataset end to end",
+      "description": "Two lanes meet here: your Python work plus the statistics behind it.",
+      "skill_slug": "data-analysis",
+      "tier": 3,
+      "lane": 1,
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "type": "course",
+          "title": "Pandas",
+          "provider": "Kaggle Learn",
+          "url": "https://www.kaggle.com/learn/pandas",
+          "duration_minutes": 240,
+          "difficulty": 3
+        },
+        {
+          "type": "documentation",
+          "title": "10 minutes to pandas",
+          "provider": "pandas",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html",
+          "duration_minutes": 60,
+          "difficulty": 3
+        },
+        {
+          "type": "project",
+          "title": "Google Data Analytics capstone",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/professional-certificates/google-data-analytics",
+          "duration_minutes": 480,
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "capstone",
+      "type": "project",
+      "title": "Capstone: your own question",
+      "description": "Three branches meet. Pick a question nobody asked yet and answer it with data.",
+      "skill_slug": null,
+      "tier": 4,
+      "lane": 1,
+      "estimated_hours": 24,
+      "resources": [
+        {
+          "type": "project",
+          "title": "Titanic — Getting Started",
+          "provider": "Kaggle",
+          "url": "https://www.kaggle.com/competitions/titanic",
+          "duration_minutes": 300,
+          "difficulty": 3
+        },
+        {
+          "type": "course",
+          "title": "Intro to Machine Learning",
+          "provider": "Kaggle Learn",
+          "url": "https://www.kaggle.com/learn/intro-to-machine-learning",
+          "duration_minutes": 180,
+          "difficulty": 3
+        },
+        {
+          "type": "article",
+          "title": "Data science courses",
+          "provider": "edX",
+          "url": "https://www.edx.org/search",
+          "duration_minutes": 120,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "job-ready",
+      "type": "milestone",
+      "title": "Final milestone: ready to apply",
+      "description": "One case study someone else can rerun, one dashboard, one list of what you can demonstrate.",
+      "skill_slug": null,
+      "tier": 5,
+      "lane": 1,
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "type": "article",
+          "title": "Job search courses",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/browse",
+          "duration_minutes": 120,
+          "difficulty": 2
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "node_key": "sql-basics",
+      "depends_on_key": "spreadsheet-basics"
+    },
+    {
+      "node_key": "python-basics",
+      "depends_on_key": "spreadsheet-basics"
+    },
+    {
+      "node_key": "data-storytelling",
+      "depends_on_key": "spreadsheet-basics"
+    },
+    {
+      "node_key": "data-modeling",
+      "depends_on_key": "sql-basics"
+    },
+    {
+      "node_key": "statistics",
+      "depends_on_key": "python-basics"
+    },
+    {
+      "node_key": "dashboards",
+      "depends_on_key": "data-storytelling"
+    },
+    {
+      "node_key": "proof-case",
+      "depends_on_key": "data-modeling"
+    },
+    {
+      "node_key": "proof-case",
+      "depends_on_key": "dashboards"
+    },
+    {
+      "node_key": "project-analysis",
+      "depends_on_key": "statistics"
+    },
+    {
+      "node_key": "project-analysis",
+      "depends_on_key": "data-modeling"
+    },
+    {
+      "node_key": "capstone",
+      "depends_on_key": "project-analysis"
+    },
+    {
+      "node_key": "capstone",
+      "depends_on_key": "proof-case"
+    },
+    {
+      "node_key": "capstone",
+      "depends_on_key": "dashboards"
+    },
+    {
+      "node_key": "job-ready",
+      "depends_on_key": "capstone"
+    }
+  ],
+  "related_careers": [
+    {
+      "slug": "business-analyst",
+      "type": "next_level",
+      "rationale": "Analysis experience is the strongest predictor of success in a business analyst role.",
+      "transferable_skills": [
+        "sql",
+        "data-analysis",
+        "communication"
+      ]
+    },
+    {
+      "slug": "software-developer",
+      "type": "pivot",
+      "rationale": "Your SQL and structured thinking transfer straight into writing and querying services.",
+      "transferable_skills": [
+        "sql",
+        "problem-solving",
+        "javascript"
+      ]
+    },
+    {
+      "slug": "marketing-specialist",
+      "type": "related",
+      "rationale": "Campaign reporting leans on the same query, chart and story skills you already use.",
+      "transferable_skills": [
+        "data-analysis",
+        "seo"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "questions": [
+    {
+      "id": "free-time",
+      "kind": "multi",
+      "prompt": "When you get a free afternoon, what do you drift towards?",
+      "helper": "Pick as many as you like. There are no wrong answers.",
+      "options": [
+        {
+          "id": "tinker",
+          "label": "Taking things apart or tinkering",
+          "weights": { "build": 2 }
+        },
+        {
+          "id": "code-small",
+          "label": "Making a small tool or website",
+          "weights": { "build": 3 },
+          "skills": ["javascript"]
+        },
+        {
+          "id": "numbers",
+          "label": "Puzzles, numbers, or spreadsheets",
+          "weights": { "analyze": 3 },
+          "skills": ["spreadsheets"]
+        },
+        {
+          "id": "sketch",
+          "label": "Sketching, layouts, or visuals",
+          "weights": { "design": 3 },
+          "skills": ["visual-design"]
+        },
+        {
+          "id": "write",
+          "label": "Writing, posting, or chatting",
+          "weights": { "communicate": 3 },
+          "skills": ["writing"]
+        },
+        {
+          "id": "deep-dive",
+          "label": "Games and deep-dives on how they work",
+          "weights": { "build": 1, "analyze": 1 }
+        }
+      ],
+      "allow_text": true,
+      "text_prompt": "Anything else you love doing? (optional)",
+      "skippable": true
+    },
+    {
+      "id": "working-style",
+      "kind": "single",
+      "prompt": "How do you like to work?",
+      "helper": "Go with the one that sounds most like an ordinary week.",
+      "options": [
+        {
+          "id": "alone",
+          "label": "Mostly on my own, headphones on",
+          "weights": { "analyze": 2, "build": 1 }
+        },
+        {
+          "id": "team",
+          "label": "With a team, bouncing ideas around",
+          "weights": { "communicate": 3, "design": 1 }
+        },
+        {
+          "id": "mixed",
+          "label": "A mix — alone to focus, team to decide",
+          "weights": { "build": 1, "analyze": 1, "design": 1, "communicate": 1 }
+        }
+      ],
+      "skippable": true
+    },
+    {
+      "id": "problem-style",
+      "kind": "single",
+      "prompt": "A tricky problem lands on your desk. What do you do first?",
+      "helper": "Whatever you actually do, not what sounds impressive.",
+      "options": [
+        {
+          "id": "build",
+          "label": "Build something until it works",
+          "weights": { "build": 4 }
+        },
+        {
+          "id": "figure-out",
+          "label": "Break it down and figure out what is true",
+          "weights": { "analyze": 4 }
+        },
+        {
+          "id": "design",
+          "label": "Sketch how it should look and feel",
+          "weights": { "design": 4 }
+        },
+        {
+          "id": "explain",
+          "label": "Explain it out loud until it makes sense",
+          "weights": { "communicate": 4 }
+        }
+      ],
+      "skippable": true
+    },
+    {
+      "id": "numbers",
+      "kind": "scale",
+      "prompt": "How comfortable are you with numbers, formulas, and statistics?",
+      "helper": "Slide to whatever feels honest. You can skip this.",
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabel": "I avoid them",
+        "maxLabel": "Right at home"
+      },
+      "scale_weights": { "analyze": 3 },
+      "skippable": true
+    },
+    {
+      "id": "tools",
+      "kind": "scale",
+      "prompt": "How comfortable are you picking up new digital tools and tech?",
+      "helper": "New app, new dashboard, new setting — how does that go?",
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabel": "I get stuck",
+        "maxLabel": "I pick them up fast"
+      },
+      "scale_weights": { "build": 3 },
+      "skippable": true
+    },
+    {
+      "id": "job-matters",
+      "kind": "multi",
+      "prompt": "What matters most to you in a job?",
+      "helper": "Pick up to three. This only shapes what we show you.",
+      "options": [
+        { "id": "pay", "label": "Good pay", "weights": { "analyze": 1 } },
+        { "id": "creativity", "label": "Making creative things", "weights": { "design": 3 } },
+        {
+          "id": "helping",
+          "label": "Helping people directly",
+          "weights": { "communicate": 2, "analyze": 1 }
+        },
+        {
+          "id": "stability",
+          "label": "Stability and predictability",
+          "weights": { "analyze": 2, "build": 1 }
+        },
+        {
+          "id": "growth",
+          "label": "Room to grow",
+          "weights": { "build": 1, "analyze": 1, "design": 1, "communicate": 1 }
+        }
+      ],
+      "skippable": true
+    },
+    {
+      "id": "weekly-time",
+      "kind": "single",
+      "prompt": "How much time can you spend learning each week?",
+      "helper": "A rough guess is fine — it changes nothing about your results.",
+      "options": [
+        { "id": "light", "label": "Under 3 hours", "weights": {} },
+        { "id": "steady", "label": "3 to 6 hours", "weights": {} },
+        { "id": "serious", "label": "7 to 10 hours", "weights": {} },
+        { "id": "intense", "label": "More than 10 hours", "weights": {} }
+      ],
+      "skippable": true
+    },
+    {
+      "id": "experience",
+      "kind": "single",
+      "prompt": "How much have you already built or made?",
+      "helper": "Started counts. So does barely started.",
+      "options": [
+        { "id": "brand-new", "label": "Nothing yet — brand new", "weights": {} },
+        {
+          "id": "tutorials",
+          "label": "I follow tutorials sometimes",
+          "weights": { "build": 1 }
+        },
+        {
+          "id": "small-projects",
+          "label": "I have made small projects of my own",
+          "weights": { "build": 2, "design": 1 },
+          "skills": ["javascript"]
+        },
+        {
+          "id": "coursework",
+          "label": "Coursework or school projects",
+          "weights": { "analyze": 1, "design": 1 }
+        },
+        {
+          "id": "real-work",
+          "label": "Internship, freelance, or real work",
+          "weights": { "build": 1, "analyze": 1, "design": 1, "communicate": 1 }
+        }
+      ],
+      "skippable": true
+    }
+  ]
+}

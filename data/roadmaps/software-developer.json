@@ -1,0 +1,496 @@
+{
+  "schema_version": 1,
+  "career_slug": "software-developer",
+  "version": 1,
+  "title": "Software Developer skill tree",
+  "description": "Three lanes: the browser, the core language, and the data underneath. Two branches must meet before you can build, and everything meets again at the final milestone. Sample roadmap.",
+  "nodes": [
+    {
+      "key": "html-css",
+      "type": "skill",
+      "title": "HTML and CSS basics",
+      "description": "Structure a page, style it, and make it behave on a small screen.",
+      "skill_slug": null,
+      "tier": 0,
+      "lane": 1,
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "HTML: HyperText Markup Language",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+          "duration_minutes": 90,
+          "difficulty": 1,
+          "note": "Reference for every tag you will actually use."
+        },
+        {
+          "type": "course",
+          "title": "Responsive Web Design",
+          "provider": "freeCodeCamp",
+          "url": "https://www.freecodecamp.org/learn/responsive-web-design/",
+          "duration_minutes": 300,
+          "difficulty": 1
+        },
+        {
+          "type": "documentation",
+          "title": "Learn to style HTML with CSS",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics",
+          "duration_minutes": 120,
+          "difficulty": 1
+        }
+      ]
+    },
+    {
+      "key": "js-basics",
+      "type": "skill",
+      "title": "JavaScript fundamentals",
+      "description": "Variables, types, conditionals, loops and functions — the core language.",
+      "skill_slug": "javascript",
+      "tier": 1,
+      "lane": 0,
+      "estimated_hours": 20,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "JavaScript Guide",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+          "duration_minutes": 180,
+          "difficulty": 2
+        },
+        {
+          "type": "course",
+          "title": "JavaScript Algorithms and Data Structures",
+          "provider": "freeCodeCamp",
+          "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
+          "duration_minutes": 300,
+          "difficulty": 2
+        },
+        {
+          "type": "tutorial",
+          "title": "JavaScript track",
+          "provider": "Exercism",
+          "url": "https://exercism.org/tracks/javascript",
+          "duration_minutes": 240,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "git-workflow",
+      "type": "skill",
+      "title": "Git and a team workflow",
+      "description": "Branch, commit, review, merge. How code moves between people.",
+      "skill_slug": "version-control",
+      "tier": 1,
+      "lane": 1,
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "Pro Git book",
+          "provider": "Git",
+          "url": "https://git-scm.com/book/en/v2",
+          "duration_minutes": 180,
+          "difficulty": 2
+        },
+        {
+          "type": "course",
+          "title": "Git courses",
+          "provider": "edX",
+          "url": "https://www.edx.org/learn/git",
+          "duration_minutes": 240,
+          "difficulty": 2
+        },
+        {
+          "type": "documentation",
+          "title": "GitHub documentation",
+          "provider": "GitHub",
+          "url": "https://docs.github.com/en",
+          "duration_minutes": 60,
+          "difficulty": 1
+        }
+      ]
+    },
+    {
+      "key": "sql-basics",
+      "type": "skill",
+      "title": "SQL basics",
+      "description": "Select, filter, join. Enough SQL to read a real database.",
+      "skill_slug": "sql",
+      "tier": 1,
+      "lane": 2,
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "type": "tutorial",
+          "title": "SQLBolt exercises",
+          "provider": "SQLBolt",
+          "url": "https://sqlbolt.com/",
+          "duration_minutes": 90,
+          "difficulty": 1
+        },
+        {
+          "type": "documentation",
+          "title": "The PostgreSQL Tutorial",
+          "provider": "PostgreSQL",
+          "url": "https://www.postgresql.org/docs/current/tutorial.html",
+          "duration_minutes": 60,
+          "difficulty": 1
+        },
+        {
+          "type": "course",
+          "title": "SQL courses",
+          "provider": "edX",
+          "url": "https://www.edx.org/learn/sql",
+          "duration_minutes": 180,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "js-dom",
+      "type": "skill",
+      "title": "Working with the page",
+      "description": "Select elements, listen for events, and change the page with code.",
+      "skill_slug": "javascript",
+      "tier": 2,
+      "lane": 0,
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "Document Object Model",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model",
+          "duration_minutes": 90,
+          "difficulty": 2
+        },
+        {
+          "type": "documentation",
+          "title": "Introduction to events",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events",
+          "duration_minutes": 90,
+          "difficulty": 2
+        },
+        {
+          "type": "tutorial",
+          "title": "Manipulating the DOM",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/DOM_scripting",
+          "duration_minutes": 120,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "functions-async",
+      "type": "skill",
+      "title": "Functions and async code",
+      "description": "Compose small functions, then handle work that finishes later.",
+      "skill_slug": "javascript",
+      "tier": 2,
+      "lane": 1,
+      "estimated_hours": 14,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "Functions",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
+          "duration_minutes": 60,
+          "difficulty": 2
+        },
+        {
+          "type": "documentation",
+          "title": "Using promises",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises",
+          "duration_minutes": 90,
+          "difficulty": 3
+        },
+        {
+          "type": "documentation",
+          "title": "async function",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function",
+          "duration_minutes": 60,
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "http-apis",
+      "type": "skill",
+      "title": "HTTP and APIs",
+      "description": "Two lanes meet here: your Git workflow plus SQL lets you talk to a real API.",
+      "skill_slug": "networking",
+      "tier": 2,
+      "lane": 2,
+      "estimated_hours": 12,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "HTTP overview",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
+          "duration_minutes": 60,
+          "difficulty": 2
+        },
+        {
+          "type": "documentation",
+          "title": "Using the Fetch API",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch",
+          "duration_minutes": 60,
+          "difficulty": 3
+        },
+        {
+          "type": "documentation",
+          "title": "HTTP status codes",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status",
+          "duration_minutes": 90,
+          "difficulty": 2
+        }
+      ]
+    },
+    {
+      "key": "project-ui",
+      "type": "project",
+      "title": "Build a small interface",
+      "description": "Ship one page that reacts to the user: a form, a list, and a filter.",
+      "skill_slug": null,
+      "tier": 3,
+      "lane": 0,
+      "estimated_hours": 16,
+      "resources": [
+        {
+          "type": "project",
+          "title": "Learn web development",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development",
+          "duration_minutes": 240,
+          "difficulty": 2
+        },
+        {
+          "type": "course",
+          "title": "Frontend and web development courses",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/browse",
+          "duration_minutes": 300,
+          "difficulty": 3
+        },
+        {
+          "type": "project",
+          "title": "Foundations curriculum",
+          "provider": "The Odin Project",
+          "url": "https://www.theodinproject.com/",
+          "duration_minutes": 480,
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "project-api",
+      "type": "project",
+      "title": "Build a small API",
+      "description": "Two lanes meet here: async code plus HTTP and SQL becomes a working service.",
+      "skill_slug": null,
+      "tier": 3,
+      "lane": 1,
+      "estimated_hours": 18,
+      "resources": [
+        {
+          "type": "documentation",
+          "title": "Control flow and error handling",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling",
+          "duration_minutes": 60,
+          "difficulty": 3
+        },
+        {
+          "type": "course",
+          "title": "Software development courses",
+          "provider": "edX",
+          "url": "https://www.edx.org/search",
+          "duration_minutes": 300,
+          "difficulty": 3
+        },
+        {
+          "type": "tutorial",
+          "title": "CS50x — Introduction to Computer Science",
+          "provider": "Harvard CS50",
+          "url": "https://cs50.harvard.edu/x/",
+          "duration_minutes": 600,
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "proof-testing",
+      "type": "proof",
+      "title": "Prove it with tests",
+      "description": "Write tests for code you already shipped and make them pass on a broken build.",
+      "skill_slug": "problem-solving",
+      "tier": 3,
+      "lane": 2,
+      "estimated_hours": 6,
+      "resources": [
+        {
+          "type": "assessment",
+          "title": "Testing basics — self check",
+          "provider": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development",
+          "duration_minutes": 60,
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "key": "portfolio",
+      "type": "milestone",
+      "title": "Everything in one portfolio",
+      "description": "Three branches meet: your interface, your API and your tests become one thing you can show.",
+      "skill_slug": null,
+      "tier": 4,
+      "lane": 1,
+      "estimated_hours": 10,
+      "resources": [
+        {
+          "type": "article",
+          "title": "How to present a project",
+          "provider": "freeCodeCamp",
+          "url": "https://www.freecodecamp.org/learn/",
+          "duration_minutes": 30,
+          "difficulty": 1
+        }
+      ]
+    },
+    {
+      "key": "job-ready",
+      "type": "milestone",
+      "title": "Final milestone: ready to apply",
+      "description": "One written case study, one repo someone else can run, one list of what you can demonstrate.",
+      "skill_slug": null,
+      "tier": 5,
+      "lane": 1,
+      "estimated_hours": 8,
+      "resources": [
+        {
+          "type": "article",
+          "title": "Career and job search courses",
+          "provider": "Coursera",
+          "url": "https://www.coursera.org/browse",
+          "duration_minutes": 120,
+          "difficulty": 2
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "node_key": "js-basics",
+      "depends_on_key": "html-css"
+    },
+    {
+      "node_key": "git-workflow",
+      "depends_on_key": "html-css"
+    },
+    {
+      "node_key": "sql-basics",
+      "depends_on_key": "html-css"
+    },
+    {
+      "node_key": "js-dom",
+      "depends_on_key": "js-basics"
+    },
+    {
+      "node_key": "functions-async",
+      "depends_on_key": "js-basics"
+    },
+    {
+      "node_key": "http-apis",
+      "depends_on_key": "git-workflow"
+    },
+    {
+      "node_key": "http-apis",
+      "depends_on_key": "sql-basics"
+    },
+    {
+      "node_key": "project-ui",
+      "depends_on_key": "js-dom"
+    },
+    {
+      "node_key": "project-api",
+      "depends_on_key": "functions-async"
+    },
+    {
+      "node_key": "project-api",
+      "depends_on_key": "http-apis"
+    },
+    {
+      "node_key": "proof-testing",
+      "depends_on_key": "http-apis"
+    },
+    {
+      "node_key": "portfolio",
+      "depends_on_key": "project-ui"
+    },
+    {
+      "node_key": "portfolio",
+      "depends_on_key": "project-api"
+    },
+    {
+      "node_key": "portfolio",
+      "depends_on_key": "proof-testing"
+    },
+    {
+      "node_key": "job-ready",
+      "depends_on_key": "portfolio"
+    }
+  ],
+  "related_careers": [
+    {
+      "slug": "cybersecurity-analyst",
+      "type": "pivot",
+      "rationale": "You already build networked systems; pivoting shifts the goal from shipping features to defending them.",
+      "transferable_skills": [
+        "networking",
+        "problem-solving",
+        "version-control"
+      ]
+    },
+    {
+      "slug": "data-analyst",
+      "type": "pivot",
+      "rationale": "SQL and structured thinking transfer directly. You would trade writing services for querying data.",
+      "transferable_skills": [
+        "sql",
+        "problem-solving",
+        "javascript"
+      ]
+    },
+    {
+      "slug": "ui-ux-designer",
+      "type": "related",
+      "rationale": "Front-end work puts you close to interface decisions even without a design background.",
+      "transferable_skills": [
+        "javascript",
+        "communication"
+      ]
+    },
+    {
+      "slug": "business-analyst",
+      "type": "alternative",
+      "rationale": "A build-adjacent route that leans on requirements and communication rather than code.",
+      "transferable_skills": [
+        "communication",
+        "problem-solving"
+      ]
+    }
+  ]
+}

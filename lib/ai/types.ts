@@ -20,7 +20,7 @@
  * means adding a case in `lib/ai/provider.ts` and one file under
  * `lib/ai/providers/` — no feature code changes.
  */
-export type AIProviderId = "mock";
+export type AIProviderId = "mock" | "gemini";
 
 /** Provider actually serving a request. May differ from the configured one. */
 export type AIProviderName = string;
@@ -44,6 +44,20 @@ export interface AITextGenerationInput {
   maxTokens?: number;
   /** Stable identifier used to correlate logs across a feature's calls. */
   operation?: string;
+  /**
+   * File inputs (e.g. a resume PDF). Providers that support them send them
+   * natively; others ignore them. Never logged.
+   */
+  attachments?: AIAttachment[];
+}
+
+/**
+ * One file input for the model. Base64-encoded bytes plus MIME type —
+ * kept as data (not a path) so nothing touches disk.
+ */
+export interface AIAttachment {
+  mimeType: string;
+  base64Data: string;
 }
 
 /**

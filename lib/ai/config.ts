@@ -27,7 +27,7 @@ export interface AIConfig {
 }
 
 /** Providers this build knows how to construct. */
-export const SUPPORTED_PROVIDERS: readonly AIProviderId[] = ["mock"];
+export const SUPPORTED_PROVIDERS: readonly AIProviderId[] = ["mock", "gemini"];
 
 const DEFAULT_PROVIDER: AIProviderId = "mock";
 
@@ -62,15 +62,22 @@ export function getAIConfig(): AIConfig {
 /**
  * Validates provider-specific credentials.
  *
- * The mock provider needs none, so this returns without touching the
- * environment. A real adapter adds its own check here — keeping the lookup
- * server-side and in one place, rather than scattered through adapters.
+ * The mock provider needs none. Gemini requires `GEMINI_API_KEY`. The lookup
+ * stays server-side and in one place, rather than scattered through adapters.
  */
 export function assertProviderCredentials(
   provider: AIProviderId
 ): Record<string, string> {
   switch (provider) {
     case "mock":
+      return {};
+    case "gemini":
+      if (!process.env.GEMINI_API_KEY?.trim()) {
+        throw aiConfigurationError(
+          "AI_PROVIDER is set to \"gemini\" but GEMINI_API_KEY is not set.",
+          { provider, detail: "missing GEMINI_API_KEY" }
+        );
+      }
       return {};
     default: {
       // Unreachable while SUPPORTED_PROVIDERS and this switch agree; present so
@@ -90,5 +97,7 @@ export function assertProviderCredentials(
 export const AI_ENV_VARS = {
   provider: "AI_PROVIDER",
   model: "AI_MODEL",
+  modelFallbacks: "AI_MODEL_FALLBACKS",
   debug: "AI_DEBUG",
+  geminiKey: "GEMINI_API_KEY",
 } as const;

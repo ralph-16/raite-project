@@ -225,7 +225,8 @@ revoke update on public.profiles from authenticated, anon;
 grant update (display_name, year_level, program, graduation_year, bio,
               interests, learning_preferences, resume_url,
               career_aspiration, career_aspiration_industry,
-              career_aspiration_set_at, onboarding_completed_at)
+              career_aspiration_source, career_aspiration_set_at,
+              onboarding_completed_at)
   on public.profiles to authenticated;
 
 -- AI context is server-written. confirm: no write column grants for these.

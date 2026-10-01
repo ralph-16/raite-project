@@ -1,0 +1,365 @@
+{
+  "careers": [
+    {
+      "slug": "software-developer",
+      "title": "Software Developer",
+      "category": "build",
+      "description": "Designs, builds, and maintains software systems and digital products.",
+      "role_description": "Design, build, test and maintain web applications and backend services. Day to day: reading requirements, writing code, reviewing pull requests, fixing defects.",
+      "daily_work": [
+        "Turn a short requirements note into working code",
+        "Review a teammate's pull request over coffee",
+        "Fix a bug reported by a tester or a user",
+        "Pair with someone on a tricky bit of logic",
+        "Write or run tests so tomorrow's change stays safe"
+      ],
+      "required_skills": [
+        { "slug": "javascript", "name": "JavaScript", "importance": 5 },
+        { "slug": "typescript", "name": "TypeScript", "importance": 4 },
+        { "slug": "version-control", "name": "Version Control", "importance": 4 },
+        { "slug": "problem-solving", "name": "Problem Solving", "importance": 4 },
+        { "slug": "sql", "name": "SQL", "importance": 3 },
+        { "slug": "networking", "name": "Networking", "importance": 3 }
+      ],
+      "salary": { "median": 55000, "currency": "PHP", "period": "annual" },
+      "market_demand": "high",
+      "learning_effort_months": 12,
+      "related": [
+        {
+          "slug": "cybersecurity-analyst",
+          "type": "pivot",
+          "rationale": "You already build networked systems; pivoting shifts the goal from shipping features to defending them.",
+          "transferable_skills": ["networking", "problem-solving", "version-control"]
+        },
+        {
+          "slug": "data-analyst",
+          "type": "pivot",
+          "rationale": "SQL and structured thinking transfer directly. You would trade writing services for querying data.",
+          "transferable_skills": ["sql", "problem-solving", "javascript"]
+        },
+        {
+          "slug": "ui-ux-designer",
+          "type": "related",
+          "rationale": "Front-end work puts you close to interface decisions even without a design background.",
+          "transferable_skills": ["javascript", "communication"]
+        },
+        {
+          "slug": "business-analyst",
+          "type": "alternative",
+          "rationale": "A build-adjacent route that leans on requirements and communication rather than code.",
+          "transferable_skills": ["communication", "problem-solving"]
+        }
+      ],
+      "is_sample_data": true
+    },
+    {
+      "slug": "cybersecurity-analyst",
+      "title": "Cybersecurity Analyst",
+      "category": "build",
+      "description": "Protects systems, networks, and data from threats and vulnerabilities.",
+      "role_description": "Monitor systems, investigate incidents and harden infrastructure against threats.",
+      "daily_work": [
+        "Read overnight alerts and triage what matters",
+        "Investigate a suspicious login or a misconfigured rule",
+        "Patch or harden a server and document the change",
+        "Run a vulnerability scan and write up the findings",
+        "Brief a non-technical team on what to watch for"
+      ],
+      "required_skills": [
+        { "slug": "networking", "name": "Networking", "importance": 5 },
+        { "slug": "problem-solving", "name": "Problem Solving", "importance": 4 },
+        { "slug": "communication", "name": "Communication", "importance": 3 },
+        { "slug": "version-control", "name": "Version Control", "importance": 3 },
+        { "slug": "sql", "name": "SQL", "importance": 2 }
+      ],
+      "salary": { "median": 60000, "currency": "PHP", "period": "annual" },
+      "market_demand": "high",
+      "learning_effort_months": 14,
+      "related": [
+        {
+          "slug": "software-developer",
+          "type": "pivot",
+          "rationale": "Building experience plus your defence lens makes platform and tooling work a natural sideways move.",
+          "transferable_skills": ["networking", "problem-solving", "version-control"]
+        },
+        {
+          "slug": "business-analyst",
+          "type": "related",
+          "rationale": "Security work is mostly written communication: findings, risk, and the fix you are asking for.",
+          "transferable_skills": ["communication", "problem-solving"]
+        }
+      ],
+      "is_sample_data": true
+    },
+    {
+      "slug": "data-analyst",
+      "title": "Data Analyst",
+      "category": "analyze",
+      "description": "Turns raw data into insight through analysis, visualization, and reporting.",
+      "role_description": "Clean and query data, build reports and dashboards, and brief stakeholders.",
+      "daily_work": [
+        "Pull and clean a messy export from a source system",
+        "Write queries to answer a plain business question",
+        "Build a chart that makes the trend obvious",
+        "Sanity-check numbers with the person who owns them",
+        "Write a short summary of what the data says"
+      ],
+      "required_skills": [
+        { "slug": "sql", "name": "SQL", "importance": 5 },
+        { "slug": "data-analysis", "name": "Data Analysis", "importance": 5 },
+        { "slug": "statistics", "name": "Statistics", "importance": 4 },
+        { "slug": "spreadsheets", "name": "Spreadsheets", "importance": 3 },
+        { "slug": "communication", "name": "Communication", "importance": 3 }
+      ],
+      "salary": { "median": 48000, "currency": "PHP", "period": "annual" },
+      "market_demand": "high",
+      "learning_effort_months": 8,
+      "related": [
+        {
+          "slug": "business-analyst",
+          "type": "next_level",
+          "rationale": "Analysis experience is the strongest predictor of success in a business analyst role.",
+          "transferable_skills": ["sql", "data-analysis", "communication"]
+        },
+        {
+          "slug": "software-developer",
+          "type": "pivot",
+          "rationale": "Your SQL and structured thinking transfer straight into writing and querying services.",
+          "transferable_skills": ["sql", "problem-solving", "javascript"]
+        },
+        {
+          "slug": "marketing-specialist",
+          "type": "related",
+          "rationale": "Campaign reporting leans on the same query, chart and story skills you already use.",
+          "transferable_skills": ["data-analysis", "seo"]
+        }
+      ],
+      "is_sample_data": true
+    },
+    {
+      "slug": "business-analyst",
+      "title": "Business Analyst",
+      "category": "analyze",
+      "description": "Bridges business needs and technical solutions through structured analysis.",
+      "role_description": "Document processes, gather requirements and translate business needs into solutions.",
+      "daily_work": [
+        "Interview the people who do the actual work",
+        "Map a process and spot where it breaks down",
+        "Write requirements a developer can act on",
+        "Facilitate a meeting between two teams that talk past each other",
+        "Check the delivered change against the original need"
+      ],
+      "required_skills": [
+        { "slug": "communication", "name": "Communication", "importance": 5 },
+        { "slug": "data-analysis", "name": "Data Analysis", "importance": 4 },
+        { "slug": "problem-solving", "name": "Problem Solving", "importance": 4 },
+        { "slug": "sql", "name": "SQL", "importance": 3 },
+        { "slug": "spreadsheets", "name": "Spreadsheets", "importance": 3 }
+      ],
+      "salary": { "median": 52000, "currency": "PHP", "period": "annual" },
+      "market_demand": "high",
+      "learning_effort_months": 6,
+      "related": [
+        {
+          "slug": "data-analyst",
+          "type": "alternative",
+          "rationale": "A data-first route with less stakeholder facilitation and more time in the query editor.",
+          "transferable_skills": ["sql", "data-analysis", "communication"]
+        },
+        {
+          "slug": "software-developer",
+          "type": "alternative",
+          "rationale": "A build-adjacent route that leans on your requirements and communication skills.",
+          "transferable_skills": ["communication", "problem-solving"]
+        },
+        {
+          "slug": "content-strategist",
+          "type": "related",
+          "rationale": "Both jobs turn a fuzzy request into a plan other people can execute.",
+          "transferable_skills": ["communication", "writing"]
+        }
+      ],
+      "is_sample_data": true
+    },
+    {
+      "slug": "ui-ux-designer",
+      "title": "UI/UX Designer",
+      "category": "design",
+      "description": "Creates usable, accessible digital experiences through research and design.",
+      "role_description": "Research user needs, design interfaces and prototypes, and validate with users.",
+      "daily_work": [
+        "Watch a student try the screen you just designed",
+        "Sketch three versions of a flow before choosing one",
+        "Build a clickable prototype and tighten the spacing",
+        "Pair with a developer on what is actually buildable",
+        "Run an accessibility pass on the finished screen"
+      ],
+      "required_skills": [
+        { "slug": "ui-design", "name": "UI Design", "importance": 5 },
+        { "slug": "user-research", "name": "User Research", "importance": 5 },
+        { "slug": "figma", "name": "Figma", "importance": 4 },
+        { "slug": "visual-design", "name": "Visual Design", "importance": 4 },
+        { "slug": "communication", "name": "Communication", "importance": 3 }
+      ],
+      "salary": { "median": 45000, "currency": "PHP", "period": "annual" },
+      "market_demand": "medium",
+      "learning_effort_months": 8,
+      "related": [
+        {
+          "slug": "graphic-designer",
+          "type": "alternative",
+          "rationale": "A design route without the research and prototyping load.",
+          "transferable_skills": ["visual-design", "figma"]
+        },
+        {
+          "slug": "software-developer",
+          "type": "related",
+          "rationale": "Interface decisions sit right next to implementation, so design and code can feed each other.",
+          "transferable_skills": ["javascript", "communication"]
+        },
+        {
+          "slug": "content-strategist",
+          "type": "related",
+          "rationale": "Screens are mostly words and hierarchy — content thinking makes the design stronger.",
+          "transferable_skills": ["writing", "communication"]
+        }
+      ],
+      "is_sample_data": true
+    },
+    {
+      "slug": "graphic-designer",
+      "title": "Graphic Designer",
+      "category": "design",
+      "description": "Communicates ideas visually through typography, layout, and imagery.",
+      "role_description": "Create visual assets for brand, print and digital channels.",
+      "daily_work": [
+        "Take a one-line brief and sketch a few directions",
+        "Set type, colour and layout for a poster or a post",
+        "Prepare files for print or for the web",
+        "Present the work and take feedback without taking it personally",
+        "Keep a messy asset folder tidy and on brand"
+      ],
+      "required_skills": [
+        { "slug": "visual-design", "name": "Visual Design", "importance": 5 },
+        { "slug": "figma", "name": "Figma", "importance": 4 },
+        { "slug": "writing", "name": "Writing", "importance": 3 },
+        { "slug": "content-strategy", "name": "Content Strategy", "importance": 2 }
+      ],
+      "salary": { "median": 38000, "currency": "PHP", "period": "annual" },
+      "market_demand": "medium",
+      "learning_effort_months": 6,
+      "related": [
+        {
+          "slug": "ui-ux-designer",
+          "type": "next_level",
+          "rationale": "Visual fundamentals transfer; you would add interaction patterns and user research.",
+          "transferable_skills": ["visual-design", "figma"]
+        },
+        {
+          "slug": "content-strategist",
+          "type": "related",
+          "rationale": "Editorial direction and visual execution usually travel in the same team.",
+          "transferable_skills": ["visual-design", "writing"]
+        },
+        {
+          "slug": "marketing-specialist",
+          "type": "related",
+          "rationale": "Campaigns need the assets you make and the eye you have for them.",
+          "transferable_skills": ["visual-design", "content-strategy"]
+        }
+      ],
+      "is_sample_data": true
+    },
+    {
+      "slug": "content-strategist",
+      "title": "Content Strategist",
+      "category": "communicate",
+      "description": "Plans and produces content that reaches and resonates with target audiences.",
+      "role_description": "Plan content calendars and editorial direction across channels.",
+      "daily_work": [
+        "Decide what gets written this month and why",
+        "Brief a writer (or write it yourself) against a goal",
+        "Edit for clarity, tone, and the keyword you care about",
+        "Schedule and publish across two or three channels",
+        "Check what performed and adjust the plan"
+      ],
+      "required_skills": [
+        { "slug": "writing", "name": "Writing", "importance": 5 },
+        { "slug": "content-strategy", "name": "Content Strategy", "importance": 5 },
+        { "slug": "seo", "name": "SEO", "importance": 4 },
+        { "slug": "social-media", "name": "Social Media", "importance": 3 },
+        { "slug": "communication", "name": "Communication", "importance": 3 }
+      ],
+      "salary": { "median": 40000, "currency": "PHP", "period": "annual" },
+      "market_demand": "medium",
+      "learning_effort_months": 5,
+      "related": [
+        {
+          "slug": "marketing-specialist",
+          "type": "next_level",
+          "rationale": "Content is the input to campaign work; marketing owns the distribution and measurement.",
+          "transferable_skills": ["writing", "content-strategy", "seo"]
+        },
+        {
+          "slug": "graphic-designer",
+          "type": "related",
+          "rationale": "Editorial direction and visual execution usually travel in the same team.",
+          "transferable_skills": ["writing", "visual-design"]
+        },
+        {
+          "slug": "ui-ux-designer",
+          "type": "related",
+          "rationale": "Product screens are mostly words and hierarchy — content thinking makes the design stronger.",
+          "transferable_skills": ["writing", "communication"]
+        }
+      ],
+      "is_sample_data": true
+    },
+    {
+      "slug": "marketing-specialist",
+      "title": "Marketing Specialist",
+      "category": "communicate",
+      "description": "Promotes products and brands through research, campaigns, and channels.",
+      "role_description": "Run campaigns, analyse channel performance and grow awareness.",
+      "daily_work": [
+        "Set up a campaign and its audience segments",
+        "Write or review the copy that goes out",
+        "Watch the numbers and shift budget mid-week",
+        "Talk to design about the next set of assets",
+        "Write a short recap of what worked and what did not"
+      ],
+      "required_skills": [
+        { "slug": "seo", "name": "SEO", "importance": 5 },
+        { "slug": "social-media", "name": "Social Media", "importance": 5 },
+        { "slug": "content-strategy", "name": "Content Strategy", "importance": 4 },
+        { "slug": "writing", "name": "Writing", "importance": 4 },
+        { "slug": "data-analysis", "name": "Data Analysis", "importance": 3 },
+        { "slug": "communication", "name": "Communication", "importance": 4 }
+      ],
+      "salary": { "median": 42000, "currency": "PHP", "period": "annual" },
+      "market_demand": "medium",
+      "learning_effort_months": 6,
+      "related": [
+        {
+          "slug": "content-strategist",
+          "type": "alternative",
+          "rationale": "A communications-first route with less focus on paid channels.",
+          "transferable_skills": ["writing", "seo"]
+        },
+        {
+          "slug": "data-analyst",
+          "type": "related",
+          "rationale": "Campaign reporting leans on the same query, chart and story skills.",
+          "transferable_skills": ["data-analysis", "seo"]
+        },
+        {
+          "slug": "graphic-designer",
+          "type": "related",
+          "rationale": "Campaigns need the assets you make and the eye you have for them.",
+          "transferable_skills": ["visual-design", "content-strategy"]
+        }
+      ],
+      "is_sample_data": true
+    }
+  ]
+}

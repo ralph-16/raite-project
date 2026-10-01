@@ -1,0 +1,194 @@
+"use client";
+
+import * as React from "react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { GuidedAnswer } from "@/lib/onboarding/guided";
+import { ChoiceGroup } from "./choice-group";
+import { LoryAvatar } from "./lory-avatar";
+import { StepNavigation } from "./step-navigation";
+
+export interface QaQuestion {
+  key: string;
+  topic: string;
+  type: "single_choice" | "multi_choice" | "short_text";
+  prompt: string;
+  options: Array<{ value: string; label: string }>;
+  count: number;
+}
+
+interface QaSurveyStageProps {
+  question: QaQuestion | null;
+  loading: boolean;
+  loadError: string | null;
+  answeredCount: number;
+  onAnswer: (answer: GuidedAnswer) => void;
+  onRetry: () => void;
+  onBack: () => void;
+  onSkipStep: () => void;
+}
+
+const MAX_QUESTIONS = 8;
+
+/**
+ * One AI-generated question at a time. Every question offers an explicit
+ * answer action plus Skip and "I'm not sure yet" — no dead ends, no forced
+ * choices.
+ */
+export function QaSurveyStage({
+  question,
+  loading,
+  loadError,
+  answeredCount,
+  onAnswer,
+  onRetry,
+  onBack,
+  onSkipStep,
+}: QaSurveyStageProps) {
+  const [single, setSingle] = React.useState<string | undefined>(undefined);
+  const [multi, setMulti] = React.useState<string[]>([]);
+  const [text, setText] = React.useState("");
+
+  React.useEffect(() => {
+    setSingle(undefined);
+    setMulti([]);
+    setText("");
+  }, [question?.key]);
+
+  const submit = (answer: string, flags?: { skipped?: boolean }) => {
+    if (!question) return;
+    onAnswer({
+      key: question.key,
+      topic: question.topic,
+      prompt: question.prompt,
+      type: question.type,
+      answer,
+      skipped: flags?.skipped ?? false,
+    });
+  };
+
+  const canSubmit =
+    question?.type === "short_text"
+      ? text.trim().length > 0
+      : question?.type === "single_choice"
+        ? single !== undefined
+        : multi.length > 0;
+
+  const submitLabel = "Answer";
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex items-start gap-3">
+        <LoryAvatar
+          size="sm"
+          state={loading ? "thinking" : loadError ? "confused" : "idle"}
+        />
+        <p
+          className="text-sm text-muted-foreground"
+          role="status"
+          aria-label={`Question ${answeredCount + 1} of up to ${MAX_QUESTIONS}`}
+        >
+          Question {answeredCount + 1} of up to {MAX_QUESTIONS}
+        </p>
+      </div>
+
+      {loading && !question ? (
+        <div className="flex flex-col gap-2" role="status">
+          <div className="shimmer h-5 w-3/4 rounded bg-muted" aria-hidden="true" />
+          <div className="shimmer h-4 w-1/2 rounded bg-muted" aria-hidden="true" />
+          <p className="sr-only">Lory is thinking of a question...</p>
+        </div>
+      ) : null}
+
+      {loadError ? (
+        <div className="flex flex-col gap-3">
+          <p role="alert" className="text-sm text-destructive">
+            {loadError}
+          </p>
+          <div>
+            <Button type="button" variant="outline" onClick={onRetry}>
+              Try again
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
+      {question && !loading ? (
+        <div className="flex flex-col gap-4" key={question.key}>
+          {question.type === "short_text" ? (
+            <div className="flex flex-col gap-2">
+              <Label htmlFor={`qa-${question.key}`}>{question.prompt}</Label>
+              <Input
+                id={`qa-${question.key}`}
+                value={text}
+                autoComplete="off"
+                onChange={(event) => setText(event.target.value)}
+                placeholder="Type your answer"
+              />
+            </div>
+          ) : (
+            <ChoiceGroup
+              name={`qa-${question.key}`}
+              legend={question.prompt}
+              options={question.options}
+              selected={
+                question.type === "single_choice"
+                  ? single !== undefined
+                    ? [single]
+                    : []
+                  : multi
+              }
+              multiple={question.type === "multi_choice"}
+              onToggle={(value) => {
+                if (question.type === "single_choice") {
+                  setSingle(value);
+                } else {
+                  setMulti((prev) =>
+                    prev.includes(value)
+                      ? prev.filter((v) => v !== value)
+                      : [...prev, value]
+                  );
+                }
+              }}
+            />
+          )}
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button
+              type="button"
+              disabled={!canSubmit}
+              onClick={() =>
+                submit(
+                  question.type === "short_text"
+                    ? text.trim()
+                    : question.type === "single_choice"
+                      ? (single ?? "")
+                      : multi.join(", ")
+                )
+              }
+            >
+              {submitLabel}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => submit("(not sure)", { skipped: true })}
+            >
+              I&apos;m not sure yet
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
+      {loading && question ? (
+        <p className="text-sm text-muted-foreground" role="status">
+          Saving that — thinking of what to ask next...
+        </p>
+      ) : null}
+
+      <StepNavigation onBack={onBack} onSkip={onSkipStep} skipLabel="Skip questions" />
+    </div>
+  );
+}
