@@ -158,7 +158,7 @@ export function QaSurveyStage({
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button
               type="button"
-              disabled={!canSubmit}
+              disabled={!canSubmit || loading}
               onClick={() =>
                 submit(
                   question.type === "short_text"
@@ -174,6 +174,7 @@ export function QaSurveyStage({
             <Button
               type="button"
               variant="outline"
+              disabled={loading}
               onClick={() => submit("(not sure)", { skipped: true })}
             >
               I&apos;m not sure yet

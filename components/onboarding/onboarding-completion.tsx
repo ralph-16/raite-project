@@ -29,7 +29,7 @@ export function OnboardingCompletion({
 }: OnboardingCompletionProps) {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 px-6 py-16 text-center md:py-20">
-      <LoryAvatar size="lg" state={profile ? "happy" : "idle"} />
+      <LoryAvatar size="lg" state={profile ? "celebrating" : "idle"} />
       <h1 className="font-sans font-bold tracking-tight text-3xl md:text-4xl">
         You did it!
       </h1>

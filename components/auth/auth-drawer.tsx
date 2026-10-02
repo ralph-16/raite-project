@@ -1,7 +1,5 @@
 "use client";
 
-import { Bird } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -11,6 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { AuthMode } from "@/lib/auth/types";
+import { LoryAvatar } from "@/components/onboarding/lory-avatar";
 import { LogInForm } from "./login-form";
 import { SignUpForm } from "./sign-up-form";
 
@@ -63,12 +62,7 @@ export function AuthDrawer({
             button sits in the top-right corner of this header area. */}
         <SheetHeader className="gap-3 pr-8">
           <div className="flex items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"
-            >
-              <Bird />
-            </span>
+            <LoryAvatar size="sm" state="welcoming" />
             <span className="text-sm font-medium text-muted-foreground">
               Lory · your Ka-Lakbay guide
             </span>

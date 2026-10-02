@@ -200,8 +200,13 @@ export function OnboardingFlow() {
 
   /* ---------------- Q&A ---------------- */
 
+  /** Guards against double-clicks and overlapping fetches. */
+  const qaInFlight = React.useRef(false);
+
   const fetchNext = React.useCallback(
     async (answers: GuidedAnswer[]) => {
+      if (qaInFlight.current) return;
+      qaInFlight.current = true;
       setQaLoading(true);
       setQaError(null);
       try {
@@ -239,6 +244,7 @@ export function OnboardingFlow() {
         setQaError("Unable to reach Lory right now. Try again.");
       } finally {
         setQaLoading(false);
+        qaInFlight.current = false;
       }
     },
     // aspirations/resume are stage-stable while Q&A runs; answers passed explicitly.
