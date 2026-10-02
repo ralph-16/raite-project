@@ -12,9 +12,13 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-display)", "system-ui", "sans-serif"],
-        body: ["var(--font-body)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        /* Inter for everything. display/body/mono kept as aliases so
+           existing `font-display` / `font-body` / `font-mono` classes
+           keep working and all render as Inter. */
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-sans)", "system-ui", "sans-serif"],
+        body: ["var(--font-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background) / <alpha-value>)",
@@ -62,6 +66,13 @@ const config: Config = {
         "lory-magenta": "hsl(var(--lory-magenta) / <alpha-value>)",
         "lory-green": "hsl(var(--lory-green) / <alpha-value>)",
         "lory-burgundy": "hsl(var(--lory-burgundy) / <alpha-value>)",
+        "lory-taffy": "hsl(var(--lory-taffy) / <alpha-value>)",
+        "lory-vinyl": "hsl(var(--lory-vinyl) / <alpha-value>)",
+        "accent-primary": "hsl(var(--accent-primary) / <alpha-value>)",
+        "accent-highlight": "hsl(var(--accent-highlight) / <alpha-value>)",
+        /* Text-only inks (surfaces use accent-primary / accent-highlight). */
+        "accent-ink": "hsl(var(--accent-ink) / <alpha-value>)",
+        "highlight-ink": "hsl(var(--highlight-ink) / <alpha-value>)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -69,6 +80,9 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        /* RETIRED per AGENTS.md §8: lory-float and gel-wiggle must never be
+           used as ambient always-on motion. Keyframes kept only in case a
+           specific intentional moment needs them. */
         "lory-float": {
           "0%, 100%": { transform: "translateY(0) rotate(-2deg)" },
           "50%": { transform: "translateY(-8px) rotate(2deg)" },
@@ -95,14 +109,22 @@ const config: Config = {
           "60%": { transform: "scale(1.15)" },
           "100%": { transform: "scale(1)" },
         },
+        /* One orchestrated landing entrance: rise in, then rest (§8). */
+        "rise-in": {
+          "0%": { opacity: "0", transform: "translateY(14px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
-        "lory-float": "lory-float 4s ease-in-out infinite",
-        "gel-wiggle": "gel-wiggle 6s ease-in-out infinite",
+        /* RETIRED per AGENTS.md §8: no ambient lory-float / gel-wiggle entries.
+           Use shimmer, step-in-next/prev, pop-in only. */
         shimmer: "shimmer 1.8s ease-in-out infinite",
         "step-in-next": "step-in-next 320ms cubic-bezier(0.22, 1, 0.36, 1) both",
         "step-in-prev": "step-in-prev 320ms cubic-bezier(0.22, 1, 0.36, 1) both",
         "pop-in": "pop-in 420ms ease-out both",
+        /* Staggered via inline `animation-delay` — delays collapse to 0 under
+           prefers-reduced-motion (see globals.css). */
+        "rise-in": "rise-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },

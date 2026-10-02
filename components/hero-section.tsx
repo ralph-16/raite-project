@@ -1,110 +1,99 @@
 "use client";
 
-import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import { useAuthDrawer } from "@/components/auth/auth-drawer-provider";
-import { landingCopy } from "@/lib/mock/copy";
-import { cn } from "@/lib/utils";
-
-const COPY = landingCopy();
+import { scrollToSection } from "@/lib/utils";
 
 /**
- * Staggered exit: when a CTA is pressed the hero elements lift and fade in
- * sequence while the auth drawer slides in over them. Pure CSS transitions —
- * `prefers-reduced-motion` collapses them to nothing in globals.css.
+ * Decorative typography only — these words are possibilities, never
+ * recommendations, matches, or data about the visitor.
  */
-function useHeroExit(isDrawerOpen: boolean) {
-  const [exiting, setExiting] = React.useState(false);
-
-  React.useEffect(() => {
-    if (isDrawerOpen) {
-      setExiting(true);
-      return;
-    }
-    setExiting(false);
-  }, [isDrawerOpen]);
-
-  return exiting;
-}
-
-interface HeroLayerProps {
-  exiting: boolean;
-  order: number;
-  children: React.ReactNode;
-  className?: string;
-}
-
-function HeroLayer({ exiting, order, children, className }: HeroLayerProps) {
-  return (
-    <div
-      style={{ transitionDelay: `${order * 60}ms` }}
-      className={cn(
-        "transition-all duration-500 ease-out",
-        exiting ? "-translate-y-8 opacity-0" : "translate-y-0 opacity-100",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-}
+const careerWords = [
+  { text: "DOCTOR", rotation: -5, tone: "text-accent-ink", size: "text-2xl md:text-3xl" },
+  { text: "PILOT", rotation: 4, tone: "text-lory-green", size: "text-3xl md:text-4xl" },
+  { text: "DESIGNER", rotation: -3, tone: "text-foreground", size: "text-2xl md:text-3xl" },
+  { text: "ARCHITECT", rotation: 6, tone: "text-lory-taffy", size: "text-3xl md:text-4xl" },
+  { text: "TEACHER", rotation: -6, tone: "text-lory-green", size: "text-2xl md:text-3xl" },
+  { text: "GAME DEVELOPER", rotation: 3, tone: "text-accent-ink", size: "text-2xl md:text-3xl" },
+];
 
 export function HeroSection() {
-  const { openAuth, isOpen } = useAuthDrawer();
-  const exiting = useHeroExit(isOpen);
-
-  const openFromHero = (
-    mode: "signup" | "login",
-    trigger: HTMLElement
-  ) => openAuth(mode, trigger);
+  const { openAuth } = useAuthDrawer();
 
   return (
-    <section className="py-24 md:py-32">
+    <section className="bg-background pt-28 pb-16 md:pt-36 md:pb-24">
       <div className="mx-auto max-w-5xl px-6">
-        <div className="flex max-w-2xl flex-col gap-8">
-          <HeroLayer exiting={exiting} order={0}>
-            <p className="text-sm text-muted-foreground tracking-wide">
-              {COPY.hero.eyebrow}
+        <p
+          className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground animate-rise-in"
+          style={{ animationDelay: "0ms" }}
+        >
+          AI-powered student career navigator
+        </p>
+
+        <h1
+          className="mt-5 font-display font-normal text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] animate-rise-in"
+          style={{ animationDelay: "60ms" }}
+        >
+          What do you want <span className="marker">to be?</span>
+        </h1>
+
+        <div className="mt-10 grid gap-10 md:mt-14 md:grid-cols-[1.1fr_0.9fr] md:gap-12">
+          <div className="animate-rise-in" style={{ animationDelay: "180ms" }}>
+            <p className="text-xl font-medium leading-snug md:text-2xl">
+              You don&apos;t have to know yet.
             </p>
-          </HeroLayer>
-
-          <HeroLayer exiting={exiting} order={1}>
-            <h1 className="font-display font-normal text-5xl md:text-7xl tracking-tight leading-[1.1]">
-              {COPY.hero.headlineBefore}{" "}
-              <span className="text-lory-blue">{COPY.hero.headlineAccent}</span>
-            </h1>
-          </HeroLayer>
-
-          <HeroLayer exiting={exiting} order={2}>
-            <p className="max-w-lg text-lg text-muted-foreground leading-relaxed">
-              {COPY.hero.subhead}
+            <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">
+              Ka-Lakbay helps you explore possible paths, understand the skills
+              behind them, and decide what to learn next — then gives you
+              something to prove it.
             </p>
-          </HeroLayer>
 
-          <HeroLayer exiting={exiting} order={3}>
-            <div className="flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button
                 size="lg"
-                onClick={(event) => openFromHero("signup", event.currentTarget)}
+                onClick={(event) => openAuth("signup", event.currentTarget)}
               >
-                {COPY.hero.primaryCta}
+                Start exploring
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                onClick={(event) => openFromHero("login", event.currentTarget)}
+                onClick={() => scrollToSection("uncertainty")}
               >
-                {COPY.hero.secondaryCta}
+                I&apos;m not sure yet
               </Button>
             </div>
-          </HeroLayer>
 
-          <HeroLayer exiting={exiting} order={4}>
-            <p className="text-sm text-muted-foreground">
-              {COPY.hero.trustLine}
+            <p className="mt-6 font-mono text-xs text-muted-foreground">
+              No resume needed. Skip anything you&apos;re not sure about.
             </p>
-          </HeroLayer>
+          </div>
+
+          {/* Possibilities, not promises. Decorative: hidden from AT. */}
+          <div
+            aria-hidden="true"
+            className="flex flex-col items-start gap-3 md:items-end md:gap-4"
+          >
+            <span className="mb-1 hidden font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground md:block">
+              Possible paths, not promises
+            </span>
+            {careerWords.map((word, i) => (
+              <span
+                key={word.text}
+                /* Animation lives on the wrapper: a CSS animation would
+                   otherwise override the inline rotate on the same node. */
+                className="animate-rise-in"
+                style={{ animationDelay: `${340 + i * 120}ms` }}
+              >
+                <span
+                  className={`inline-block font-display font-normal leading-[1.1] ${word.size} ${word.tone}`}
+                  style={{ transform: `rotate(${word.rotation}deg)` }}
+                >
+                  {word.text}
+                </span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>

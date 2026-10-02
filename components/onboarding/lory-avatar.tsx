@@ -11,10 +11,11 @@ interface LoryAvatarProps {
 }
 
 /**
- * Lory mark: parrot companion in a soft tinted circle. `thinking` floats
- * faster while the student waits, `happy`/`confused` are still frames for
- * done/error moments. State is never the only signal — surrounding copy
- * always says what is happening.
+ * Lory mark: parrot companion in a soft tinted circle. Static tint only —
+ * ambient float retired per AGENTS.md §8 (no constant floating). `thinking`
+ * uses the shimmer loading utility while the student waits,
+ * `happy`/`confused` are still frames for done/error moments. State is never
+ * the only signal — surrounding copy always says what is happening.
  */
 export function LoryAvatar({ size = "md", state = "idle" }: LoryAvatarProps) {
   return (
@@ -24,8 +25,7 @@ export function LoryAvatar({ size = "md", state = "idle" }: LoryAvatarProps) {
       className={cn(
         "inline-flex items-center justify-center rounded-full text-foreground",
         state === "confused" ? "bg-lory-hot-pink/10" : "bg-lory-pink/20",
-        state === "idle" && "animate-lory-float",
-        state === "thinking" && "animate-lory-float [animation-duration:1.5s]",
+        state === "thinking" && "shimmer",
         size === "sm" && "size-10",
         size === "md" && "size-14",
         size === "lg" && "size-20"

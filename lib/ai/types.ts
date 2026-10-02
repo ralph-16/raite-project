@@ -20,7 +20,7 @@
  * means adding a case in `lib/ai/provider.ts` and one file under
  * `lib/ai/providers/` — no feature code changes.
  */
-export type AIProviderId = "mock" | "gemini";
+export type AIProviderId = "mock" | "gemini" | "openrouter";
 
 /** Provider actually serving a request. May differ from the configured one. */
 export type AIProviderName = string;

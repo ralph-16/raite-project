@@ -296,7 +296,7 @@ export function HomeView() {
         {visible.length === 0 ? (
           <Empty>
             <EmptyHeader>
-              <EmptyTitle>Nothing matches “{query.trim()}”</EmptyTitle>
+              <EmptyTitle>No paths found for “{query.trim()}”</EmptyTitle>
               <EmptyDescription>
                 Try a skill like “SQL”, a category like “design”, or clear the
                 search to see every path.

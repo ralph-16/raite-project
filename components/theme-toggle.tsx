@@ -1,35 +1,69 @@
 "use client";
 
+import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { saveTheme } from "@/lib/mock/storage";
 
+type Theme = "light" | "dark";
+
+function readTheme(): Theme {
+  // The inline script in `app/layout.tsx` already applied `kl.theme` to <html>
+  // before paint, so the class is the source of truth — no storage read, no
+  // hydration mismatch.
+  if (typeof document === "undefined") return "light";
+  return document.documentElement.classList.contains("dark") ? "dark" : "light";
+}
+
+function applyTheme(theme: Theme): void {
+  const root = document.documentElement;
+  root.classList.toggle("dark", theme === "dark");
+  root.style.colorScheme = theme;
+}
+
 /**
- * Light/dark switch used in every top navigation.
+ * Light / dark switch for the landing page and app shell.
  *
- * The initial theme is applied before first paint by the inline script in
- * `app/layout.tsx`, so this component needs no state: the two icons are
- * shown/hidden with `dark:` variants straight off the <html> class, which
- * keeps the server and client markup identical.
+ * The saved theme (`kl.theme`) is applied pre-paint by the inline script in
+ * `app/layout.tsx`; this component only mirrors that state and adds a short
+ * `.theme-anim` window so colours cross-fade instead of snapping.
  */
 export function ThemeToggle() {
-  const handleToggle = () => {
+  const [theme, setTheme] = React.useState<Theme>("light");
+
+  React.useEffect(() => {
+    setTheme(readTheme());
+  }, []);
+
+  const toggle = () => {
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    applyTheme(next);
+    saveTheme(next);
+
     const root = document.documentElement;
-    const nextIsDark = !root.classList.contains("dark");
-    root.classList.toggle("dark", nextIsDark);
-    saveTheme(nextIsDark ? "dark" : "light");
+    root.classList.add("theme-anim");
+    window.setTimeout(() => root.classList.remove("theme-anim"), 320);
   };
 
+  const isDark = theme === "dark";
+
   return (
-    <button
+    <Button
       type="button"
-      onClick={handleToggle}
-      aria-label="Toggle dark mode"
-      title="Toggle dark mode"
-      className="inline-flex size-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      variant="ghost"
+      size="icon"
+      onClick={toggle}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-pressed={isDark}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
-      <Moon aria-hidden="true" className="size-4 dark:hidden" />
-      <Sun aria-hidden="true" className="hidden size-4 dark:block" />
-    </button>
+      {isDark ? (
+        <Sun aria-hidden="true" />
+      ) : (
+        <Moon aria-hidden="true" />
+      )}
+    </Button>
   );
 }

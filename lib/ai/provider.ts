@@ -11,6 +11,7 @@ import "server-only";
 import { aiConfigurationError } from "./errors";
 import { GeminiProvider } from "./providers/gemini";
 import { MockProvider } from "./providers/mock";
+import { OpenRouterProvider } from "./providers/openrouter";
 import type { AIProvider, AIProviderId } from "./types";
 
 /** Cached instances. Providers are stateless, so one per id is enough. */
@@ -39,6 +40,8 @@ function createProvider(id: AIProviderId): AIProvider {
       return new MockProvider();
     case "gemini":
       return new GeminiProvider();
+    case "openrouter":
+      return new OpenRouterProvider();
     default:
       throw aiConfigurationError(`AI provider "${id}" is not implemented.`, {
         provider: id,
@@ -51,7 +54,7 @@ function createProvider(id: AIProviderId): AIProvider {
  * enumerate what this build supports.
  */
 export function listAIProviders(): AIProviderId[] {
-  return ["mock", "gemini"];
+  return ["mock", "gemini", "openrouter"];
 }
 
 /**

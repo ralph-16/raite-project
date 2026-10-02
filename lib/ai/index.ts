@@ -20,11 +20,13 @@ import "server-only";
  * time rather than silently shipping an API key to the browser.
  */
 
-import { assertProviderCredentials, getAIConfig } from "./config";
+import { assertProviderCredentials, getAIConfig, resolveProviderChain } from "./config";
 import { AIError, aiParseError, aiUnavailableError, toAIError } from "./errors";
 import { logAIError, logAIRequest, logAISuccess } from "./logger";
 import { getAIProvider } from "./provider";
 import type {
+  AIProvider,
+  AIUsage,
   AITextGenerationInput,
   AITextGenerationResult,
   AIStructuredGenerationInput,
@@ -35,60 +37,101 @@ export * from "./types";
 export { AIError } from "./errors";
 
 /**
+ * Executes a provider call through the fallback chain.
+ *
+ * Tries each provider in `AI_PROVIDER_ORDER` (or `[config.provider]` when the
+ * variable is unset). A provider is skipped when its credentials are missing.
+ * When a provider fails with 429 or 503 — rate-limited or overloaded — the
+ * next provider in the chain is tried. Any other failure (auth, bad request,
+ * parse) throws immediately: switching providers cannot fix it.
+ *
+ * Returns the successful result, which always carries the `provider` and
+ * `model` that actually answered. When every provider is exhausted, the last
+ * error is thrown; when none could be attempted, a configuration error.
+ */
+async function executeWithProviderChain<T extends { usage?: AIUsage }>(
+  context: { operation?: string; model?: string },
+  call: (provider: AIProvider, model: string) => Promise<T>
+): Promise<T> {
+  const config = getAIConfig();
+  const chain = resolveProviderChain(config);
+
+  let lastError: AIError | null = null;
+
+  for (const providerId of chain) {
+    let provider: AIProvider;
+    try {
+      assertProviderCredentials(providerId);
+      provider = getAIProvider(providerId);
+    } catch {
+      // No credentials for this provider — it cannot serve, so skip it.
+      continue;
+    }
+
+    if (!provider.isAvailable()) continue;
+
+    const model = context.model ?? provider.defaultModel ?? config.model;
+    const startedAt = Date.now();
+
+    logAIRequest({
+      operation: context.operation,
+      provider: provider.id,
+      model,
+    });
+
+    try {
+      const result = await call(provider, model);
+
+      logAISuccess({
+        operation: context.operation,
+        provider: provider.id,
+        model,
+        durationMs: Date.now() - startedAt,
+        usage: result.usage,
+      });
+
+      return result;
+    } catch (error) {
+      const aiError = toAIError(error, { provider: provider.id, model });
+      logAIError(aiError, {
+        operation: context.operation,
+        provider: provider.id,
+        model,
+        durationMs: Date.now() - startedAt,
+      });
+      lastError = aiError;
+
+      // Only exhaustion (429 or 503) moves to the next provider.
+      const isExhausted =
+        aiError.code === "rate_limit" || aiError.status === 503;
+      if (!isExhausted) throw aiError;
+    }
+  }
+
+  if (lastError) throw lastError;
+  throw aiUnavailableError(
+    "No AI provider is available with the current configuration.",
+    { detail: `chain: ${chain.join(", ")}` }
+  );
+}
+
+/**
  * Generates text.
  *
- * Resolves configuration and provider, executes, normalizes, and throws an
- * `AIError` for every failure — no provider-specific type and no raw vendor
- * error reaches the caller.
+ * Resolves configuration and the provider chain, executes, normalizes, and
+ * throws an `AIError` for every failure — no provider-specific type and no
+ * raw vendor error reaches the caller.
  */
 export async function generateText(
   input: AITextGenerationInput
 ): Promise<AITextGenerationResult> {
-  const config = getAIConfig();
-  assertProviderCredentials(config.provider);
-
-  const provider = getAIProvider(config.provider);
-
-  if (!provider.isAvailable()) {
-    throw aiUnavailableError(
-      `AI provider "${provider.id}" is not available with the current configuration.`,
-      { provider: provider.id }
-    );
-  }
-
-  const model = input.model ?? config.model ?? provider.defaultModel;
-  const startedAt = Date.now();
-
-  logAIRequest({
-    operation: input.operation,
-    provider: provider.id,
-    model,
-  });
-
-  try {
-    const raw = await provider.generateText({ ...input, model });
-
-    const result = normalizeTextResult(raw, provider.id, model);
-
-    logAISuccess({
-      operation: input.operation,
-      provider: provider.id,
-      model,
-      durationMs: Date.now() - startedAt,
-      usage: result.usage,
-    });
-
-    return result;
-  } catch (error) {
-    const aiError = toAIError(error, { provider: provider.id, model });
-    logAIError(aiError, {
-      operation: input.operation,
-      provider: provider.id,
-      model,
-      durationMs: Date.now() - startedAt,
-    });
-    throw aiError;
-  }
+  return executeWithProviderChain(
+    { operation: input.operation, model: input.model },
+    async (provider, model) => {
+      const raw = await provider.generateText({ ...input, model });
+      return normalizeTextResult(raw, provider.id, model);
+    }
+  );
 }
 
 /**
@@ -106,69 +149,42 @@ export async function generateText(
 export async function generateStructured<T = unknown>(
   input: AIStructuredGenerationInput
 ): Promise<AIStructuredGenerationResult> {
-  const config = getAIConfig();
-  assertProviderCredentials(config.provider);
+  return executeWithProviderChain(
+    { operation: input.operation, model: input.model },
+    async (provider, model) => {
+      // Prefer the provider's native structured path when it has one. Falling back
+      // to prompt instructions means a provider without native support still
+      // works, at the cost of being less reliable.
+      const raw = provider.generateStructured
+        ? await provider.generateStructured({
+            ...input,
+            model,
+            // A provider honouring jsonSchema does not need the prompt to repeat it.
+            prompt: input.prompt,
+          })
+        : await provider.generateText({
+            ...input,
+            model,
+            prompt: buildStructuredPrompt(input),
+          });
 
-  const provider = getAIProvider(config.provider);
-  const model = input.model ?? config.model ?? provider.defaultModel;
-  const startedAt = Date.now();
+      const textResult = normalizeTextResult(raw, provider.id, model);
+      const value = parseJson(textResult.text, {
+        provider: provider.id,
+        model,
+        schemaName: input.jsonSchema.name,
+      });
 
-  logAIRequest({
-    operation: input.operation,
-    provider: provider.id,
-    model,
-  });
-
-  try {
-    // Prefer the provider's native structured path when it has one. Falling back
-    // to prompt instructions means a provider without native support still
-    // works, at the cost of being less reliable.
-    const raw = provider.generateStructured
-      ? await provider.generateStructured({
-          ...input,
-          model,
-          // A provider honouring jsonSchema does not need the prompt to repeat it.
-          prompt: input.prompt,
-        })
-      : await provider.generateText({
-          ...input,
-          model,
-          prompt: buildStructuredPrompt(input),
-        });
-
-    const textResult = normalizeTextResult(raw, provider.id, model);
-    const value = parseJson(textResult.text, {
-      provider: provider.id,
-      model,
-      schemaName: input.jsonSchema.name,
-    });
-
-    logAISuccess({
-      operation: input.operation,
-      provider: provider.id,
-      model,
-      durationMs: Date.now() - startedAt,
-      usage: textResult.usage,
-    });
-
-    return {
-      value: value as T,
-      rawText: textResult.text,
-      model: textResult.model,
-      provider: textResult.provider,
-      usage: textResult.usage,
-      metadata: textResult.metadata,
-    };
-  } catch (error) {
-    const aiError = toAIError(error, { provider: provider.id, model });
-    logAIError(aiError, {
-      operation: input.operation,
-      provider: provider.id,
-      model,
-      durationMs: Date.now() - startedAt,
-    });
-    throw aiError;
-  }
+      return {
+        value: value as T,
+        rawText: textResult.text,
+        model: textResult.model,
+        provider: textResult.provider,
+        usage: textResult.usage,
+        metadata: textResult.metadata,
+      };
+    }
+  );
 }
 
 /**
@@ -288,10 +304,11 @@ export function describeAIConfig(): {
   debug: boolean;
 } {
   const config = getAIConfig();
-  const provider = getAIProvider(config.provider);
+  const chain = resolveProviderChain(config);
+  const provider = getAIProvider(chain[0]);
 
   return {
-    provider: provider.id,
+    provider: chain.join(","),
     model: config.model ?? provider.defaultModel,
     debug: config.debug,
   };

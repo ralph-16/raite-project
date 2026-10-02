@@ -64,8 +64,8 @@ repeating "AI-powered" throughout the UI. No decoration because it is fashionabl
 ### Design quality test
 
 Before considering a visual redesign complete, ask: *"Could this design belong
-to 100 other AI startups?"* If yes, keep iterating. Identity must come from Oi
-typography, expressive color, editorial composition, playful career typography,
+to 100 other AI startups?"* If yes, keep iterating. Identity must come from
+expressive color, editorial composition, playful career typography,
 whitespace, and the aspiration → uncertainty → exploration → start narrative —
 recognizable even without the logo.
 
@@ -171,21 +171,22 @@ with text or icon (especially skill levels, success/error).
 
 ---
 
-## 4. Typography (update wins: Oi replaces Knewave)
+## 4. Typography — Inter for everything
 
 | Role | Font | CSS variable | Class |
 |---|---|---|---|
-| Display / headlines | **Oi** (expressive, editorial) | `--font-display` | `font-display` |
-| Body / UI text | **Space Grotesk** | `--font-body` | `font-body` (default on `<body>`) |
-| Data / mono | **IBM Plex Mono** | `--font-mono` | `font-mono` |
+| All text (display, body, UI, data) | **Inter** | `--font-sans` | `font-sans` |
+
+`font-display`, `font-body`, and `font-mono` remain as Tailwind aliases that
+all resolve to Inter, so existing classes keep working. Prefer `font-sans`
+in new code.
 
 ### Rules
 
-- Hero headlines, major section headings, large editorial statements: `font-display`. **Oi has a single weight.** Use `font-normal`, never `font-bold`/`font-semibold`.
-- Body, nav, labels, paragraphs, buttons: `font-body`.
-- Technical info, metadata, scores, tabular values: `font-mono`.
-- **Never** Oi for nav, buttons, labels, dense UI, body copy, or text under ~18px.
-- **Never** all-caps labels as a default; oversized expressive words (e.g. DOCTOR, PILOT, DESIGNER) are intentional editorial moments, not labels.
+- Inter everywhere: headlines, body, nav, labels, buttons, metadata, scores, tabular values.
+- Use weight and size for hierarchy, not different families: headlines `font-bold`/`font-extrabold` + tight tracking; body `font-normal`/`font-medium`; meta `font-medium` + `tracking-wide` where needed.
+- **Never** introduce another font family (no display serif, grotesk, or mono face) without updating this section first.
+- **Never** all-caps labels as a default; oversized expressive words (e.g. DOCTOR, PILOT, DESIGNER) are intentional editorial moments, not labels — set them in Inter extrabold uppercase with tight tracking.
 - Highlighting a word with color/marker is allowed as a brand moment (e.g. Mellow marker behind a hero word), but must stay readable and intentional.
 - Line length: max ~80 chars for body (`max-w-md` hero copy, `max-w-2xl` section intros).
 - Do not reduce every design problem to cards. Prefer oversized text, typographic composition, editorial hierarchy, scale changes, controlled rotation, unusual alignment — where readable.
@@ -194,13 +195,13 @@ with text or icon (especially skill levels, success/error).
 
 | Element | Class |
 |---|---|
-| Hero H1 | `font-display font-normal text-5xl md:text-7xl` (landing may go larger) |
-| Section H2 | `font-display font-normal text-3xl md:text-4xl` |
-| Card H3 (product) | `font-display font-normal text-lg` |
+| Hero H1 | `font-sans font-extrabold tracking-tight text-5xl md:text-7xl` (landing may go larger) |
+| Section H2 | `font-sans font-bold tracking-tight text-3xl md:text-4xl` |
+| Card H3 (product) | `font-sans font-semibold text-lg` |
 | Body | `text-base` / `text-lg`, `text-foreground` or `text-muted-foreground` |
-| Small / meta | `text-sm` / `text-xs`, `text-muted-foreground` (+ `font-mono` for data) |
+| Small / meta | `text-sm` / `text-xs`, `text-muted-foreground` (`font-mono` alias still renders as Inter; prefer `font-sans font-medium` + tracking) |
 
-Migration note: `layout.tsx` still loads Knewave — swap to Oi (`next/font/google`, single weight, `--font-display`) as part of the landing rework.
+Migration note: `layout.tsx` now loads only Inter (`next/font/google`, `--font-sans`). The old Oi / Space Grotesk / IBM Plex Mono loading is removed.
 
 ---
 
@@ -379,7 +380,7 @@ ambient always-on motion.
 - All interactive elements reachable via Tab, with visible focus.
 - `prefers-reduced-motion` respected. Animations use transform/opacity.
 - Chat and AI output regions use `aria-live="polite"`.
-- No Oi in small or dense text (hackathon a11y bonus).
+- Inter at all sizes; use weight/size (not a separate display face) for hierarchy.
 
 ---
 
@@ -394,7 +395,7 @@ lib/
 ├── utils.ts               # cn() utility
 app/
 ├── globals.css            # ALL CSS variables go here, never a new CSS file
-├── layout.tsx             # fonts loaded via next/font/google (Oi + Space Grotesk + IBM Plex Mono)
+├── layout.tsx             # fonts loaded via next/font/google (Inter only, --font-sans)
 tailwind.config.ts         # colors (hsl(var(--x) / <alpha-value>)), keyframes, animations
 ```
 
@@ -431,7 +432,7 @@ Before building a new screen, confirm:
 1. **Purpose**: persuade / operate / read / experience. Does it support the core loop? If not, don't build it.
 2. **First viewport**: communicates the task immediately with one obvious next action.
 3. **Color**: landing = intentional editorial pairing (§3.2); product = white/neutral base, semantic accent actions, highlight sparingly.
-4. **Type**: Oi (single weight) for display, Space Grotesk for body, IBM Plex Mono for data.
+4. **Type**: Inter for everything (`font-sans`); hierarchy via weight/size/tracking (§4).
 5. **Copy**: UI voice for controls, Lory voice for companion text. "Alignment", not "match". No invented functionality.
 6. **Privacy and AI**: say why data is collected, label AI content, keep resume optional.
 7. **Motion**: one orchestrated entrance, restrained feedback, reduced motion respected.
@@ -454,7 +455,7 @@ Before building a new screen, confirm:
 | Restrained motion craft | `emilkowalski/skills@emil-design-eng` (312K) | `npx skills add emilkowalski/skills@emil-design-eng` |
 | shadcn composition rules | `shadcn` (already vendored) | load via skill tool |
 
-Skipped low-trust lookalikes (`anti-ui-slop` 13 installs, `anti-slop-review` 4 installs). Prefer the high-install, reputable sources above; this file outranks any skill on brand conflicts (palette, Oi, copy).
+Skipped low-trust lookalikes (`anti-ui-slop` 13 installs, `anti-slop-review` 4 installs). Prefer the high-install, reputable sources above; this file outranks any skill on brand conflicts (palette, Inter, copy).
 
 ---
 

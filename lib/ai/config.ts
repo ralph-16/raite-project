@@ -26,8 +26,32 @@ export interface AIConfig {
   debug: boolean;
 }
 
+/**
+ * Resolves the provider fallback chain from `AI_PROVIDER_ORDER`.
+ *
+ * When set (e.g. `gemini,openrouter`), the service tries each provider in
+ * order and moves to the next when one fails with 429 or 503. When unset,
+ * the chain is just `[config.provider]` — the single-provider behaviour.
+ *
+ * Unknown ids are filtered out so a typo cannot silently disable a provider.
+ * If nothing valid remains, falls back to `[config.provider]`.
+ */
+export function resolveProviderChain(config: AIConfig): AIProviderId[] {
+  const raw = process.env.AI_PROVIDER_ORDER?.trim();
+  if (!raw) return [config.provider];
+
+  const order = raw
+    .split(",")
+    .map((id) => id.trim())
+    .filter((id): id is AIProviderId =>
+      SUPPORTED_PROVIDERS.includes(id as AIProviderId)
+    );
+
+  return order.length > 0 ? order : [config.provider];
+}
+
 /** Providers this build knows how to construct. */
-export const SUPPORTED_PROVIDERS: readonly AIProviderId[] = ["mock", "gemini"];
+export const SUPPORTED_PROVIDERS: readonly AIProviderId[] = ["mock", "gemini", "openrouter"];
 
 const DEFAULT_PROVIDER: AIProviderId = "mock";
 
@@ -79,6 +103,14 @@ export function assertProviderCredentials(
         );
       }
       return {};
+    case "openrouter":
+      if (!process.env.OPENROUTER_API_KEY?.trim()) {
+        throw aiConfigurationError(
+          "AI_PROVIDER is set to \"openrouter\" but OPENROUTER_API_KEY is not set.",
+          { provider, detail: "missing OPENROUTER_API_KEY" }
+        );
+      }
+      return {};
     default: {
       // Unreachable while SUPPORTED_PROVIDERS and this switch agree; present so
       // adding a provider cannot silently skip its credential check.
@@ -100,4 +132,5 @@ export const AI_ENV_VARS = {
   modelFallbacks: "AI_MODEL_FALLBACKS",
   debug: "AI_DEBUG",
   geminiKey: "GEMINI_API_KEY",
+  openrouterKey: "OPENROUTER_API_KEY",
 } as const;

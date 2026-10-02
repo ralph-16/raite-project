@@ -1,18 +1,25 @@
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/components/hero-section";
-import { HowItWorks } from "@/components/how-it-works";
 import { Features } from "@/components/features";
+import { CareerExploration } from "@/components/career-exploration";
+import { HowItWorks } from "@/components/how-it-works";
+import { LearningStructure } from "@/components/learning-structure";
+import { ProofBasedLearning } from "@/components/proof-based-learning";
+import { KaLakbayIntroduction } from "@/components/ka-lakbay-introduction";
 import { CTASection } from "@/components/cta-section";
 import { Footer } from "@/components/footer";
 import { AuthDrawerProvider } from "@/components/auth/auth-drawer-provider";
 
 /**
- * Landing page — deliberately short: nav, hero, how it works, features,
- * final CTA, footer.
+ * Landing page — one connected narrative (AGENTS §12), in chapter order:
  *
- * career-exploration, learning-structure, proof-based-learning and
- * ka-lakbay-introduction still exist in `components/` but are no longer
- * rendered here (drop them back into <main> to restore them).
+ *   POSSIBILITY (hero) → THE PROBLEM (#problem) → UNCERTAINTY
+ *   (#uncertainty, the Velvet Cherry block) → THE LOOP (#how-it-works)
+ *   → LEARN·TRY·PROVE (#learn, the highlight block) → PROOF (#proof)
+ *   → WHAT AI DOES (#about) → START (inverted closing chapter)
+ *
+ * Section ids are what the navbar, footer and hero scroll links target, so
+ * keep them in sync when reordering.
  */
 export default function Home() {
   return (
@@ -22,8 +29,12 @@ export default function Home() {
       <Navbar />
       <main>
         <HeroSection />
-        <HowItWorks />
         <Features />
+        <CareerExploration />
+        <HowItWorks />
+        <LearningStructure />
+        <ProofBasedLearning />
+        <KaLakbayIntroduction />
         <CTASection />
       </main>
       <Footer />

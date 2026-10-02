@@ -5,13 +5,15 @@
 /*
  * Ka-Lakbay design tokens.
  * The palette is fixed: do not add, shift, or substitute colors.
- * Taffy #E76290 and Blue Vinyl #0759A2 are NOT part of it.
+ * Taffy #E76290 and Blue Vinyl #0759A2 are supporting expressive colors
+ * (the older ban on them is rescinded per AGENTS.md §3.2).
  *
  * Light is the base theme. Dark mode is opt-in: the class is set on <html>
  * from `kl.theme` (see components/theme-toggle.tsx) by an inline script in
- * app/layout.tsx, so it applies before first paint. Only neutrals and
- * semantic surfaces change in dark — every `--lory-*` palette value is
- * identical in both themes.
+ * app/layout.tsx, so it applies before first paint. Neutrals and semantic
+ * surfaces change in dark — every `--lory-*` palette value is identical in
+ * both themes; `--accent-*` remaps (Kind Berry/Mellow lead light,
+ * Velvet Cherry/Flossy lead dark).
  */
 @layer base {
   :root {
@@ -39,8 +41,24 @@
     --lory-magenta: 315 100% 56%; /* Hot Pink (electric) - rare */
     --lory-green: 115 84% 23%; /* Green House - success */
     --lory-burgundy: 350 72% 25%; /* Velvet Cherry - destructive */
+    --lory-taffy: 333 72% 62%; /* Taffy - playful editorial (≈ #E76290) */
+    --lory-vinyl: 209 92% 33%; /* Blue Vinyl - deeper blue (≈ #0759A2) */
 
     /* ── Semantic mapping ───────────────────────────────────── */
+    --accent-primary: 218 85% 53%; /* Kind Berry in light */
+    --accent-highlight: 63 100% 56%; /* Mellow in light */
+
+    /* Ink for accent-coloured TEXT (accent-primary is a surface colour, so it
+       cannot be reused for copy). Light = Kind Berry (4.8:1 on white, §3.5). */
+    --accent-ink: 218 85% 53%;
+    /* Ink for text sitting ON --accent-highlight. Mellow/Flossy are loud, so
+       the ink stays near-black in both themes (§3.5: Mellow only takes
+       foreground; white on Flossy is forbidden). */
+    --highlight-ink: 0 0% 4%;
+    /* Hero marker fill behind a display word. Near-full Mellow in light,
+       Flossy at reduced alpha in dark so white foreground keeps >6:1. */
+    --marker-fill: hsl(63 100% 56% / 0.95);
+
     --primary: 218 85% 53%;
     --primary-foreground: 0 0% 100%;
 
@@ -59,17 +77,24 @@
     --ring: 218 85% 53%;
 
     --radius: 0.5rem;
+
+    /* Native controls + scrollbars follow the theme even before the toggle
+       touches `documentElement.style.colorScheme`. */
+    color-scheme: light;
   }
 
-  /* Dark canvas: same hues, inverted neutrals.
+  /* Dark mode is its own expression (Velvet Cherry + Flossy lead), not
+     inverted light. Canvas goes near-black with near-white foreground.
+     --accent-primary resolves to Velvet Cherry: use it as
+     surface/block/border in dark, never as body text on dark (poor contrast).
      Contrast notes (all on #121212):
        --foreground  #F7F7F7  ≈ 17:1
        --muted-foreground #ADADAD ≈ 8:1
      --accent-foreground stays near-black: it means "ink on a Mellow fill",
      which is Mellow's job in both themes. */
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 97%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
     --card: 0 0% 10%;
     --card-foreground: 0 0% 97%;
@@ -86,10 +111,25 @@
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 97%;
 
+    /* Velvet Cherry as surface/block/border in dark — never body text on dark. */
+    --accent-primary: 350 72% 25%;
+    --accent-highlight: 339 100% 75%; /* Flossy in dark */
+
+    /* Accent ink in dark: Flossy reads at ~8.9:1 on black (Kind Berry only
+       makes ~4.4:1 there, which is too thin for small text). */
+    --accent-ink: 339 100% 75%;
+    /* Stays near-black: it only ever sits on Mellow (light) or Flossy (dark),
+       and white on Flossy is forbidden (§3.5). */
+    --highlight-ink: 0 0% 4%;
+    /* Flossy at 55% over black keeps white foreground above 6:1. */
+    --marker-fill: hsl(339 100% 75% / 0.55);
+
     --accent: 63 100% 56%;
     --accent-foreground: 0 0% 4%;
 
     --ring: 218 85% 60%;
+
+    color-scheme: dark;
   }
 }
 
@@ -98,7 +138,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background text-foreground font-sans antialiased;
   }
   /* Kind Berry behind white: 4.8:1 */
   ::selection {
@@ -134,14 +174,42 @@
   @apply animate-shimmer;
 }
 
-/* Motion is decorative — honour the OS preference wherever we animate. */
+/* Mellow marker behind a hero display word (§4: a marker is an allowed brand
+   moment). The fill comes from `--marker-fill`, which the theme swaps so the
+   near-black foreground keeps its contrast in both modes. */
+.marker {
+  background-color: var(--marker-fill);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-inline: 0.08em;
+}
+
+/* Short window added by the theme toggle so colours cross-fade instead of
+   snapping. Removed after ~320ms — never left on permanently. */
+.theme-anim,
+.theme-anim *,
+.theme-anim *::before,
+.theme-anim *::after {
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    fill 300ms ease,
+    stroke 300ms ease !important;
+}
+
+/* Motion is decorative — honour the OS preference wherever we animate.
+   Delays are neutralised too: a staggered `animation-delay` would otherwise
+   keep content hidden for up to a second under reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 }

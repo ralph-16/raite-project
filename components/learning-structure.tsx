@@ -1,69 +1,57 @@
-const steps = [
-  "JavaScript",
-  "Functions",
-  "Learn the concept",
-  "Try an example",
-  "Practice",
-  "Complete a challenge",
-  "Demonstrate the skill",
+import { Reveal } from "@/components/reveal";
+
+const stages = [
+  {
+    title: "Learn",
+    body: "Understand the concept. Short, focused explanations introduce one topic at a time — no 12-hour course.",
+  },
+  {
+    title: "Try",
+    body: "Apply it. Small examples and practice tasks let you use it in a real scenario while it is still fresh.",
+  },
+  {
+    title: "Prove",
+    body: "Show it. A challenge demonstrates the skill for real, and what you prove updates your profile.",
+  },
 ];
 
-const supportingPoints = [
-  "Small learning activities",
-  "Practical examples",
-  "Practice tasks",
-  "Real-world challenges",
-  "Proof-based progress",
-];
-
+/**
+ * LEARN → TRY → PROVE — the page's highlight block (Mellow in light,
+ * Flossy in dark), with near-black ink so contrast holds in both themes.
+ */
 export function LearningStructure() {
   return (
-    <section className="border-t border-border">
-      <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
-        <div className="flex flex-col gap-16">
-          <div className="max-w-xl flex flex-col gap-4">
-            <h2 className="font-display text-3xl md:text-4xl font-normal tracking-tight">
-              Industry knowledge, one step at a time.
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              You don&apos;t have to learn everything at once. Ka-Lakbay breaks larger skill areas into smaller concepts, examples, practice activities, and challenges.
+    <section id="learn" className="bg-accent-highlight text-highlight-ink">
+      <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
+        <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-end md:gap-12">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em]">
+              Inside one activity
             </p>
+            <h2 className="mt-5 font-display font-normal text-4xl leading-[1.08] md:text-6xl">
+              Learn it. Try it. Prove it.
+            </h2>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Learning path visualization */}
-            <div className="flex flex-col gap-1">
-              {steps.map((step, i) => (
-                <div key={step} className="flex items-center gap-4">
-                  <div className="flex-1 py-3 px-4 border border-border bg-card rounded-sm">
-                    <span className="text-sm font-medium">{step}</span>
-                  </div>
-                  {i < steps.length - 1 && (
-                    <svg className="text-muted-foreground shrink-0" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M8 2v12M4 10l4 4 4-4" />
-                    </svg>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Supporting points */}
-            <div className="flex flex-col gap-4">
-              <h3 className="font-display font-normal text-lg">
-                How you&apos;ll learn
-              </h3>
-              <ul className="flex flex-col gap-3">
-                {supportingPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <p className="text-base leading-relaxed md:text-lg">
+            Every skill in Ka-Lakbay moves through the same three moves, so you
+            always know what you are doing and why it counts.
+          </p>
         </div>
-      </div>
+
+        <div className="mt-12 border-t border-highlight-ink/30">
+          {stages.map((stage) => (
+            <div
+              key={stage.title}
+              className="grid gap-2 border-b border-highlight-ink/30 py-6 md:grid-cols-[minmax(0,0.55fr)_minmax(0,1.45fr)] md:items-baseline md:gap-10 md:py-7"
+            >
+              <h3 className="font-display font-normal text-4xl leading-none md:text-5xl">
+                {stage.title}
+              </h3>
+              <p className="text-base leading-relaxed">{stage.body}</p>
+            </div>
+          ))}
+        </div>
+      </Reveal>
     </section>
   );
 }

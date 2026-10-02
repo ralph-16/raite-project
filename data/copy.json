@@ -1,12 +1,12 @@
 {
   "hero": {
-    "eyebrow": "AI-Powered Student Career Navigator",
+    "eyebrow": "A career and learning navigator for students",
     "headlineBefore": "Not sure what's next? Find your",
     "headlineAccent": "direction.",
     "headlineAfter": "",
-    "subhead": "Answer a few friendly questions. See careers that fit you. Follow a game-style map to get there.",
-    "primaryCta": "Start My Journey",
-    "secondaryCta": "Log In",
+    "subhead": "Answer a few friendly questions. Explore possible paths and see why each one is relevant to you. Follow a clear map to build skills you can demonstrate.",
+    "primaryCta": "Start my journey",
+    "secondaryCta": "Log in",
     "trustLine": "Free to try. No wrong answers. Skip anything."
   },
   "howItWorks": {
@@ -16,17 +16,17 @@
       {
         "number": "01",
         "title": "Tell Lory about you",
-        "description": "A quick chat-free walkthrough, about 3 minutes."
+        "description": "A quick chat-free walkthrough, about 3 minutes. Skip anything you are not sure about yet."
       },
       {
         "number": "02",
-        "title": "See careers that fit",
-        "description": "Matched to your interests, skills and goals."
+        "title": "Explore possible paths",
+        "description": "See career paths with alignment and the reason behind each one."
       },
       {
         "number": "03",
-        "title": "Level up your skills",
-        "description": "A skill-tree map with real learning resources."
+        "title": "Build skills you can show",
+        "description": "A connected map of what to learn next, and challenges that prove what you can do."
       }
     ]
   },
@@ -35,25 +35,25 @@
     "intro": "Everything you need to explore a path — nothing you have to pay for.",
     "items": [
       {
-        "title": "Careers matched to you",
-        "description": "See paths that line up with your answers, and the reason why."
+        "title": "Possible paths, with reasons",
+        "description": "Each path shows its alignment and why it is relevant to you."
       },
       {
-        "title": "Skill-tree roadmaps",
-        "description": "A game-style map of what to learn and in what order."
+        "title": "Skill maps in order",
+        "description": "See what to learn next and how each step connects."
       },
       {
         "title": "Free learning resources",
         "description": "Every step links to free, well-known material you can open today."
       },
       {
-        "title": "Bookmark your path",
-        "description": "Save the careers you like and pick up where you left off."
+        "title": "Proof of what you can do",
+        "description": "Complete small challenges and track skills you have demonstrated."
       }
     ]
   },
   "finalCta": {
     "headline": "Your path doesn't have to be a guess.",
-    "button": "Start My Journey"
+    "button": "Start my journey"
   }
 }

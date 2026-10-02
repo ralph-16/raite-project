@@ -1,80 +1,43 @@
-"use client";
+import { Reveal } from "@/components/reveal";
 
-import { Button } from "@/components/ui/button";
-import { useAuthDrawer } from "@/components/auth/auth-drawer-provider";
-
-const categories = [
-  {
-    title: "Build",
-    description: "Explore paths focused on creating software, applications, systems, and digital products.",
-    paths: ["Software Developer", "Cybersecurity Analyst"],
-  },
-  {
-    title: "Analyze",
-    description: "Explore paths focused on understanding information, finding patterns, and solving problems with data.",
-    paths: ["Data Analyst", "Business Analyst"],
-  },
-  {
-    title: "Design",
-    description: "Explore paths focused on creating experiences, visuals, and digital content.",
-    paths: ["UI/UX Designer", "Graphic Designer"],
-  },
-  {
-    title: "Communicate",
-    description: "Explore paths focused on content, audiences, messaging, and digital communication.",
-    paths: ["Content Strategist", "Marketing Specialist"],
-  },
-];
-
+/**
+ * UNCERTAINTY chapter — the one Velvet Cherry block on the page.
+ * Answers the visitor's real objection ("I don't know what I want yet")
+ * before any product explanation.
+ *
+ * Text uses `text-primary-foreground` (white in both themes) rather than a
+ * raw neutral, so the block stays token-driven — see §3.6.
+ */
 export function CareerExploration() {
-  const { openAuth } = useAuthDrawer();
-
   return (
-    <section id="career-paths" className="border-t border-border">
-      <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
-        <div className="flex flex-col gap-16">
-          <div className="max-w-xl flex flex-col gap-4">
-            <h2 className="font-display text-3xl md:text-4xl font-normal tracking-tight">
-              You don&apos;t need to know your career yet.
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Not sure what you want to become? That&apos;s okay. Ka-Lakbay can help you explore possibilities based on the things you enjoy, the problems you like solving, and the ways you prefer to work.
+    <section id="uncertainty" className="bg-lory-burgundy text-primary-foreground">
+      <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
+        <div className="max-w-3xl">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary-foreground/60">
+            Uncertainty
+          </p>
+          <h2 className="mt-5 font-display font-normal text-4xl leading-[1.08] md:text-6xl">
+            You don&apos;t need to know your career yet.
+          </h2>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2 md:gap-10">
+            <p className="text-base leading-relaxed text-primary-foreground/80 md:text-lg">
+              Most students are asked to choose a career before they have tried
+              any of it. Ka-Lakbay starts from what you enjoy and what you can
+              already do, then lays out possible paths.
+            </p>
+            <p className="text-base leading-relaxed text-primary-foreground/80 md:text-lg">
+              Each path arrives with the reason it&apos;s there and the skills it
+              would ask of you. Nothing is ranked, and nothing is decided for
+              you.
             </p>
           </div>
 
-          <div className="grid gap-px bg-border md:grid-cols-2">
-            {categories.map((cat) => (
-              <div key={cat.title} className="bg-background p-8 flex flex-col gap-4">
-                <h3 className="font-display font-normal text-lg">
-                  {cat.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {cat.description}
-                </p>
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {cat.paths.map((path) => (
-                    <span
-                      key={path}
-                      className="text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground"
-                    >
-                      {path}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div>
-            <Button
-              size="lg"
-              onClick={(event) => openAuth("signup", event.currentTarget)}
-            >
-              Explore Possibilities
-            </Button>
-          </div>
+          <p className="mt-10 font-display text-2xl leading-snug text-lory-pink md:text-3xl">
+            Alignment, not a verdict.
+          </p>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

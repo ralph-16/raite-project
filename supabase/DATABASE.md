@@ -17,7 +17,7 @@ The schema supports the product flow: **onboarding → context → career match 
 | `migrations/20261002000000_grant_profiles_aspiration_source.sql` | **Superseded.** Granted `UPDATE(career_aspiration_source)` to `authenticated`; no longer needed (see below). |
 | `migrations/20261003000000_revoke_profiles_aspiration_source.sql` | Revokes that grant. `career_aspiration_source` / `career_aspiration_set_at` are written only via the service-role client in `POST /api/profiler`, so authenticated clients lose nothing. |
 
-`schema.sql` is **generated** by concatenating the two migrations plus the seed. Edit the migration files, then regenerate — do not hand-edit `schema.sql`, or the change is lost on the next build.
+`schema.sql` is **generated** by concatenating the migrations plus the seed. Edit the migration files, then regenerate — do not hand-edit `schema.sql`, or the change is lost on the next build. Note: `schema.sql` currently reflects only migrations 1–2; it does not yet include the grant/revoke migrations, so a fresh database built from `schema.sql` alone will still carry the old column grant until it is regenerated.
 
 ### Applying
 
@@ -35,7 +35,7 @@ Incremental (a migration was already applied):
 supabase db push
 ```
 
-`schema.sql` is a snapshot, not a migration. It contains bare `create table` / `create type`, so running it twice fails by design. Both migration files are re-runnable: every `create type`, `create trigger` and `create policy` in migration 2 is guarded with a `do $$ ... exception when duplicate_object` block or a preceding `drop ... if exists`, and its seed inserts are idempotent.
+`schema.sql` is a snapshot, not a migration. It contains bare `create table` / `create type`, so running it twice fails by design. Migrations 1–2 are re-runnable: every `create type`, `create trigger` and `create policy` in migration 2 is guarded with a `do $$ ... exception when duplicate_object` block or a preceding `drop ... if exists`, and its seed inserts are idempotent. The grant/revoke migrations are plain idempotent statements (re-running a revoke of an absent privilege only warns).
 
 Local reset (drops the DB, replays migrations + seed):
 
