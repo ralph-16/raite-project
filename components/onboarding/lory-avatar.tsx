@@ -12,15 +12,19 @@ export type LoryAvatarState =
   | "determined"
   | "welcoming";
 
+/**
+ * One portrait per mood, from the Lory set in `public/lory/`. Mood is
+ * decorative — the surrounding copy always says what is happening.
+ */
 const STATE_IMAGE: Record<LoryAvatarState, string> = {
-  idle: "/lory/lory-idle.png",
-  thinking: "/lory/lory-thinking.png",
-  happy: "/lory/lory-happy.png",
-  confused: "/lory/lory-confused.png",
-  celebrating: "/lory/lory-celebrating.png",
-  encouraging: "/lory/lory-encouraging.png",
-  determined: "/lory/lory-determined.png",
-  welcoming: "/lory/lory-welcoming.png",
+  idle: "/lory/LORY SITTING.png",
+  thinking: "/lory/LORY THINKING.png",
+  happy: "/lory/LORY FACING FORWARD HAPPY.png",
+  confused: "/lory/LORY CONFUSED.png",
+  celebrating: "/lory/LORY FIGURED IT OUT.png",
+  encouraging: "/lory/LORY CUTE.png",
+  determined: "/lory/LORY SERIOUS.png",
+  welcoming: "/lory/LORY.png",
 };
 
 const SIZE_PX = { sm: 40, md: 56, lg: 80 } as const;

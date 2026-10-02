@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -31,8 +32,15 @@ export function Navbar() {
       <div className="mx-auto max-w-5xl px-6 h-16 flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="group flex items-center gap-2 font-sans font-semibold tracking-tight text-lg tracking-tight shrink-0"
+          className="group flex items-center gap-2 font-sans font-semibold tracking-tight text-lg shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
+          <Image
+            src="/logo.png"
+            alt=""
+            width={32}
+            height={32}
+            className="size-8 shrink-0"
+          />
           Ka-Lakbay
           <span
             aria-hidden="true"

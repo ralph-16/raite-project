@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Loader2, LogOut } from "lucide-react";
@@ -79,8 +80,16 @@ export function AppNav() {
         <div className="flex items-center gap-6">
           <Link
             href="/home"
-            className="font-sans font-semibold tracking-tight text-lg tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex items-center gap-2 font-sans font-semibold tracking-tight text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
+            <Image
+              src="/logo.png"
+              alt=""
+              aria-hidden="true"
+              width={32}
+              height={32}
+              className="size-8 shrink-0"
+            />
             Ka-Lakbay
           </Link>
 

@@ -90,6 +90,11 @@ function splitList(value: string): string[] {
     .filter(Boolean);
 }
 
+/** Splits a comma-separated skills string (resume edit field). */
+export function splitSkillList(value: string): string[] {
+  return splitList(value);
+}
+
 function answersFor(state: GuidedState, topic: string): GuidedAnswer[] {
   return state.answers.filter((a) => a.topic === topic && !a.skipped);
 }
@@ -137,9 +142,10 @@ export function toOnboardingState(state: GuidedState): OnboardingState {
     ...answersFor(state, "experience").map((a) => a.answer),
   ].filter(Boolean);
 
-  const learningPreferences = answersFor(state, "learning").flatMap((a) =>
-    splitList(a.answer)
-  );
+  const learningPreferences = [
+    ...answersFor(state, "learning"),
+    ...answersFor(state, "learning_time"),
+  ].flatMap((a) => splitList(a.answer));
 
   const aspiration = state.aspirations.unsure
     ? { direction: "unsure" as const, explorationSignals: [] }

@@ -19,6 +19,8 @@ import type {
   AITextGenerationInput,
   AITextGenerationResult,
 } from "../types";
+import type { OnboardingQuestion } from "../prompts/onboarding";
+import fallbackData from "../../../data/onboarding-fallback.json";
 
 const PROVIDER_ID = "mock";
 const DEFAULT_MODEL = "mock-echo-v1";
@@ -39,110 +41,49 @@ const MOCK_LATENCY_MS = 50;
  * (`metadata.mock = true`) so it can never be mistaken for
  * model-generated advice.
  */
-const NEXT_QUESTION_FIXTURES: Array<Record<string, unknown>> = [
+
+const FALLBACK_QUESTIONS: OnboardingQuestion[] = (
+  fallbackData as { questions: OnboardingQuestion[] }
+).questions;
+
+/**
+ * Mock Q&A script: the two gating questions the profile
+ * needs (year level, program), then the shared static
+ * fallback script. Mirrors what a well-behaved model is
+ * instructed to ask, in order.
+ */
+const NEXT_QUESTION_SCRIPT: Array<Record<string, unknown>> = [
   {
-    done: false,
-    key: "year_level",
+    id: "year_level",
+    type: "single",
+    text: "What year are you in right now?",
+    options: [
+      { id: "first_year", label: "First year" },
+      { id: "second_year", label: "Second year" },
+      { id: "third_year", label: "Third year" },
+      { id: "fourth_year", label: "Fourth year" },
+      { id: "graduate", label: "Graduate or beyond" },
+    ],
+    allowSkip: true,
+    allowNotSure: true,
     topic: "year_level",
-    type: "single_choice",
-    prompt: "What year are you in right now?",
-    options: [
-      { value: "first_year", label: "First year" },
-      { value: "second_year", label: "Second year" },
-      { value: "third_year", label: "Third year" },
-      { value: "fourth_year", label: "Fourth year" },
-      { value: "graduate", label: "Already graduated" },
-      { value: "working", label: "Working" },
-    ],
   },
   {
-    done: false,
-    key: "program",
+    id: "program",
+    type: "text",
+    text: "What are you studying?",
+    options: [],
+    allowSkip: true,
+    allowNotSure: true,
     topic: "program",
-    type: "short_text",
-    prompt: "What are you studying?",
-    options: [],
   },
-  {
-    done: false,
-    key: "interests",
-    topic: "interests",
-    type: "multi_choice",
-    prompt: "What do you enjoy doing in your free time? Pick all that apply.",
-    options: [
-      { value: "building", label: "Building things" },
-      { value: "writing", label: "Writing" },
-      { value: "helping", label: "Helping people" },
-      { value: "numbers", label: "Numbers and puzzles" },
-      { value: "design", label: "Design and art" },
-    ],
-  },
-  {
-    done: false,
-    key: "skills",
-    topic: "skills",
-    type: "multi_choice",
-    prompt: "Which of these have you actually tried? Pick all that apply.",
-    options: [
-      { value: "coding", label: "Coding" },
-      { value: "design", label: "Design" },
-      { value: "data", label: "Data and spreadsheets" },
-      { value: "writing", label: "Writing" },
-      { value: "presenting", label: "Presenting" },
-    ],
-  },
-  {
-    done: false,
-    key: "experience",
-    topic: "experience",
-    type: "short_text",
-    prompt: "Tell me about a project or job you learned something from.",
-    options: [],
-  },
-  {
-    done: false,
-    key: "learning_time",
-    topic: "learning",
-    type: "single_choice",
-    prompt: "How much time could you spend learning each week?",
-    options: [
-      { value: "under_1h", label: "Under an hour" },
-      { value: "1-3h", label: "1 to 3 hours" },
-      { value: "4-7h", label: "4 to 7 hours" },
-      { value: "8h_plus", label: "8+ hours" },
-    ],
-  },
-  {
-    done: false,
-    key: "working_style",
-    topic: "other",
-    type: "single_choice",
-    prompt: "Do you prefer working with others or on your own?",
-    options: [
-      { value: "alone", label: "Mostly on my own" },
-      { value: "mixed", label: "A mix of both" },
-      { value: "team", label: "Mostly with others" },
-    ],
-  },
-  {
-    done: false,
-    key: "job_values",
-    topic: "other",
-    type: "multi_choice",
-    prompt: "What matters most to you in a job? Pick all that apply.",
-    options: [
-      { value: "learning", label: "Learning new things" },
-      { value: "people", label: "Working with people" },
-      { value: "creative", label: "Creative freedom" },
-      { value: "stability", label: "Stability" },
-      { value: "impact", label: "Visible impact" },
-    ],
-  },
+  ...FALLBACK_QUESTIONS,
 ];
 
 /**
- * Honest placeholder profile: every list is empty because the mock
- * never read any student answers. The summary says so plainly.
+ * Honest placeholder profile: every list is empty because the
+ * mock never read any student answers. The summary says so
+ * plainly.
  */
 const EXPLORER_PROFILE_FIXTURE: Record<string, unknown> = {
   strengths: [],
@@ -169,13 +110,14 @@ function buildFixture(
   if (schemaName === "NextQuestion") {
     const index = Math.min(
       Math.max(answeredCount(input.prompt), 0),
-      NEXT_QUESTION_FIXTURES.length - 1
+      NEXT_QUESTION_SCRIPT.length - 1
     );
-    return NEXT_QUESTION_FIXTURES[index];
+    return { done: false, question: NEXT_QUESTION_SCRIPT[index] };
   }
   if (schemaName === "ExplorerProfile") return EXPLORER_PROFILE_FIXTURE;
-  // Unknown schema: the caller's Zod validation will reject it, which
-  // is the honest outcome — the mock cannot fabricate every shape.
+  // Unknown schema: the caller's Zod validation will reject it,
+  // which is the honest outcome — the mock cannot fabricate every
+  // shape.
   return {};
 }
 

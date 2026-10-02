@@ -7,6 +7,7 @@ import {
   GUIDED_STORAGE_KEY,
   HOME_SNAPSHOT_KEY,
   INITIAL_GUIDED_STATE,
+  splitSkillList,
   toOnboardingState,
   type GuidedAnswer,
   type GuidedState,
@@ -28,6 +29,43 @@ type Stage = "intro" | "resume" | "aspirations" | "qa" | "building" | "done";
 const STAGE_ORDER: Stage[] = ["intro", "resume", "aspirations", "qa", "building", "done"];
 
 const MAX_RESUME_BYTES = 5 * 1024 * 1024;
+
+/**
+ * Question shape returned by /api/onboarding/next-question.
+ * Mapped onto QaQuestion for the UI below.
+ */
+interface ApiOnboardingQuestion {
+  id: string;
+  text: string;
+  type: "single" | "multi" | "scale" | "text";
+  options: Array<{ id: string; label: string }>;
+  allowSkip: boolean;
+  allowNotSure: boolean;
+  topic: string;
+}
+
+/**
+ * Maps the API question onto the UI question. Scale and
+ * single questions both render as a single-choice group
+ * (the model provides the scale points as options).
+ */
+function toQaQuestion(question: ApiOnboardingQuestion): QaQuestion {
+  return {
+    key: question.id,
+    topic: question.topic,
+    type:
+      question.type === "single" || question.type === "scale"
+        ? "single_choice"
+        : question.type === "multi"
+          ? "multi_choice"
+          : "short_text",
+    prompt: question.text,
+    options: question.options.map((option) => ({
+      value: option.id,
+      label: option.label,
+    })),
+  };
+}
 
 function loadStored(): { state: GuidedState; stage: number } | null {
   try {
@@ -61,6 +99,8 @@ export function OnboardingFlow() {
   const [question, setQuestion] = React.useState<QaQuestion | null>(null);
   const [qaLoading, setQaLoading] = React.useState(false);
   const [qaError, setQaError] = React.useState<string | null>(null);
+  /** Small neutral note under the question: AI-generated or fallback. */
+  const [sourceNote, setSourceNote] = React.useState<string | null>(null);
 
   const [buildError, setBuildError] = React.useState<string | null>(null);
   const [isBuilding, setIsBuilding] = React.useState(false);
@@ -69,6 +109,8 @@ export function OnboardingFlow() {
   const [completionNote, setCompletionNote] = React.useState<string | null>(null);
 
   const headingRef = React.useRef<HTMLDivElement>(null);
+  /** Aborts the in-flight Q&A request on unmount or supersession. */
+  const qaAbort = React.useRef<AbortController | null>(null);
   const stage = STAGE_ORDER[stageIndex] ?? "intro";
 
   React.useEffect(() => {
@@ -99,6 +141,13 @@ export function OnboardingFlow() {
   React.useEffect(() => {
     if (hydrated) headingRef.current?.focus();
   }, [stageIndex, hydrated]);
+
+  // Abort any in-flight Q&A request when the flow unmounts.
+  React.useEffect(() => {
+    return () => {
+      qaAbort.current?.abort();
+    };
+  }, []);
 
   const patch = (next: Partial<GuidedState>) =>
     setState((prev) => ({ ...prev, ...next }));
@@ -207,48 +256,77 @@ export function OnboardingFlow() {
     async (answers: GuidedAnswer[]) => {
       if (qaInFlight.current) return;
       qaInFlight.current = true;
+      // Supersede any in-flight request (new answer or unmount).
+      qaAbort.current?.abort();
+      const controller = new AbortController();
+      qaAbort.current = controller;
       setQaLoading(true);
       setQaError(null);
       try {
         const response = await fetch("/api/onboarding/next-question", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({
             answers: answers.map((a) => ({
-              key: a.key,
+              questionId: a.key,
               topic: a.topic,
-              prompt: a.prompt,
-              answer: a.answer,
+              answerLabel: a.answer,
             })),
-            aspirations: state.aspirations.text.trim() || undefined,
-            unsure: state.aspirations.unsure,
-            resumeSummary: state.resume.parsed?.summary || undefined,
+            desiredCareer:
+              state.aspirations.skipped || state.aspirations.unsure
+                ? undefined
+                : state.aspirations.text.trim() || undefined,
+            resumeSkills:
+              state.resume.correctedSkills !== undefined
+                ? splitSkillList(state.resume.correctedSkills)
+                : (state.resume.parsed?.skills ?? undefined),
           }),
         });
-        const data = (await response.json()) as QaQuestion & {
+        const data = (await response.json()) as {
           status?: string;
           done?: boolean;
+          question?: ApiOnboardingQuestion;
           message?: string;
+          source?: string;
         };
         if (!response.ok || data.status === "error") {
           setQaError(data.message ?? "Lory lost the thread. Try again.");
           return;
         }
-        if (data.done) {
+        if (data.done || !data.question) {
           patch({ qaDone: true });
           goTo(STAGE_ORDER.indexOf("building"));
           return;
         }
-        setQuestion(data);
-      } catch {
+        setSourceNote(
+          data.source === "fallback"
+            ? "Using Lory's standard questions"
+            : "AI-generated by Lory"
+        );
+        setQuestion(toQaQuestion(data.question));
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return; // Superseded by a newer request, or unmounted.
+        }
         setQaError("Unable to reach Lory right now. Try again.");
       } finally {
-        setQaLoading(false);
-        qaInFlight.current = false;
+        // Only the newest request owns the loading state.
+        if (qaAbort.current === controller) {
+          qaAbort.current = null;
+          setQaLoading(false);
+          qaInFlight.current = false;
+        }
       }
     },
     // aspirations/resume are stage-stable while Q&A runs; answers passed explicitly.
-    [state.aspirations.text, state.aspirations.unsure, state.resume.parsed?.summary]
+    [
+      state.aspirations.text,
+      state.aspirations.unsure,
+      state.aspirations.skipped,
+      state.resume.parsed?.skills,
+      state.resume.correctedSkills,
+    ]
   );
 
   // First question when entering the Q&A stage.
@@ -501,6 +579,7 @@ export function OnboardingFlow() {
               loading={qaLoading}
               loadError={qaError}
               answeredCount={state.answers.length}
+              sourceNote={sourceNote}
               onAnswer={handleQaAnswer}
               onRetry={() => void fetchNext(state.answers)}
               onBack={() => goTo(stageIndex - 1)}

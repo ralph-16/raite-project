@@ -1,0 +1,114 @@
+{
+  "questions": [
+    {
+      "id": "fallback-free-time",
+      "type": "multi",
+      "text": "What do you enjoy doing in your free time? Pick all that apply.",
+      "options": [
+        { "id": "building", "label": "Building things" },
+        { "id": "writing", "label": "Writing and words" },
+        { "id": "helping", "label": "Helping people" },
+        { "id": "numbers", "label": "Numbers and puzzles" },
+        { "id": "design", "label": "Design and art" }
+      ],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "interests"
+    },
+    {
+      "id": "fallback-working-style",
+      "type": "single",
+      "text": "When you work on something big, how do you like to do it?",
+      "options": [
+        { "id": "alone", "label": "Mostly on my own" },
+        { "id": "mixed", "label": "A mix of both" },
+        { "id": "team", "label": "Mostly with others" }
+      ],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "working_style"
+    },
+    {
+      "id": "fallback-problem-style",
+      "type": "single",
+      "text": "A tricky problem shows up. What's your first instinct?",
+      "options": [
+        { "id": "steps", "label": "Break it into small steps" },
+        { "id": "ask", "label": "Ask someone who knows" },
+        { "id": "try", "label": "Try something and see" },
+        { "id": "research", "label": "Look up how others solved it" }
+      ],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "problem_style"
+    },
+    {
+      "id": "fallback-numbers",
+      "type": "scale",
+      "text": "How comfortable are you with numbers and data?",
+      "options": [
+        { "id": "1", "label": "Not at all" },
+        { "id": "2", "label": "A little" },
+        { "id": "3", "label": "Somewhat" },
+        { "id": "4", "label": "Mostly" },
+        { "id": "5", "label": "Very much" }
+      ],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "numbers_comfort"
+    },
+    {
+      "id": "fallback-tools",
+      "type": "multi",
+      "text": "Which of these have you actually used? Pick all that apply.",
+      "options": [
+        { "id": "spreadsheets", "label": "Spreadsheets" },
+        { "id": "coding", "label": "A coding tool" },
+        { "id": "design", "label": "Design software" },
+        { "id": "lab", "label": "A lab or workshop tool" },
+        { "id": "none", "label": "None of these yet" }
+      ],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "tools_comfort"
+    },
+    {
+      "id": "fallback-job-values",
+      "type": "multi",
+      "text": "What matters most to you in a job? Pick all that apply.",
+      "options": [
+        { "id": "learning", "label": "Learning new things" },
+        { "id": "people", "label": "Working with people" },
+        { "id": "creative", "label": "Creative freedom" },
+        { "id": "stability", "label": "Stability" },
+        { "id": "impact", "label": "Visible impact" }
+      ],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "job_values"
+    },
+    {
+      "id": "fallback-learning-time",
+      "type": "single",
+      "text": "How much time could you spend learning each week?",
+      "options": [
+        { "id": "under_1h", "label": "Under an hour" },
+        { "id": "1-3h", "label": "1 to 3 hours" },
+        { "id": "4-7h", "label": "4 to 7 hours" },
+        { "id": "8h_plus", "label": "8+ hours" }
+      ],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "learning_time"
+    },
+    {
+      "id": "fallback-experience",
+      "type": "text",
+      "text": "Tell me about a project or job you learned something from.",
+      "options": [],
+      "allowSkip": true,
+      "allowNotSure": true,
+      "topic": "experience"
+    }
+  ]
+}
