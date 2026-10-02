@@ -1,4 +1,6 @@
+import { MOCK_MODE } from "@/lib/mock/flags";
 import { HomeProfile } from "@/components/home-profile";
+import { HomeView } from "@/components/home-view";
 
 export const metadata = {
   title: "Home — Ka-Lakbay",
@@ -6,14 +8,10 @@ export const metadata = {
 };
 
 /**
- * Home placeholder. Shows the Explorer Profile snapshot saved at onboarding
- * completion ("Lory's read on you (AI-generated)"). The full dashboard and
- * signed-in reads arrive with real auth.
+ * Signed-in home. Mock mode renders the self-contained dashboard (localStorage
+ * only, labelled sample data). With `NEXT_PUBLIC_MOCK_MODE=false` the original
+ * snapshot home is untouched.
  */
 export default function HomePage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <HomeProfile />
-    </main>
-  );
+  return MOCK_MODE ? <HomeView /> : <HomeProfile />;
 }

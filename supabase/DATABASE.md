@@ -14,6 +14,8 @@ The schema supports the product flow: **onboarding → context → career match 
 | `seed.sql` | Optional demo data (a fictional student, "Ana"). |
 | `migrations/20260101000000_initial_schema.sql` | Foundation. Profiles, skills, careers, learning, proof, RLS. |
 | `migrations/20260102000000_roadmaps_onboarding_context.sql` | Onboarding, resume, explainable matching, RPG roadmaps, resources. |
+| `migrations/20261002000000_grant_profiles_aspiration_source.sql` | **Superseded.** Granted `UPDATE(career_aspiration_source)` to `authenticated`; no longer needed (see below). |
+| `migrations/20261003000000_revoke_profiles_aspiration_source.sql` | Revokes that grant. `career_aspiration_source` / `career_aspiration_set_at` are written only via the service-role client in `POST /api/profiler`, so authenticated clients lose nothing. |
 
 `schema.sql` is **generated** by concatenating the two migrations plus the seed. Edit the migration files, then regenerate — do not hand-edit `schema.sql`, or the change is lost on the next build.
 

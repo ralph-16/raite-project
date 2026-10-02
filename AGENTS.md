@@ -1,6 +1,10 @@
 # AGENTS.md — Ka-Lakbay Design System
 
 > Agents and LLMs: follow these rules when writing, reviewing, or refactoring any UI in this repo.
+>
+> This file is the merged source of truth. `AGENTS-update.md` was the preferred
+> source on any conflict and has been folded in here — if a rule below
+> contradicts an older note elsewhere, this file wins.
 
 ---
 
@@ -14,68 +18,118 @@
 | Core loop | Discover → Diagnose → Map → Learn → Prove → Reassess |
 | Audience | Students (not schools, teachers, or admins) |
 
+Ka-Lakbay is designed around the idea that students do not need to already know
+exactly what career they want. It helps them explore possibilities, understand
+the skills behind those possibilities, develop those skills, and demonstrate
+what they can do. The student remains the decision-maker.
+
 ### Product guardrails (affect UI copy and layout)
 
 - **Not** a job board, resume builder, course marketplace, generic chatbot, career quiz, or LMS. Do not build screens for those.
-- The AI **suggests possible paths**. It never decides a student's career. Use: *career path, possible path, alignment, explore, relevant to you, skills to develop*. Avoid: *match, best career, you should become, guaranteed*.
+- The AI **suggests possible paths**. It never decides a student's career. Use: *possible path, career path, alignment, explore, relevant to you, skills to develop, possible next step, explore what fits, see where this could lead*. Avoid: *match, best career, perfect career, you should become, guaranteed, AI knows your ideal career*.
 - Resume upload is **optional**. Every flow must work fully with "Skip for now".
-- Every place that collects data explains **why** it is collected. AI involvement is always visible (label AI-generated content).
+- Every place that collects data explains **why** it is collected. AI involvement is always visible (label AI-generated content: "Lory suggests", "AI-generated"). Do not make AI output look like human-authored fact.
 - Never imply recommendations are guaranteed outcomes.
 - Track what the student can **demonstrate**, not only what they consumed. Finishing a resource does not equal mastery.
 - Support English and Filipino copy. Keep strings out of JSX where practical so they can be translated.
+- The student is the protagonist; Ka-Lakbay is the guide. Normalize uncertainty ("You don't have to know yet."). No fear-based or manipulative language.
+- RAITE 2026 context: the product must explain its educational problem, why AI is needed, and who benefits — but the landing page must still feel like a real student product, not a hackathon poster.
 
 ---
 
-## 2. Color system
+## 2. Design philosophy
 
-**Direction: Notion-like layout with pastel color.** White canvas, neutral borders, quiet text. Color comes from the Ka-Lakbay palette, used mostly as soft tints, with full-strength color reserved for actions and highlights. Not a dark theme. Dark mode is out of scope for the MVP.
+Ka-Lakbay's visual identity is: playful, whimsical, expressive, youthful,
+editorial, pop-culture aware, Gen-Z oriented, typographic, energetic, slightly
+unexpected, human.
 
-### 2.1 Neutrals (about 85–90% of every screen)
+The design **can be loud. It must not be chaotic.** One visual section normally
+has one dominant color, one or two supporting colors, and appropriate neutral
+space. Do not use every brand color at once.
+
+**Scope split (resolves the old Notion-quiet vs. new editorial conflict):**
+
+- **Landing page** → editorial chapters (see §12). Oversized type, unusual layouts, expressive color. Never a generic feature-card grid.
+- **Product / app screens** (onboarding, profile, careers, roadmap, learning, proof) → quiet Notion-like base: white canvas, neutral borders, whitespace, with brand color as tints + actions. This is where the §3 neutrals and tint recipe apply most.
+
+### Never do (generic AI-SaaS slop)
+
+Generic "AI" visual language, purple AI gradients, gradient text, animated
+gradients, excessive glassmorphism, excessive rounded cards / pills /
+repetitive rounded containers, sparkle icons, fake AI magic effects, generic
+dashboard mockups, stock illustrations, generic 3D objects, excessive shadows,
+feature-card grids everywhere, unnecessary badges, decorative particles,
+repeating "AI-powered" throughout the UI. No decoration because it is fashionable.
+
+### Design quality test
+
+Before considering a visual redesign complete, ask: *"Could this design belong
+to 100 other AI startups?"* If yes, keep iterating. Identity must come from Oi
+typography, expressive color, editorial composition, playful career typography,
+whitespace, and the aspiration → uncertainty → exploration → start narrative —
+recognizable even without the logo.
+
+> Make it look like a product made for students that happens to use AI — not an
+> AI product that happens to target students.
+
+---
+
+## 3. Color system
+
+### 3.1 Neutrals (product base, ~85–90% of app screens)
 
 | Token | HSL | Hex | Usage |
 |---|---|---|---|
-| `--background` | `0 0% 100%` | `#FFFFFF` | Page canvas |
-| `--foreground` | `0 0% 4%` | `#0A0A0A` | Primary text |
+| `--background` | `0 0% 100%` | `#FFFFFF` | Page canvas (light) |
+| `--foreground` | `0 0% 4%` | `#0A0A0A` | Primary text (light) |
 | `--card` | `0 0% 100%` | `#FFFFFF` | Cards (separated by border, not fill) |
 | `--card-foreground` | `0 0% 4%` | `#0A0A0A` | Card text |
 | `--muted` | `60 11% 96%` | `#F7F7F5` | Subtle surfaces, hover rows, sidebars |
 | `--muted-foreground` | `0 0% 42%` | `#6B6B6B` | Secondary text (5.3:1 on white) |
 | `--border` / `--input` | `60 4% 91%` | `#E9E9E7` | Dividers, input borders |
 
-### 2.2 Palette (from the design board)
+### 3.2 Palette (merged — update wins)
 
-The palette is fixed. Do not add, shift, or substitute colors.
+The palette is fixed. Do not add, shift, or substitute colors. The older ban on
+Taffy and Blue Vinyl is **rescinded** — they are supporting expressive colors.
 
-| Token | Board name | Hex | HSL | Role |
-|---|---|---|---|---|
-| `--lory-blue` | **Kind Berry** | `#1F6BED` | `218 85% 53%` | **Main accent.** Primary buttons, links, focus rings, selected and active states |
-| `--lory-yellow` | **Mellow** | `#F4FF1E` | `63 100% 56%` | **Main accent.** Highlights, current step, "you are here", streaks. Fill only, never text on white |
-| `--lory-pink` | **Flossy** | `#FF7FAB` | `339 100% 75%` | Soft accent. Tinted surfaces, tags, early-progress states |
-| `--lory-hot-pink` | **Hot Pink** (warm) | `#FF4283` | `339 100% 63%` | Small attention accents, notification dots, badges |
-| `--lory-magenta` | **Hot Pink** (electric) | `#FF1EC7` | `315 100% 56%` | Rare. Gradient stops and celebratory moments |
-| `--lory-green` | **Green House** | `#116B09` | `115 84% 23%` | Success |
-| `--lory-burgundy` | **Velvet Cherry** | `#6E1221` | `350 72% 25%` | Destructive and error |
+| Token | Name | Hex | Role |
+|---|---|---|---|
+| `--lory-blue` | **Kind Berry** | `#1F6BED` | Light-mode primary accent. Buttons, links, focus rings, active states |
+| `--lory-yellow` | **Mellow** | `#F4FF1E` | Light-mode highlight. Emphasis, markers, selected moments. Fill only, never text on white |
+| `--lory-burgundy` | **Velvet Cherry** | `#6E1221` | Dark-mode primary accent. Accent surfaces, blocks, large areas, borders. Also the light-mode destructive value (role changes by theme — always use the semantic token) |
+| `--lory-pink` | **Flossy** | `#FF7FAB` | Dark-mode highlight. Expressive typography, markers. Check contrast on the actual background |
+| `--lory-green` | **Green House** | `#116B09` | Supporting expressive color: growth, learning, progress. Do NOT auto-map it to semantic success |
+| `--lory-taffy` | **Taffy** | `#E76290` | Supporting: playful editorial moments, transitions, illustrations, special sections |
+| `--lory-hot-pink` | **Hot Pink** (warm) | `#FF4283` | Supporting: energy, celebration, milestones. Default attention pink |
+| `--lory-magenta` | **Hot Pink** (electric) | `#FF1EC7` | Rare: high-energy editorial / celebratory moments only |
+| `--lory-vinyl` | **Blue Vinyl** | `#0759A2` | Supporting deeper blue. Depth alongside Kind Berry; never replaces it as the light interaction color |
 
-**Not in the palette (do not use, do not create tokens):** Taffy `#E76290`, Blue Vinyl `#0759A2`.
+**Hierarchy:** Kind Berry + Mellow lead light mode; Velvet Cherry + Flossy lead
+dark mode. Example relationships (not rigid rules): White + Kind Berry + Mellow
+(light); Black + Velvet Cherry + Flossy (dark / uncertainty); Green House +
+Flossy/neutral (growth); Hot Pink/Taffy + Mellow (celebration); Blue Vinyl +
+Kind Berry (depth). Never more than three palette colors in one screen region.
 
-**Hierarchy:** Kind Berry and Mellow are the brand pair and lead every screen. Flossy, the two Hot Pinks, Green House, and Velvet Cherry are supporting accents in small doses. Never put more than three palette colors on one screen region.
+### 3.3 Semantic mapping (theme-aware — update wins)
 
-### 2.3 Semantic mapping
+Components must consume semantic tokens, never hardcode "primary = blue".
 
-| shadcn token | Value |
-|---|---|
-| `--primary` | `--lory-blue` |
-| `--primary-foreground` | `0 0% 100%` |
-| `--secondary` | `--muted` |
-| `--accent` | `--lory-yellow` at low alpha for hover and highlight surfaces |
-| `--ring` | `--lory-blue` |
-| `--success` | `--lory-green` |
-| `--destructive` | `--lory-burgundy` |
-| `--destructive-foreground` / `--success-foreground` | `0 0% 100%` |
+| Token | Light resolves to | Dark resolves to |
+|---|---|---|
+| `--accent-primary` | Kind Berry `#1F6BED` | Velvet Cherry `#6E1221` |
+| `--accent-highlight` | Mellow `#F4FF1E` | Flossy `#FF7FAB` |
+| `--surface` / `--background` | `#FFFFFF` | `#000000` or approved dark neutral |
+| `--foreground` | `#0A0A0A` | light/white foreground for the background |
 
-### 2.4 Pastel tint recipe
+Keep `--primary`, `--secondary`, `--accent`, `--ring`, `--success`,
+`--destructive` (+ foregrounds) as shadcn aliases wired to the tokens above.
+Dark mode is NOT light mode with a black background — it is its own expression.
 
-The board colors are saturated. To get the pastel feel, use them as translucent tints on surfaces and keep solid color for small, important elements.
+### 3.4 Pastel tint recipe (product screens)
+
+Board colors are saturated: use translucent tints on surfaces, solid color for
+small important elements.
 
 | Use | Tint | Text on it |
 |---|---|---|
@@ -83,101 +137,113 @@ The board colors are saturated. To get the pastel feel, use them as translucent 
 | Highlight / current step surface | `bg-lory-yellow/30` | `text-foreground` |
 | Soft tag / early-progress surface | `bg-lory-pink/20` | `text-foreground` |
 | Attention surface | `bg-lory-hot-pink/10` | `text-foreground` |
-| Success surface | `bg-lory-green/10` | `text-lory-green` |
-| Error surface | `bg-lory-burgundy/10` | `text-lory-burgundy` |
+| Success surface | `bg-lory-green/10` | `text-lory-green` + icon/label (never color alone) |
+| Error surface | `bg-lory-burgundy/10` | `text-lory-burgundy` + icon/label |
 
-Tailwind alpha modifiers only work if colors are registered as `hsl(var(--token) / <alpha-value>)` in `tailwind.config.ts`.
+Tailwind alpha modifiers only work if colors are registered as
+`hsl(var(--token) / <alpha-value>)` in `tailwind.config.ts`.
 
-### 2.5 Contrast rules (light base)
+### 3.5 Contrast rules
 
 | Pair | Ratio | Rule |
 |---|---|---|
 | White on Kind Berry | 4.8:1 | OK for buttons and body-size text |
-| Kind Berry on white | 4.8:1 | OK for links. On `--muted` (`#F7F7F5`) it drops to about 4.5:1, so use bold or larger text there |
-| Foreground (`#0A0A0A`) on Mellow | about 18:1 | The only correct text on Mellow |
-| Mellow on white | 1.1:1 | **Never** as text, icon, or border on white. Fill and highlighter only |
-| Mellow on Kind Berry | 4.4:1 | Large Knewave headlines only |
-| Foreground on Flossy | about 9:1 | OK |
+| Kind Berry on white | 4.8:1 | OK for links. On `--muted` drops to ~4.5:1 — use bold/larger there |
+| Foreground on Mellow | ~18:1 | The only correct text on Mellow |
+| Mellow on white | 1.1:1 | **Never** as text, icon, or border on white |
+| Foreground on Flossy | ~9:1 | OK |
 | White on Flossy | 2.4:1 | **Never** |
-| White on either Hot Pink | about 3.3:1 | Large or bold text only. Never as pink text on white |
+| White on either Hot Pink | ~3.3:1 | Large/bold only. Never pink text on white |
 | White on Green House / Velvet Cherry | 6.7:1 / 11.9:1 | OK |
+| Velvet Cherry as text on black | poor | Use as surface/block/border, not body text on dark |
 | Foreground on Kind Berry | 4.1:1 | Do not use. Pair Kind Berry with white |
 
-### 2.6 Color rules
+Always evaluate the actual foreground/background pair. Text: 4.5:1 normal, 3:1
+large (18px+ or 14px+ bold). **Color alone must not communicate meaning** — pair
+with text or icon (especially skill levels, success/error).
 
-- **Never** use raw Tailwind colors (`bg-blue-500`) or raw hex in components. Use semantic tokens (`bg-primary`, `text-lory-blue`).
+### 3.6 Color rules
+
+- **Never** raw Tailwind colors (`bg-blue-500`) or raw hex in components. Use semantic tokens (`bg-primary`, `text-lory-blue`) or add a `cva` variant.
 - Status colors go through semantic tokens or badge variants.
-- **Color alone must not communicate meaning.** Pair it with text or an icon (especially skill levels and success/error).
-- Text contrast: 4.5:1 normal, 3:1 large (18px+ or 14px+ bold).
-- Gradients: Kind Berry → Flossy or Flossy → Hot Pink only, and only for hero and celebratory moments.
-- The mascot's orange-red is part of the Lory illustration, not a UI token. Do not recolor UI to match it.
+- Gradients: static brand-pair only (Kind Berry → Flossy, Flossy → Hot Pink), hero/celebratory sparingly. No purple AI gradients, no gradient text, no animated gradients.
+- Lory's orange-red belongs to the illustration, not the UI. Do not recolor UI to match it.
 
 ---
 
-## 3. Typography
+## 4. Typography (update wins: Oi replaces Knewave)
 
 | Role | Font | CSS variable | Class |
 |---|---|---|---|
-| Display / headlines | **Knewave** (retro comic / gaming) | `--font-display` | `font-display` |
+| Display / headlines | **Oi** (expressive, editorial) | `--font-display` | `font-display` |
 | Body / UI text | **Space Grotesk** | `--font-body` | `font-body` (default on `<body>`) |
 | Data / mono | **IBM Plex Mono** | `--font-mono` | `font-mono` |
 
 ### Rules
 
-- Headlines and hero text: `font-display`. **Knewave has a single weight.** Use `font-normal`, never `font-bold` or `font-semibold` (the browser would fake it).
-- Body, labels, paragraphs, buttons: `font-body`.
-- Numeric data, scores, tabular values: `font-mono`.
-- **Never** use all-caps for labels.
-- **Never** accent a single word in a headline with a different color unless it is an intentional brand moment (e.g. `<span className="text-lory-blue">direction</span>` in the hero).
-- Line length: max 80 characters for body copy (`max-w-md` for hero, `max-w-2xl` for section intros).
-- Keep Knewave out of long text, small sizes (under 18px), and dense UI like tables and form labels.
+- Hero headlines, major section headings, large editorial statements: `font-display`. **Oi has a single weight.** Use `font-normal`, never `font-bold`/`font-semibold`.
+- Body, nav, labels, paragraphs, buttons: `font-body`.
+- Technical info, metadata, scores, tabular values: `font-mono`.
+- **Never** Oi for nav, buttons, labels, dense UI, body copy, or text under ~18px.
+- **Never** all-caps labels as a default; oversized expressive words (e.g. DOCTOR, PILOT, DESIGNER) are intentional editorial moments, not labels.
+- Highlighting a word with color/marker is allowed as a brand moment (e.g. Mellow marker behind a hero word), but must stay readable and intentional.
+- Line length: max ~80 chars for body (`max-w-md` hero copy, `max-w-2xl` section intros).
+- Do not reduce every design problem to cards. Prefer oversized text, typographic composition, editorial hierarchy, scale changes, controlled rotation, unusual alignment — where readable.
 
-### Type scale
+### Type scale (starting point, compose editorially on landing)
 
 | Element | Class |
 |---|---|
-| Hero H1 | `font-display font-normal text-5xl md:text-7xl` |
+| Hero H1 | `font-display font-normal text-5xl md:text-7xl` (landing may go larger) |
 | Section H2 | `font-display font-normal text-3xl md:text-4xl` |
-| Card H3 | `font-display font-normal text-lg` |
+| Card H3 (product) | `font-display font-normal text-lg` |
 | Body | `text-base` / `text-lg`, `text-foreground` or `text-muted-foreground` |
-| Small / meta | `text-sm` / `text-xs`, `text-muted-foreground` |
+| Small / meta | `text-sm` / `text-xs`, `text-muted-foreground` (+ `font-mono` for data) |
+
+Migration note: `layout.tsx` still loads Knewave — swap to Oi (`next/font/google`, single weight, `--font-display`) as part of the landing rework.
 
 ---
 
-## 4. Voice and copy
+## 5. Voice and copy
 
 Two voices. Do not mix them.
 
-**UI voice** (buttons, labels, errors, empty states, settings): plain verbs, sentence case, active voice, no filler.
-Example: "Start my journey", "Skip for now", "Upload resume".
+**UI voice** (buttons, labels, errors, empty states, settings): plain verbs,
+sentence case, active voice, no filler. "Start my journey", "Skip for now",
+"Upload resume". Avoid startup clichés ("Unlock your potential", "Revolutionize
+your journey", "cutting-edge AI", "powered by magic").
 
-**Lory voice** (chat bubbles, tooltips, reactions, empty-state companion lines): cheerful and whimsical, with occasional casual study-buddy humor. Never childish, never a decision-maker.
-Examples: "Nice! That tells me a little more about you." / "Okay, we found a skill gap. No panic, that's literally what we're here for."
+**Lory voice** (chat bubbles, tooltips, reactions, empty-state companion lines):
+cheerful and whimsical study-buddy, occasional humor. Never childish, never a
+decision-maker. "Nice! That tells me a little more about you." / "Okay, we found
+a skill gap. No panic, that's literally what we're here for."
 
 Rules:
 - Lory may explain, encourage, and ask. Lory never says "you should be a ___".
 - Use *alignment*, not *match*. Show a reason next to every alignment percentage.
-- Lory says there are no wrong answers and that questions can be skipped. Make "skip" and "I'm not sure yet" available in the interview.
+- Lory says there are no wrong answers; "Skip" and "I'm not sure yet" are always available in the interview.
 - Label AI-generated content ("Lory suggests", "AI-generated").
+- Frame AI as: "AI helps you explore. You make the decisions. You do the learning. You demonstrate the skill." Never the protagonist.
+- Resume optional, skippable questions, student in control. Never claim privacy/data guarantees that are not implemented.
+- Never fabricate functionality for marketing UI (no fake match %, scores, roadmaps, analytics). Inspect the implementation; use real components/data.
 
 ---
 
-## 5. Spacing and layout
+## 6. Spacing and layout
 
-- **Container**: `mx-auto max-w-5xl px-6`.
-- **Section vertical padding**: `py-16 md:py-20`; hero: `py-24 md:py-32`.
-- **Separators**: `border-b border-border`. Notion-like means borders and whitespace, not heavy shadows.
-- **Cards**: `rounded-xl border border-border bg-card`. Hover may add a faint tinted ring, never a dark shadow.
-- **Grid gaps**: `gap-4` for cards, `gap-px bg-border` for dense grids.
-- **Use `gap-*` over `space-x-*` / `space-y-*`.**
-- **Use `size-*` over `w-* h-*`** when equal.
-- Mobile-first. Design at 375px first.
+- **Product container**: `mx-auto max-w-5xl px-6`. Landing chapters may break out intentionally (full-bleed color blocks, oversized type) but must not cause horizontal overflow.
+- **Section vertical padding**: `py-16 md:py-20`; hero: `py-24 md:py-32` (product). Landing chapters set their own rhythm.
+- **Separators**: `border-b border-border` on product screens. Landing uses color-block / whitespace transitions between chapters instead.
+- **Cards (product only)**: `rounded-xl border border-border bg-card`. Hover may add a faint tinted ring, never a dark shadow. Landing: do NOT default to cards.
+- **Grid gaps**: `gap-4` for cards, `gap-px bg-border` for dense grids (product).
+- **Use `gap-*` over `space-x-*` / `space-y-*`. Use `size-*` over `w-* h-*`** when equal.
+- Mobile-first. Design at 375px first; validate 375 / 768 / 1280. Mobile recomposes, never just shrinks. Touch targets ≥ 44×44 (`size-11`).
 
 ---
 
-## 6. Components
+## 7. Components
 
-### 6.1 Existing shadcn/ui (extended)
+### 7.1 Existing shadcn/ui (extended)
 
 | File | Key additions |
 |---|---|
@@ -185,19 +251,24 @@ Rules:
 | `components/ui/card.tsx` | `rounded-xl`, border, tinted hover ring |
 | `components/ui/input.tsx` | `focus-visible:ring-lory-blue` |
 
-### 6.2 Custom components
+Follow the `shadcn` skill: existing components first, compose don't reinvent,
+variants before custom styles, `FieldGroup`+`Field` for forms, `Badge`/`Alert`/
+`Empty`/`Skeleton`/`Separator` over custom divs, `data-icon` for button icons,
+no `dark:` overrides (semantic tokens instead).
+
+### 7.2 Custom components
 
 | File | Purpose | Key props |
 |---|---|---|
 | `components/lory-avatar.tsx` | Animated mascot | `state`: `idle \| thinking \| happy \| confused`; `size`: `sm \| md \| lg`; `animate` |
-| `components/progress-bar.tsx` | Gel-like progress fill | `value`, `max`, `variant`: `default \| gel \| gradient`, `label` |
+| `components/progress-bar.tsx` | Progress fill | `value`, `max`, `variant`: `default \| gel \| gradient`, `label` |
 | `components/skill-badge.tsx` | Skill proficiency badge | `skill`, `level`: `not-assessed \| started \| developing \| demonstrated \| strong` |
 | `components/career-card.tsx` | Career exploration card | `title`, `alignmentPercent`, `reason`, `isSaved`, `onSave`, `onClick` |
 | `components/chat-message.tsx` | Interview and help chat bubble | `sender`: `lory \| user`, `message`, `isTyping`, `timestamp`, `options?` |
-| `components/roadmap-step.tsx` | Learning level | `level` (e.g. "Level 01"), `title`, `activities`, `proof`, `isCompleted`, `isCurrent` |
+| `components/roadmap-step.tsx` | Learning level | `level`, `title`, `activities`, `proof`, `isCompleted`, `isCurrent` |
 | `components/mascot-reaction.tsx` | Floating mascot + message | `state`, `message`, `showBadge` |
 
-### 6.3 Components to add (from the MVP screen list)
+### 7.3 Components to add (from the MVP screen list)
 
 | File | Purpose |
 |---|---|
@@ -213,7 +284,7 @@ Rules:
 
 `streak-counter.tsx` exists but is **not in context.md or the MVP screen list**. Do not surface it in the demo unless the user asks for it.
 
-### 6.4 Skill level styling
+### 7.4 Skill level styling
 
 Color is never the only signal. Every level shows its text label.
 
@@ -225,63 +296,63 @@ Color is never the only signal. Every level shows its text label.
 | `demonstrated` | `bg-lory-blue/10` | `text-lory-blue` |
 | `strong` | `bg-primary` | `text-primary-foreground` |
 
-### 6.5 Usage rules
+### 7.5 Usage rules
 
 1. Use **built-in variants first**, then `className` for layout only, then add a `cva` variant.
 2. **Never** override colors via `className`. Use semantic tokens or add a variant.
 3. Use `cn()` for conditional classes.
 4. Do **not** add manual `z-50` on overlay components (Dialog, Sheet, etc.).
 5. Use the `shimmer` utility for loading states, not custom `@keyframes`.
-6. No `space-x-*` / `space-y-*`. Use `gap-*`.
-7. Prefer `truncate` shorthand.
+6. No `space-x-*` / `space-y-*`. Use `gap-*`. Prefer `truncate` shorthand.
+7. Landing rule: do not turn information hierarchy (§12) or the product loop into identical-card grids. Use editorial composition and visual continuity.
+8. Scope discipline: a landing task must NOT silently redesign dashboard/auth/profile/roadmap/backend. Shared-component changes must be backwards-compatible, intentional, documented, and regression-safe. Prefer variants and semantic tokens.
 
 ---
 
-## 7. Animation system
+## 8. Animation system (update wins: restrained, no constant float)
 
-The brief asks for smooth, liquid / gel-like, game-like motion. The rules below keep that without turning it into decoration.
-
-### Hybrid approach
+### Approach
 
 | Layer | Tool | Used for |
 |---|---|---|
 | Simple states | **CSS / Tailwind** | Hover, focus, `transition-colors` |
-| Complex motion | **Framer Motion** | Mascot float, spring entrances, step transitions, stagger |
+| Complex motion | **Framer Motion** | Typography entrances, career-word placement, chapter transitions, stagger |
+
+Follow the `ui-taste` skill workflows (`new-work` for landing chapters,
+`operate` for product/dashboard, `polish`/`distill` for refinement) and the
+`emil-design-eng` restraint on springs and stagger.
 
 ### Motion vocabulary
 
 | Effect | Where | Implementation |
 |---|---|---|
-| **Float** | LoryAvatar idle | `animate-lory-float` (4s) |
-| **Stagger** | Section entrances, grids | `staggerChildren: 0.15` |
+| **Subtle type entrance** | Hero, chapter headings | Opacity/translate once, then rest |
+| **Career words into position** | Hero expressive typography | Staggered settle, not looping |
+| **Highlight marker appear** | Mellow/Flossy emphasis | Scale/opacity pop, once |
+| **Stagger** | Section entrances (sparingly) | `staggerChildren: 0.15` |
 | **Spring** | Badge pop, avatar bounce | `type: "spring", damping: 10-20` |
 | **Press feedback** | Buttons, cards | `whileTap={{ scale: 0.98 }}` |
-| **Pop in** | Lory state change | `scale: [0, 1.3, 1]` |
-| **Layer jump** | Sign-up and interview step transitions | Outgoing content fades and shrinks, next layer springs up (transform + opacity) |
+| **Layer jump** | Sign-up / interview steps | Outgoing fades+shrinks, next springs up (transform + opacity) |
 | **Shimmer** | Loading | `.shimmer` utility |
-| **Progress fill** | Progress bar | Animate `scaleX` with `transform-origin: left` (never `width`) |
-| **Scroll reveal** | Sections | `whileInView` |
+| **Progress fill** | Progress bar | Animate `scaleX`, `transform-origin: left` (never `width`) |
+| **Scroll reveal** | Sections | `whileInView` (sparingly) |
+
+Retired as defaults: infinite `lory-float` (4s) and `gel-wiggle` (6s). Keep the
+keyframes in config only if a specific intentional moment needs them — never as
+ambient always-on motion.
 
 ### Motion rules
 
-- **Purposeful only**: motion must orient, give feedback, or show relationships.
-- **One orchestrated moment per page** (the hero entrance). Layer-jump transitions in the sign-up and interview flow count as navigation feedback, not extra decoration.
-- **Reduced motion**: honor `prefers-reduced-motion`. Replace motion with instant or opacity-only changes.
-- **No blocking**: content must be visible and usable without animation.
-- **Animate `transform` and `opacity` only.**
-- **Frequency rule**: the more often users see an animation, the shorter it is.
-
-### Keyframes (`tailwind.config.ts`)
-
-```css
-lory-float:  translateY(0→-8px) + rotate(-2°→2°), 4s ease-in-out infinite
-gel-wiggle:  scale(1→1.02) + rotate, 6s ease-in-out infinite
-shimmer:     translateX(-100%→200%), 1.8s ease-in-out infinite
-```
+- **Purposeful only**: orient, give feedback, or show relationships.
+- **One orchestrated moment per page** (hero/chapter entrance). Step transitions count as navigation feedback, not decoration.
+- **Never**: constant floating, particles, excessive parallax, animated gradients, AI sparkle effects, everything moving at once.
+- **Reduced motion**: honor `prefers-reduced-motion` (instant or opacity-only).
+- **No blocking**: content usable without animation.
+- **Animate `transform` and `opacity` only.** Shorter for frequently-seen elements.
 
 ---
 
-## 8. Vercel React best practices
+## 9. Vercel React best practices
 
 | Rule | Applied in |
 |---|---|
@@ -299,20 +370,20 @@ shimmer:     translateX(-100%→200%), 1.8s ease-in-out infinite
 
 ---
 
-## 9. Accessibility
+## 10. Accessibility
 
-- Focus ring: `focus-visible:ring-2 focus-visible:ring-lory-blue focus-visible:ring-offset-2`.
-- Touch targets: min 44×44px. Use `size-11` (not `size-10`, which is 40px).
-- Contrast: see section 2.5. Re-check any new color pairing.
-- Color never alone for meaning. Pair with icon or text.
+- Semantic HTML: one meaningful H1, logical heading hierarchy, keyboard-navigable, visible focus (`focus-visible:ring-2 focus-visible:ring-lory-blue focus-visible:ring-offset-2` — theme-aware).
+- Touch targets ≥ 44×44 (`size-11`).
+- Contrast: see §3.5. Re-check any new pairing, especially Flossy/Hot Pink/Mellow as text and all dark-mode pairs.
+- Color never alone for meaning. Decorative oversized typography must not obscure content or replace readable headings.
 - All interactive elements reachable via Tab, with visible focus.
-- `prefers-reduced-motion` respected.
+- `prefers-reduced-motion` respected. Animations use transform/opacity.
 - Chat and AI output regions use `aria-live="polite"`.
-- Accessible typography matters for the hackathon bonus: no Knewave in small or dense text.
+- No Oi in small or dense text (hackathon a11y bonus).
 
 ---
 
-## 10. File conventions
+## 11. File conventions
 
 ```
 components/
@@ -320,11 +391,10 @@ components/
 ├── lory-avatar.tsx        # custom components: kebab-case, one per file
 ├── ...
 lib/
-├── constants.ts           # color tokens, shared types (LoryState, SkillLevel, durations)
 ├── utils.ts               # cn() utility
 app/
 ├── globals.css            # ALL CSS variables go here, never a new CSS file
-├── layout.tsx             # fonts loaded via next/font/google
+├── layout.tsx             # fonts loaded via next/font/google (Oi + Space Grotesk + IBM Plex Mono)
 tailwind.config.ts         # colors (hsl(var(--x) / <alpha-value>)), keyframes, animations
 ```
 
@@ -335,30 +405,36 @@ tailwind.config.ts         # colors (hsl(var(--x) / <alpha-value>)), keyframes, 
 
 ---
 
-## 11. Commands
+## 12. Landing page direction (update wins)
 
-```bash
-npm run dev         # dev server at localhost:3000
-npm run build       # production build
-npm run lint        # ESLint
-npm run typecheck   # tsc --noEmit
-```
+Central question: **"What do you want to be?"** Supporting idea: **"You don't
+have to know yet."** Narrative: ASPIRATION → UNCERTAINTY → EXPLORATION → START.
 
-Run `typecheck` and `lint` before considering any UI task complete.
+Possible chapters: **POSSIBILITY** (bright, Kind Berry + Mellow) → **UNCERTAINTY**
+("You don't have to know yet", darker Velvet Cherry + Flossy chapter) →
+**EXPLORATION** ("Let's figure out what's possible", open) → **LEARNING**
+("Know it. Try it. Prove it.", supporting palette) → **START** ("You don't need
+the whole answer. You just need somewhere to start.", clear action).
+
+Rules:
+- Possible career words (DOCTOR, PILOT, DESIGNER…) are expressive typography about possibility — NOT cards or matches unless the interaction requires it.
+- Answer, in order: what is Ka-Lakbay, who is it for, what problem, how it works, what AI actually does, what the student gets, what next. Editorial composition, not a feature grid.
+- Product loop (Discover → … → Reassess) as one connected journey with visual continuity, not identical cards.
+- Communicate the real educational problem (interests↔career gap, skills gap, what-next overload) without exaggeration.
 
 ---
 
-## 12. Design contract (for new screens)
+## 13. Design contract (for new screens)
 
 Before building a new screen, confirm:
 
 1. **Purpose**: persuade / operate / read / experience. Does it support the core loop? If not, don't build it.
 2. **First viewport**: communicates the task immediately with one obvious next action.
-3. **Color**: white and neutral base, Kind Berry as the action color, Mellow for highlights, other palette colors as small tints.
-4. **Type**: Knewave (single weight) for headlines, Space Grotesk for body, IBM Plex Mono for data.
-5. **Copy**: UI voice for controls, Lory voice for companion text. "Alignment", not "match".
+3. **Color**: landing = intentional editorial pairing (§3.2); product = white/neutral base, semantic accent actions, highlight sparingly.
+4. **Type**: Oi (single weight) for display, Space Grotesk for body, IBM Plex Mono for data.
+5. **Copy**: UI voice for controls, Lory voice for companion text. "Alignment", not "match". No invented functionality.
 6. **Privacy and AI**: say why data is collected, label AI content, keep resume optional.
-7. **Motion**: one orchestrated entrance, tap feedback, reduced motion respected.
+7. **Motion**: one orchestrated entrance, restrained feedback, reduced motion respected.
 8. **States**: loading, empty, error, disabled, success, all implemented.
 9. **Responsive**: tested at 375px, 768px, 1280px.
 
@@ -368,9 +444,27 @@ Before building a new screen, confirm:
 
 ---
 
-## 13. Open decisions (confirm with the user, then delete this section)
+## 14. Skills to use (from skill search)
 
-1. **Skill levels**: context.md lists Beginner (section 13) and Started / Demonstrated (section 16). This file uses `not-assessed | started | developing | demonstrated | strong`. Confirm.
-2. **CTA casing**: context.md writes "Start My Journey" (title case); the UI voice rule is sentence case ("Start my journey"). Confirm.
-3. **Hot Pink**: the board has two. `--lory-hot-pink` (`#FF4283`) is the default; `--lory-magenta` (`#FF1EC7`) is reserved for rare moments. Confirm.
-4. **Streak counter**: keep, hide, or remove from the MVP.
+| Task | Skill | Install |
+|---|---|---|
+| Landing composition, anti-slop layout | `uizze.sh@ui-taste` (already vendored under `.agents/skills/`) | load via skill tool; workflows `new-work` / `polish` / `distill` |
+| Next.js structure, restraint | `vercel-labs/agent-skills@web-design-guidelines` (688K installs) | `npx skills add vercel-labs/agent-skills@web-design-guidelines` |
+| Taste critique gate | `anthropics/skills@frontend-design` (941K) + `pbakaus/impeccable@impeccable` (304K) | `npx skills add anthropics/skills@frontend-design` / `npx skills add pbakaus/impeccable@impeccable` |
+| Restrained motion craft | `emilkowalski/skills@emil-design-eng` (312K) | `npx skills add emilkowalski/skills@emil-design-eng` |
+| shadcn composition rules | `shadcn` (already vendored) | load via skill tool |
+
+Skipped low-trust lookalikes (`anti-ui-slop` 13 installs, `anti-slop-review` 4 installs). Prefer the high-install, reputable sources above; this file outranks any skill on brand conflicts (palette, Oi, copy).
+
+---
+
+## 15. Commands
+
+```bash
+npm run dev         # dev server at localhost:3000
+npm run build       # production build
+npm run lint        # ESLint
+npm run typecheck   # tsc --noEmit
+```
+
+Run `typecheck` and `lint` before considering any UI task complete.
