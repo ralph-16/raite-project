@@ -8,7 +8,7 @@ export default function AuthCodeErrorPage() {
   return (
     <main className="flex min-h-screen items-center justify-center p-6">
       <div className="w-full max-w-sm flex flex-col gap-6 text-center">
-        <h1 className="font-sans font-bold tracking-tight text-2xl font-normal tracking-tight">
+        <h1 className="font-sans font-bold tracking-tight text-2xl">
           Sign-in failed
         </h1>
         <p className="text-sm text-muted-foreground">

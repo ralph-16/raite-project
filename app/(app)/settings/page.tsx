@@ -10,7 +10,7 @@ export const metadata = {
 export default function SettingsPage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
-      <h1 className="font-sans font-bold tracking-tight text-3xl font-normal tracking-tight">
+      <h1 className="font-sans font-bold tracking-tight text-3xl">
         Settings
       </h1>
       <p className="mt-2 text-sm text-muted-foreground">
