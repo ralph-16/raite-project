@@ -51,7 +51,7 @@ export function OnboardingShell({
         </div>
       ) : null}
 
-      <h1 className="font-display text-3xl font-normal md:text-4xl">{title}</h1>
+      <h1 className="font-sans font-bold tracking-tight text-3xl font-normal md:text-4xl">{title}</h1>
 
       {loryMessage ? (
         <div

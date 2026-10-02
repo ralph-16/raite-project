@@ -24,14 +24,14 @@ export function HeroSection() {
     <section className="bg-background pt-28 pb-16 md:pt-36 md:pb-24">
       <div className="mx-auto max-w-5xl px-6">
         <p
-          className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground animate-rise-in"
+          className="font-sans font-medium text-[11px] uppercase tracking-[0.2em] text-muted-foreground animate-rise-in"
           style={{ animationDelay: "0ms" }}
         >
           AI-powered student career navigator
         </p>
 
         <h1
-          className="mt-5 font-display font-normal text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] animate-rise-in"
+          className="mt-5 font-sans font-extrabold tracking-tight text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] animate-rise-in"
           style={{ animationDelay: "60ms" }}
         >
           What do you want <span className="marker">to be?</span>
@@ -64,7 +64,7 @@ export function HeroSection() {
               </Button>
             </div>
 
-            <p className="mt-6 font-mono text-xs text-muted-foreground">
+            <p className="mt-6 font-sans text-xs text-muted-foreground">
               No resume needed. Skip anything you&apos;re not sure about.
             </p>
           </div>
@@ -74,7 +74,7 @@ export function HeroSection() {
             aria-hidden="true"
             className="flex flex-col items-start gap-3 md:items-end md:gap-4"
           >
-            <span className="mb-1 hidden font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground md:block">
+            <span className="mb-1 hidden font-sans font-medium text-[11px] uppercase tracking-[0.2em] text-muted-foreground md:block">
               Possible paths, not promises
             </span>
             {careerWords.map((word, i) => (
@@ -86,7 +86,7 @@ export function HeroSection() {
                 style={{ animationDelay: `${340 + i * 120}ms` }}
               >
                 <span
-                  className={`inline-block font-display font-normal leading-[1.1] ${word.size} ${word.tone}`}
+                  className={`inline-block font-sans font-bold tracking-tight leading-[1.1] ${word.size} ${word.tone}`}
                   style={{ transform: `rotate(${word.rotation}deg)` }}
                 >
                   {word.text}

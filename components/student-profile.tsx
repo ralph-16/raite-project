@@ -22,7 +22,7 @@ function Section({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="font-display text-lg font-normal">{title}</h3>
+      <h3 className="font-sans font-semibold tracking-tight text-lg font-normal">{title}</h3>
       {items.length > 0 ? (
         <ul className="flex flex-col gap-1.5">
           {items.map((item) => (
@@ -71,7 +71,7 @@ export function StudentProfile({
           your onboarding answers
           {modelLabel ? ` (${modelLabel})` : ""}
         </p>
-        <h2 className="font-display text-lg font-normal">
+        <h2 className="font-sans font-semibold tracking-tight text-lg font-normal">
           Your Explorer Profile
         </h2>
         {(program || yearLevelLabel) && (
@@ -83,7 +83,7 @@ export function StudentProfile({
 
       {interests && interests.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h3 className="font-display text-lg font-normal">Interests</h3>
+          <h3 className="font-sans font-semibold tracking-tight text-lg font-normal">Interests</h3>
           <p className="text-sm text-foreground">{interests.join(", ")}</p>
         </div>
       )}

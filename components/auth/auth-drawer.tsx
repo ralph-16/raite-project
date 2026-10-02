@@ -73,7 +73,7 @@ export function AuthDrawer({
               Lory · your Ka-Lakbay guide
             </span>
           </div>
-          <SheetTitle className="font-display font-normal text-lg tracking-tight">
+          <SheetTitle className="font-sans font-semibold tracking-tight text-lg tracking-tight">
             {copy.title}
           </SheetTitle>
           <SheetDescription>{copy.description}</SheetDescription>

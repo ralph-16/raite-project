@@ -17,11 +17,11 @@ export function CTASection() {
   return (
     <section className="bg-foreground text-background">
       <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-background/70">
+        <p className="font-sans font-medium text-[11px] uppercase tracking-[0.2em] text-background/70">
           Start somewhere
         </p>
 
-        <h2 className="mt-5 max-w-4xl font-display font-normal text-4xl leading-[1.08] md:text-6xl">
+        <h2 className="mt-5 max-w-4xl font-sans font-extrabold tracking-tight text-4xl leading-[1.08] md:text-6xl">
           You don&apos;t need the whole answer.
           <br className="hidden md:block" /> You just need somewhere to start.
         </h2>
@@ -44,7 +44,7 @@ export function CTASection() {
           </Button>
         </div>
 
-        <p className="mt-6 font-mono text-xs text-background/70">
+        <p className="mt-6 font-sans text-xs text-background/70">
           Free to start · Resume optional · You stay in control
         </p>
       </Reveal>

@@ -13,10 +13,10 @@ export function CareerExploration() {
     <section id="uncertainty" className="bg-lory-burgundy text-primary-foreground">
       <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
         <div className="max-w-3xl">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary-foreground/60">
+          <p className="font-sans font-medium text-[11px] uppercase tracking-[0.2em] text-primary-foreground/60">
             Uncertainty
           </p>
-          <h2 className="mt-5 font-display font-normal text-4xl leading-[1.08] md:text-6xl">
+          <h2 className="mt-5 font-sans font-extrabold tracking-tight text-4xl leading-[1.08] md:text-6xl">
             You don&apos;t need to know your career yet.
           </h2>
 
@@ -33,7 +33,7 @@ export function CareerExploration() {
             </p>
           </div>
 
-          <p className="mt-10 font-display text-2xl leading-snug text-lory-pink md:text-3xl">
+          <p className="mt-10 font-sans font-bold tracking-tight text-2xl leading-snug text-lory-pink md:text-3xl">
             Alignment, not a verdict.
           </p>
         </div>

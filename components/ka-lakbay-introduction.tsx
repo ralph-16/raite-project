@@ -31,11 +31,11 @@ export function KaLakbayIntroduction() {
   return (
     <section id="about" className="bg-primary text-primary-foreground">
       <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em]">
+        <p className="font-sans font-medium text-[11px] uppercase tracking-[0.2em]">
           What AI does here
         </p>
 
-        <h2 className="mt-5 max-w-4xl font-display font-normal text-4xl leading-[1.08] md:text-6xl">
+        <h2 className="mt-5 max-w-4xl font-sans font-extrabold tracking-tight text-4xl leading-[1.08] md:text-6xl">
           AI helps you explore.
           <br className="hidden md:block" /> You make the decisions.
         </h2>
@@ -54,7 +54,7 @@ export function KaLakbayIntroduction() {
                 key={capability.title}
                 className="grid gap-1 border-b border-primary-foreground/40 py-4 md:grid-cols-[7rem_minmax(0,1fr)] md:gap-6"
               >
-                <dt className="font-display font-normal text-lg leading-snug">
+                <dt className="font-sans font-semibold tracking-tight text-lg leading-snug">
                   {capability.title}
                 </dt>
                 <dd className="text-sm leading-relaxed">

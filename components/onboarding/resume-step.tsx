@@ -74,7 +74,7 @@ export function ResumeStep({
   return (
     <div className="flex flex-col gap-6">
       <div className="rounded-xl border border-border bg-card p-5">
-        <h2 className="font-display text-lg font-normal">
+        <h2 className="font-sans font-semibold tracking-tight text-lg font-normal">
           Want Lory to learn a little more about your background?
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

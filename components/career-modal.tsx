@@ -72,7 +72,7 @@ export function CareerModal({
                 <Badge variant="quiet">Sample data</Badge>
               ) : null}
             </div>
-            <DialogTitle className="font-display font-normal text-2xl">
+            <DialogTitle className="font-sans font-bold tracking-tight text-2xl">
               {career.title}
             </DialogTitle>
             <DialogDescription>{career.description}</DialogDescription>
@@ -81,7 +81,7 @@ export function CareerModal({
           {score !== null ? (
             <section aria-label="Alignment" className="flex flex-col gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-3xl text-foreground">
+                <span className="font-sans text-3xl text-foreground">
                   {score}%
                 </span>
                 <Badge variant={alignmentTone(score)}>
@@ -161,7 +161,7 @@ export function CareerModal({
                         />
                       ))}
                     </span>
-                    <span className="font-mono text-xs text-muted-foreground">
+                    <span className="font-sans text-xs text-muted-foreground">
                       {skill.importance}/5
                     </span>
                   </span>
@@ -177,7 +177,7 @@ export function CareerModal({
                 <dt className="text-xs text-muted-foreground">
                   Typical pay
                 </dt>
-                <dd className="mt-1 font-mono text-sm">
+                <dd className="mt-1 font-sans text-sm">
                   {formatSalary(career)}
                 </dd>
               </div>
@@ -185,7 +185,7 @@ export function CareerModal({
                 <dt className="text-xs text-muted-foreground">
                   Market demand
                 </dt>
-                <dd className="mt-1 font-mono text-sm">
+                <dd className="mt-1 font-sans text-sm">
                   {demandLabel(career.market_demand)}
                 </dd>
               </div>
@@ -193,7 +193,7 @@ export function CareerModal({
                 <dt className="text-xs text-muted-foreground">
                   Time to learn
                 </dt>
-                <dd className="mt-1 font-mono text-sm">
+                <dd className="mt-1 font-sans text-sm">
                   ~{career.learning_effort_months} months
                 </dd>
               </div>
@@ -232,7 +232,7 @@ export function CareerModal({
                       <p className="mt-1.5 text-xs text-muted-foreground">
                         {item.rationale}
                       </p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">
+                      <p className="mt-1 font-sans text-xs text-muted-foreground">
                         Transferable: {item.transferable_skills.join(", ")}
                       </p>
                     </li>

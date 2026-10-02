@@ -89,7 +89,7 @@ export function FinishStep({ state }: FinishStepProps) {
           <LoryAvatar state="thinking" size="lg" />
         </div>
       </div>
-      <h1 className="mt-6 font-display font-normal text-3xl md:text-4xl">Drawing your map…</h1>
+      <h1 className="mt-6 font-sans font-bold tracking-tight text-3xl md:text-4xl">Drawing your map…</h1>
       <p className="mt-3 text-muted-foreground">
         Lining up {handled} of {listQuestions().length} questions with sample career data and
         sketching your learning lanes.
@@ -109,7 +109,7 @@ export function FinishStep({ state }: FinishStepProps) {
             style={{ transform: `scaleX(${progress / 100})` }}
           />
         </div>
-        <p className="mt-2 font-mono text-xs text-muted-foreground">{progress}%</p>
+        <p className="mt-2 font-sans text-xs text-muted-foreground">{progress}%</p>
       </div>
 
       <p className="mt-6 text-xs text-muted-foreground">

@@ -102,7 +102,7 @@ export function ResumeStep({ resume, onResume, onSkip }: ResumeStepProps) {
   return (
     <div className="grid items-start gap-10 md:grid-cols-[1.2fr_1fr]">
       <div className="max-w-md">
-        <h1 className="font-display font-normal text-3xl md:text-4xl">
+        <h1 className="font-sans font-bold tracking-tight text-3xl md:text-4xl">
           Bring a resume (optional)
         </h1>
         <p className="mt-3 text-muted-foreground">

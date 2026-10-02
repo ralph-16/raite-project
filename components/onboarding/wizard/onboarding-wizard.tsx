@@ -232,7 +232,7 @@ export function OnboardingWizard() {
     <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-5xl flex-col px-6">
       <div className="flex items-center justify-between gap-6 pt-8">
         <JourneyStones total={STEPS.length} current={index} />
-        <p className="shrink-0 font-mono text-xs text-muted-foreground">
+        <p className="shrink-0 font-sans text-xs text-muted-foreground">
           {step === "finish" ? "Final step" : `Step ${index + 1} of ${STEPS.length}`}
         </p>
       </div>
@@ -271,7 +271,7 @@ export function OnboardingWizard() {
             ) : null}
           </div>
           {step === "finish" ? (
-            <p className="font-mono text-xs text-muted-foreground">Almost there…</p>
+            <p className="font-sans text-xs text-muted-foreground">Almost there…</p>
           ) : (
             <Button type="button" id="onboarding-continue" onClick={handleContinue}>
               {step === "welcome" ? "Let's start" : "Continue"}
@@ -334,7 +334,7 @@ function StepContent({
   // wizard usable if a data edit ever changes the step list.
   return (
     <div className="max-w-md">
-      <h2 className="font-display font-normal text-3xl">Let&apos;s keep going</h2>
+      <h2 className="font-sans font-bold tracking-tight text-3xl">Let&apos;s keep going</h2>
       <p className="mt-2 text-muted-foreground">That step went missing. Use Back to return.</p>
     </div>
   );

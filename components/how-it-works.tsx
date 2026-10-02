@@ -40,10 +40,10 @@ export function HowItWorks() {
       <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
         <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-end md:gap-12">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="font-sans font-medium text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               How it works
             </p>
-            <h2 className="mt-5 font-display font-normal text-4xl leading-[1.08] md:text-6xl">
+            <h2 className="mt-5 font-sans font-extrabold tracking-tight text-4xl leading-[1.08] md:text-6xl">
               One loop, six steps.
             </h2>
           </div>
@@ -60,10 +60,10 @@ export function HowItWorks() {
               key={step.n}
               className="grid gap-2 border-b border-border py-6 md:grid-cols-[3.5rem_minmax(0,0.85fr)_minmax(0,1.5fr)] md:items-baseline md:gap-8 md:py-7"
             >
-              <span className="font-mono text-sm text-muted-foreground">
+              <span className="font-sans text-sm text-muted-foreground">
                 {step.n}
               </span>
-              <h3 className="flex items-baseline gap-3 font-display font-normal text-2xl leading-snug md:text-3xl">
+              <h3 className="flex items-baseline gap-3 font-sans font-bold tracking-tight text-2xl leading-snug md:text-3xl">
                 {step.title}
                 <span aria-hidden="true" className="text-accent-ink text-base">
                   →
@@ -76,7 +76,7 @@ export function HowItWorks() {
           ))}
         </div>
 
-        <p className="mt-6 font-mono text-xs text-muted-foreground">
+        <p className="mt-6 font-sans text-xs text-muted-foreground">
           …and back to 01. What you prove changes what you explore next.
         </p>
       </Reveal>

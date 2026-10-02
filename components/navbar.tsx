@@ -31,7 +31,7 @@ export function Navbar() {
       <div className="mx-auto max-w-5xl px-6 h-16 flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="group flex items-center gap-2 font-display font-normal text-lg tracking-tight shrink-0"
+          className="group flex items-center gap-2 font-sans font-semibold tracking-tight text-lg tracking-tight shrink-0"
         >
           Ka-Lakbay
           <span

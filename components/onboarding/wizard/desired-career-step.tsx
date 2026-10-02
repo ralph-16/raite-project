@@ -28,7 +28,7 @@ export function DesiredCareerStep({ value, enteredText, onChange }: DesiredCaree
   return (
     <div className="grid items-start gap-10 md:grid-cols-[1.4fr_1fr]">
       <div className="max-w-2xl">
-        <h1 className="font-display font-normal text-3xl md:text-4xl">
+        <h1 className="font-sans font-bold tracking-tight text-3xl md:text-4xl">
           Is there a career in mind?
         </h1>
         <p className="mt-3 text-muted-foreground">

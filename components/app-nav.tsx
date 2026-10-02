@@ -79,7 +79,7 @@ export function AppNav() {
         <div className="flex items-center gap-6">
           <Link
             href="/home"
-            className="font-display text-lg tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="font-sans font-semibold tracking-tight text-lg tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             Ka-Lakbay
           </Link>

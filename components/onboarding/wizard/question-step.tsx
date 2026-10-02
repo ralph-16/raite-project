@@ -85,10 +85,10 @@ export function QuestionStep({ question, answer, onChange }: QuestionStepProps) 
   return (
     <div className="grid items-start gap-10 md:grid-cols-[1.4fr_1fr]">
       <div className="max-w-2xl">
-        <p className="font-mono text-xs text-muted-foreground">
+        <p className="font-sans text-xs text-muted-foreground">
           Question {number} of {listQuestions().length}
         </p>
-        <h1 className="mt-2 font-display font-normal text-3xl md:text-4xl">{question.prompt}</h1>
+        <h1 className="mt-2 font-sans font-bold tracking-tight text-3xl md:text-4xl">{question.prompt}</h1>
 
         {question.helper ? (
           <div className="mt-4 max-w-md rounded-xl border border-border bg-muted p-4 text-xs text-muted-foreground">
@@ -174,8 +174,8 @@ export function QuestionStep({ question, answer, onChange }: QuestionStepProps) 
                           onClick={() => setScale(n)}
                           className={
                             active
-                              ? "grid size-11 place-items-center rounded-full bg-primary font-mono text-sm text-primary-foreground"
-                              : "grid size-11 place-items-center rounded-full border border-border font-mono text-sm text-muted-foreground transition-colors hover:border-lory-blue hover:text-foreground"
+                              ? "grid size-11 place-items-center rounded-full bg-primary font-sans text-sm text-primary-foreground"
+                              : "grid size-11 place-items-center rounded-full border border-border font-sans text-sm text-muted-foreground transition-colors hover:border-lory-blue hover:text-foreground"
                           }
                         >
                           {n}

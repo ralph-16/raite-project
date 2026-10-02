@@ -26,10 +26,10 @@ export function ProofBasedLearning() {
     <section id="proof" className="bg-background">
       <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
         <div className="max-w-2xl">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="font-sans font-medium text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             Proof, not certificates
           </p>
-          <h2 className="mt-5 font-display font-normal text-4xl leading-[1.08] md:text-5xl">
+          <h2 className="mt-5 font-sans font-extrabold tracking-tight text-4xl leading-[1.08] md:text-5xl">
             Learning isn&apos;t just about finishing a course.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">
@@ -45,10 +45,10 @@ export function ProofBasedLearning() {
               key={state.title}
               className="flex flex-col gap-3 bg-background p-6 md:p-7"
             >
-              <span className="font-mono text-xs text-muted-foreground">
+              <span className="font-sans text-xs text-muted-foreground">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <h3 className="font-display font-normal text-xl md:text-2xl">
+              <h3 className="font-sans font-semibold tracking-tight text-xl md:text-2xl">
                 {state.title}
               </h3>
               <p className="text-sm leading-relaxed text-muted-foreground">

@@ -34,7 +34,7 @@ export function LoryReadStrip({ displayName, profile }: LoryReadStripProps) {
         <div className="flex items-center gap-4">
           <LoryAvatar size="md" state="idle" />
           <div>
-            <h1 className="font-display font-normal text-3xl md:text-4xl">
+            <h1 className="font-sans font-bold tracking-tight text-3xl md:text-4xl">
               Hi, {displayName}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">

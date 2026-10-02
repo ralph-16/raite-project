@@ -41,7 +41,7 @@ export function HomeProfile() {
   if (!snapshot?.profile) {
     return (
       <div className="flex w-full max-w-md flex-col items-center gap-4 text-center">
-        <h1 className="font-display text-2xl font-normal tracking-tight">
+        <h1 className="font-sans font-bold tracking-tight text-2xl font-normal tracking-tight">
           Welcome to your home
         </h1>
         <p className="text-sm leading-relaxed text-muted-foreground">
@@ -58,7 +58,7 @@ export function HomeProfile() {
 
   return (
     <div className="flex w-full max-w-md flex-col gap-4 text-left">
-      <h1 className="font-display text-2xl font-normal tracking-tight">
+      <h1 className="font-sans font-bold tracking-tight text-2xl font-normal tracking-tight">
         Lory&apos;s read on you (AI-generated)
       </h1>
       <StudentProfile

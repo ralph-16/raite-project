@@ -23,8 +23,8 @@ export default async function RoadmapPage({
 
   return (
     <main className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-3xl flex-col items-start justify-center gap-4 px-6 py-16">
-      <p className="font-mono text-xs text-muted-foreground">{slug}</p>
-      <h1 className="font-display font-normal text-4xl">
+      <p className="font-sans text-xs text-muted-foreground">{slug}</p>
+      <h1 className="font-sans font-extrabold tracking-tight text-4xl">
         Lory is still drawing this map
       </h1>
       <p className="max-w-md text-muted-foreground">

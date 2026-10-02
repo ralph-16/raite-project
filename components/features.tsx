@@ -28,10 +28,10 @@ export function Features() {
       <Reveal className="mx-auto max-w-5xl px-6 py-20 md:py-28">
         <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-end md:gap-12">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="font-sans font-medium text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               The problem
             </p>
-            <h2 className="mt-5 font-display font-normal text-4xl leading-[1.08] md:text-6xl">
+            <h2 className="mt-5 font-sans font-extrabold tracking-tight text-4xl leading-[1.08] md:text-6xl">
               Nobody hands you a map.
             </h2>
           </div>
@@ -49,10 +49,10 @@ export function Features() {
               key={problem.n}
               className="grid gap-2 border-b border-border py-7 md:grid-cols-[3.5rem_minmax(0,1fr)_minmax(0,1.5fr)] md:gap-8 md:py-8"
             >
-              <span className="font-mono text-sm text-muted-foreground">
+              <span className="font-sans text-sm text-muted-foreground">
                 {problem.n}
               </span>
-              <h3 className="font-display font-normal text-xl leading-snug md:text-2xl">
+              <h3 className="font-sans font-semibold tracking-tight text-xl leading-snug md:text-2xl">
                 {problem.title}
               </h3>
               <p className="text-base leading-relaxed text-muted-foreground">

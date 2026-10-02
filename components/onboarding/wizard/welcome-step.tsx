@@ -20,7 +20,7 @@ export function WelcomeStep({ onStartOver }: WelcomeStepProps) {
   return (
     <div className="grid items-start gap-10 md:grid-cols-[1.2fr_1fr]">
       <div className="max-w-md">
-        <h1 className="font-display font-normal text-4xl md:text-5xl">
+        <h1 className="font-sans font-extrabold tracking-tight text-4xl md:text-5xl">
           Let&apos;s find your direction.
         </h1>
         <p className="mt-4 text-muted-foreground">
@@ -31,7 +31,7 @@ export function WelcomeStep({ onStartOver }: WelcomeStepProps) {
         <ol className="mt-8 grid gap-2">
           {LOOP.map((label, i) => (
             <li key={label} className="flex items-center gap-3 text-sm">
-              <span className="grid size-6 place-items-center rounded-full border border-border font-mono text-xs text-muted-foreground">
+              <span className="grid size-6 place-items-center rounded-full border border-border font-sans text-xs text-muted-foreground">
                 {i + 1}
               </span>
               <span>{label}</span>

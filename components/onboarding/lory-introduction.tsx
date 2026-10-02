@@ -10,7 +10,7 @@ export function LoryIntroduction({ onBegin }: LoryIntroductionProps) {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 px-6 py-16 text-center md:py-20">
       <LoryAvatar size="lg" />
-      <h1 className="font-display text-5xl font-normal md:text-7xl">
+      <h1 className="font-sans font-extrabold tracking-tight text-5xl font-normal md:text-7xl">
         Meet <span className="text-lory-blue">Lory</span>
       </h1>
       <p className="max-w-md text-lg text-foreground">

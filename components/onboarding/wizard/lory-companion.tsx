@@ -27,7 +27,7 @@ export function LoryCompanion({ state, caption }: CompanionProps) {
 
       <p
         aria-live="polite"
-        className="max-w-xs text-center font-display text-xl leading-snug tracking-tight lg:text-left"
+        className="max-w-xs text-center font-sans font-semibold tracking-tight text-xl leading-snug tracking-tight lg:text-left"
       >
         {caption}
       </p>

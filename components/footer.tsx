@@ -21,7 +21,7 @@ export function Footer() {
           <div className="flex flex-col gap-2 max-w-xs">
             <Link
               href="/"
-              className="group flex items-center gap-2 font-display font-normal text-lg tracking-tight"
+              className="group flex items-center gap-2 font-sans font-semibold tracking-tight text-lg tracking-tight"
             >
               Ka-Lakbay
               <span

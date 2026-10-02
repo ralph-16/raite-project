@@ -36,7 +36,7 @@ export function ContinueLearning({ items }: ContinueLearningProps) {
     >
       <h2
         id="continue-heading"
-        className="font-display font-normal text-2xl md:text-3xl"
+        className="font-sans font-bold tracking-tight text-2xl md:text-3xl"
       >
         Continue learning
       </h2>
@@ -57,10 +57,10 @@ export function ContinueLearning({ items }: ContinueLearningProps) {
             <li key={item.slug}>
               <Card className="flex h-full flex-col gap-3 p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="font-display font-normal text-lg">
+                  <p className="font-sans font-semibold tracking-tight text-lg">
                     {item.title}
                   </p>
-                  <span className="font-mono text-sm text-muted-foreground">
+                  <span className="font-sans text-sm text-muted-foreground">
                     {item.percent}%
                   </span>
                 </div>

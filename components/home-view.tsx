@@ -206,7 +206,7 @@ export function HomeView() {
         >
           <h2
             id="saved-heading"
-            className="font-display font-normal text-xl"
+            className="font-sans font-semibold tracking-tight text-xl"
           >
             Saved paths
           </h2>
@@ -245,7 +245,7 @@ export function HomeView() {
           <div>
             <h2
               id="careers-heading"
-              className="font-display font-normal text-2xl md:text-3xl"
+              className="font-sans font-bold tracking-tight text-2xl md:text-3xl"
             >
               {sectionTitle}
             </h2>
@@ -320,7 +320,7 @@ export function HomeView() {
             />
             {secondary.length > 0 ? (
               <div className="flex flex-col gap-4 border-t border-border pt-6">
-                <h3 className="font-display font-normal text-xl">
+                <h3 className="font-sans font-semibold tracking-tight text-xl">
                   Switching or exploring a different path
                 </h3>
                 <CareerGrid

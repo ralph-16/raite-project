@@ -112,12 +112,12 @@ export function CareerCard({
               </Badge>
             ) : null}
           </div>
-          <CardTitle className="font-display font-normal text-lg">
+          <CardTitle className="font-sans font-semibold tracking-tight text-lg">
             {career.title}
           </CardTitle>
           {alignmentPercent !== null ? (
             <p className="flex items-baseline gap-2">
-              <span className="font-mono text-2xl text-foreground">
+              <span className="font-sans text-2xl text-foreground">
                 {alignmentPercent}%
               </span>
               <span className="text-xs text-muted-foreground">alignment</span>
@@ -135,7 +135,7 @@ export function CareerCard({
             {career.description}
           </p>
           <div className="mt-auto flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs text-muted-foreground">
+            <span className="font-sans text-xs text-muted-foreground">
               {formatSalary(career)} · {demandLabel(career.market_demand)} · ~
               {career.learning_effort_months} months
             </span>
