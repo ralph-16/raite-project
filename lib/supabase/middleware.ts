@@ -1,15 +1,16 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+import { isProtectedPath } from '@/lib/constants'
+
 /**
- * Route prefixes that require an authenticated user.
+ * Which routes need a signed-in student lives in `lib/constants.ts`, shared
+ * with the client-side mock-mode guard so the two gates can't drift apart.
  *
- * The marketing site (`/`), the login drawer (`/?auth=...`) and the auth
- * routes stay public. Unauthenticated visitors to these prefixes are sent to
- * the landing page with `?auth=login&next=...`, which opens the Sign Up / Log
- * In drawer in place — no separate login page to keep in sync.
+ * Unauthenticated visitors to those routes are sent to the landing page with
+ * `?auth=login&next=...`, which opens the Sign Up / Log In drawer in place —
+ * no separate login page to keep in sync.
  */
-const PROTECTED_PREFIXES = ['/home', '/onboarding']
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -49,7 +50,7 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims
 
   const { pathname } = request.nextUrl
-  const isProtected = PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+  const isProtected = isProtectedPath(pathname)
 
   if (!user && isProtected) {
     // `next` is preserved so authentication can send the student straight to

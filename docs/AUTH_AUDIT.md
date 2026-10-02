@@ -1,6 +1,14 @@
 # Auth Audit — Ka-Lakbay (read-only, 2026-10-02)
 
-Scope: Supabase email+password auth only. No code changed. No migrations run. No live sign-up/sign-in run (so no test users created by this audit). One read-only `npm run typecheck` was run (see §8). No secrets are printed below — env vars reported as present/empty/missing only.
+Scope: Supabase email+password auth only. The audit itself changed no code,
+ran no migrations, and ran no live sign-up/sign-in (so no test users were
+created by the audit). One read-only `npm run typecheck` was run (see §8).
+No secrets are printed below — env vars reported as present/empty/missing only.
+
+**Follow-up (same day, after mock-mode phases landed):** P5, P8, P9, P10 were
+fixed in code (see §9); P7 was already fixed by `lib/constants.ts`
+`isProtectedPath()`. P1 needs a key from you, P2 needs your decision; P3/P4
+remain open. §7 rewritten to describe mock mode as-built.
 
 ## 1. Summary
 
@@ -37,7 +45,7 @@ Scope: Supabase email+password auth only. No code changed. No migrations run. No
 | P4 | medium | route protection | No onboarding gate on `/home`: middleware checks authentication only, and `HomePage` does no completion check, so an incomplete user can open `/home` directly and skip the `kl_post_auth` destination decision. | `lib/supabase/middleware.ts:12,52`; `app/home/page.tsx:13-18` | Wrong-page path the server decision cannot prevent. | Add a completion check to middleware or `HomePage` (redirect incomplete to `/onboarding`). | M |
 | P5 | low | callback | `/auth/callback` concatenates unvalidated `next` into the redirect (`${origin}${next}`); absolute URLs degrade to same-origin paths by accident of string concat, not by validation. | `app/auth/callback/route.ts:8,14` | Fragile; a future refactor (e.g. `new URL(next)`) could turn it into an open redirect. | Validate `next` server-side with the same single-`/` rule before redirecting. | S |
 | P6 | low | session | Middleware authenticates with `getClaims()` (JWT signature only, no DB revalidation) while routes use `getUser()`; a revoked/disabled user still passes middleware until token expiry. | `lib/supabase/middleware.ts:48`; `app/api/profiler/route.ts:207` | Standard-template tradeoff; brief window where middleware and routes disagree. | Accept, or re-check `getUser()` on sensitive routes (already done in profiler). | S |
-| P7 | low | route protection | `PROTECTED_PREFIXES` uses `startsWith`, so `/homeowner` etc. would be treated as protected. | `lib/supabase/middleware.ts:12,52` | Wrong-page redirect on a hypothetical route. | Match on segment boundary (`pathname === p \|\| startsWith(p + "/")`). | S |
+| P7 | low — **fixed** | route protection | `PROTECTED_PREFIXES` used `startsWith`, so `/homeowner` would match. Now fixed: `isProtectedPath()` in `lib/constants.ts` matches exact-or-subpath only, shared by middleware and the mock guard. | (was `lib/supabase/middleware.ts:52`) now `lib/constants.ts:31-34` | Gone. | — | — |
 | P8 | low | cookies | `kl_post_auth` is `httpOnly: false` and client-readable; a stale value from an earlier attempt is only cleared on completed login, and any script on the page can read it (path only, no credential — limited exposure). | `lib/auth/actions.ts:120-131, 221-225` | Minor tampering/XSS-read surface; stale overrides across tabs. | Set `httpOnly: true` and read it server-side, or clear it on every attempt start. | S |
 | P9 | low | validation | Server actions do no input validation: a direct (non-UI) `signUp` with empty `fullName` silently falls back to the email local part, and short passwords rely solely on Supabase's check. | `lib/auth/actions.ts:139-143`; validators only called in `components/auth/*` | Contract enforced by UI only; bypassable via devtools action call. | Reuse `validateSignUp`/`validateLogIn` server-side in the actions. | S |
 | P10 | low | log-out | `logOut()` returns `{ok:true}` even when `signOut` errors or throws (including missing session), so the UI reports success while a server session cookie may survive. | `lib/auth/actions.ts:266-279` | User believes they are signed out when they may not be. | Return the failure and let the UI say so. | S |
@@ -76,18 +84,34 @@ Dashboard → Authentication → Users: delete leftover verification users noted
 9. Onboarding gate for `/home` (P4; `lib/supabase/middleware.ts` and/or `app/home/page.tsx`).
 10. README/`summary.md` refresh (see loose ends) + stale `HomePage` comment ("signed-in reads arrive with real auth" — auth is real now; `app/home/page.tsx:8-12`).
 
-## 7. Mock-mode seams (`NEXT_PUBLIC_MOCK_MODE`)
+## 7. Mock-mode seams (`NEXT_PUBLIC_MOCK_MODE`) — as built
 
-- Flag already defined but **wired to nothing**: `MOCK_MODE` in `lib/mock/flags.ts:13` has zero importers; mock data (`lib/mock/careers.ts`, `questions.ts`, `roadmaps.ts`, `scoring.ts`, `storage.ts`, `schemas.ts`, `types.ts`) is likewise unreferenced by auth/UI. The seam exists; no behavior changes until call sites read it.
-- Safest wrap points (real auth code stays untouched underneath): `signUp`/`logIn`/`logOut` in `lib/auth/actions.ts` (return canned `{ok:true}` + set the same cookies); `postAuthRoute`/`defaultRouteFor` in `lib/auth/routes.ts` (pure functions, easy to stub); `AuthDrawerProvider` deep-link effect (`components/auth/auth-drawer-provider.tsx:95-114`); `persistProfile` + `resolveUserId` in `app/api/profiler/route.ts:199-295` and `app/api/onboarding/next-question/route.ts:30-38` (return mock payloads with a mock user id).
-- What would block mock mode: `lib/supabase/middleware.ts:48-64` redirects session-less visitors away from `/home` and `/onboarding` — must early-return `NextResponse.next()` when the flag is on (flag is `NEXT_PUBLIC_`-inlined, readable in middleware); `hasCompletedOnboarding` (`lib/auth/actions.ts:242-260`) reads `profiles` + cookie — stub to a fixed value in mock mode or every mock login lands on `/onboarding`.
-- Do not wrap: `lib/supabase/client.ts`, `lib/supabase/server.ts`, `lib/supabase/middleware.ts` session machinery itself — leave real plumbing intact and bypass at the call sites above so flipping the flag back restores real behavior.
+Mock mode has since landed and follows the seams recommended here, with `MOCK_MODE` in `lib/mock/flags.ts:13` as the single switch:
+
+- Bypass points: `signUp`/`logIn`/`logOut` are replaced at the call sites by `mockSignUp`/`mockLogIn`/`mockLogOut` (`lib/mock/auth.ts`) in `components/auth/sign-up-form.tsx`, `components/auth/login-form.tsx`, `components/app-nav.tsx`; mock success navigates via `defaultRouteFor()` (no post-auth cookie), real success via `postAuthRoute()`.
+- Middleware short-circuits before any Supabase work when the flag is on (`middleware.ts:14-17`); route guarding for the demo lives client-side in `components/mock-guard.tsx`.
+- `PROTECTED_PREFIXES` + `isProtectedPath()` moved to `lib/constants.ts:17-34`, imported by both `lib/supabase/middleware.ts` and `components/mock-guard.tsx` — flipping the flag changes *where* the check happens, never *which* pages are protected.
+- Remaining mock-mode caveat: the mock guard is client-side, so a mock user can briefly render a protected page (or open it with JS disabled) before the redirect — acceptable for a demo flag, not for real auth.
 
 ## 8. Test artifacts
 
 - Live sign-up/sign-in: **not run** (deliberately — avoids creating cleanup work). No users, rows, or cookies created by this audit.
-- `npm run typecheck` (read-only): **fails** — pre-existing errors confined to `lib/mock/scoring.ts` and `lib/mock/types.ts` (`Property 'find' does not exist…`, `implicitly has an 'any' type`, missing iterator/index signature). Auth files typecheck clean. Note: `summary.md` §2 records typecheck as "pass" — that claim is now stale.
+- `npm run typecheck` (read-only, at audit time): **failed** — pre-existing errors confined to `lib/mock/scoring.ts` and `lib/mock/types.ts`. Auth files were clean. (Since fixed by the mock-phase commits; typecheck passes at follow-up time.)
 - Prior artifacts I could not enumerate from code: `summary.md` §2 finding 4 says test users/rows from its verification remain in the remote project — emails/ids are not recorded in the repo; list them from Dashboard → Authentication → Users.
+
+## 9. Fixes applied (follow-up)
+
+`npm run typecheck` exit 0, `npm run lint` clean after all of these.
+
+| Problem | Change | Files |
+|---|---|---|
+| P5 callback `next` | Server-side same-origin relative-path check; invalid values fall back to `/` | `app/auth/callback/route.ts` |
+| P7 prefix over-match | Already fixed by shared `isProtectedPath()`; report updated | `lib/constants.ts` (pre-existing) |
+| P8 stale post-auth cookie | New `clearServerDestination()` expires `kl_post_auth` after consumption; both forms call it after `router.push` (real mode only) | `lib/auth/routes.ts`, `components/auth/sign-up-form.tsx`, `components/auth/login-form.tsx` |
+| P9 no server-side validation | `signUp`/`logIn` re-run `validateSignUp`/`validateLogIn`; log-in failures use the neutral `invalid_credentials` message so direct-call probes learn nothing | `lib/auth/actions.ts` |
+| P10 `logOut` always ok | Genuine `signOut` failures now return `{ok:false}`; `app-nav` already renders `logOutError`, so no UI change needed | `lib/auth/actions.ts` |
+
+Still needing you: **P1** (paste `SUPABASE_SERVICE_ROLE_KEY` into the server env), **P2** (keep or supersede the grant migration). Still open in code: **P3** (sign `kl_onboarded`), **P4** (`/home` onboarding gate), **P11** (authenticated-landing redirect, reset/OAuth stubs). P6 accepted as the standard-template tradeoff.
 
 ## Appendix. Loose ends (non-auth, noted per task)
 

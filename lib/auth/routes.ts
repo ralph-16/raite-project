@@ -112,3 +112,14 @@ function readCookie(name: string): string | null {
   }
   return null;
 }
+
+/**
+ * Expires the server's destination cookie after it has been consumed.
+ * Call after navigating so a stale decision cannot leak into a later
+ * attempt (e.g. across tabs): the next attempt re-reads `?next=` or the
+ * mode default instead of replaying this one.
+ */
+export function clearServerDestination(): void {
+  if (typeof document === "undefined") return;
+  document.cookie = `${POST_AUTH_DEST_COOKIE}=; Max-Age=0; path=/`;
+}

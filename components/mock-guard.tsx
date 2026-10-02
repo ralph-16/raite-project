@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 
+import { isProtectedPath } from "@/lib/constants";
 import { readMockSession } from "@/lib/mock/auth";
 import { MOCK_MODE } from "@/lib/mock/flags";
 
@@ -17,20 +18,10 @@ import { MOCK_MODE } from "@/lib/mock/flags";
  *
  * With `NEXT_PUBLIC_MOCK_MODE=false` this renders its children untouched and
  * `middleware.ts` does the redirecting, exactly as before.
+ *
+ * Both paths consult the same `PROTECTED_PREFIXES` in `lib/constants.ts`, so
+ * turning mock mode off cannot silently unprotect a page.
  */
-const PROTECTED_PREFIXES = [
-  "/home",
-  "/onboarding",
-  "/profile",
-  "/settings",
-  "/roadmap",
-];
-
-function isProtected(pathname: string): boolean {
-  return PROTECTED_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
-  );
-}
 
 export function MockGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -44,7 +35,7 @@ export function MockGuard({ children }: { children: React.ReactNode }) {
       return;
     }
     const pathname = window.location.pathname;
-    if (!isProtected(pathname)) {
+    if (!isProtectedPath(pathname)) {
       setStatus("ready");
       return;
     }

@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { signUp } from "@/lib/auth/actions";
-import { postAuthRoute, defaultRouteFor } from "@/lib/auth/routes";
+import { postAuthRoute, defaultRouteFor, clearServerDestination } from "@/lib/auth/routes";
 import type { FieldErrors, SignUpValues } from "@/lib/auth/types";
 import {
   PASSWORD_MIN_LENGTH,
@@ -86,6 +86,7 @@ export function SignUpForm() {
       // Intended destination: /onboarding. Mock mode has no post-auth
       // cookie, so it goes straight to the mode's default route.
       router.push(MOCK_MODE ? defaultRouteFor("signup") : postAuthRoute("signup"));
+      if (!MOCK_MODE) clearServerDestination();
       return;
     }
     setFormError(result.message);

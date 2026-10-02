@@ -81,11 +81,28 @@ const config: Config = {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(200%)" },
         },
+        /* Layer-jump step transitions: outgoing layer leaves, next springs in. */
+        "step-in-next": {
+          "0%": { opacity: "0", transform: "translateX(28px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "step-in-prev": {
+          "0%": { opacity: "0", transform: "translateX(-28px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "pop-in": {
+          "0%": { transform: "scale(0)" },
+          "60%": { transform: "scale(1.15)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
       animation: {
         "lory-float": "lory-float 4s ease-in-out infinite",
         "gel-wiggle": "gel-wiggle 6s ease-in-out infinite",
         shimmer: "shimmer 1.8s ease-in-out infinite",
+        "step-in-next": "step-in-next 320ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "step-in-prev": "step-in-prev 320ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "pop-in": "pop-in 420ms ease-out both",
       },
     },
   },

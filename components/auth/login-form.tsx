@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { logIn } from "@/lib/auth/actions";
-import { postAuthRoute, defaultRouteFor } from "@/lib/auth/routes";
+import { postAuthRoute, defaultRouteFor, clearServerDestination } from "@/lib/auth/routes";
 import type { FieldErrors, LogInValues } from "@/lib/auth/types";
 import {
   hasErrors,
@@ -70,6 +70,7 @@ export function LogInForm() {
     if (result.ok) {
       // Intended destination: /home (or a preserved `?next=` target).
       router.push(MOCK_MODE ? defaultRouteFor("login") : postAuthRoute("login"));
+      if (!MOCK_MODE) clearServerDestination();
       return;
     }
     setFormError(result.message);

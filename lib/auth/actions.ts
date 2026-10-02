@@ -32,6 +32,7 @@ import {
   POST_SIGN_UP_ROUTE,
 } from "./routes";
 import type { AuthResult, LogInValues, SignUpValues } from "./types";
+import { hasErrors, validateLogIn, validateSignUp } from "./validation";
 
 /* ------------------------------------------------------------------ *
  * Friendly messages (UI voice — plain, sentence case, no provider text)
@@ -54,6 +55,7 @@ const MESSAGES = {
     "That email and password combination didn't work. Check them and try again.",
   logInFailed: "Something went wrong while signing you in. Try again.",
   logOutFailed: "Couldn't sign you out just now. Try again.",
+  invalidInput: "Check what you entered and try again.",
 } as const;
 
 /* ------------------------------------------------------------------ *
@@ -147,6 +149,12 @@ function displayNameFor(values: SignUpValues): string {
  * ------------------------------------------------------------------ */
 
 export async function signUp(values: SignUpValues): Promise<AuthResult> {
+  // The forms validate client-side, but a server action can be invoked
+  // directly — re-check here so the contract holds without the UI.
+  if (hasErrors(validateSignUp(values))) {
+    return { ok: false, code: "unknown", message: MESSAGES.invalidInput };
+  }
+
   const email = values.email.trim();
   const displayName = displayNameFor(values);
 
@@ -191,6 +199,11 @@ export async function signUp(values: SignUpValues): Promise<AuthResult> {
  * ------------------------------------------------------------------ */
 
 export async function logIn(values: LogInValues): Promise<AuthResult> {
+  // Same reasoning as signUp: the client check is not the enforcement point.
+  if (hasErrors(validateLogIn(values))) {
+    return { ok: false, code: "invalid_credentials", message: MESSAGES.invalidCredentials };
+  }
+
   const email = values.email.trim();
 
   const supabase = await createClient();
@@ -272,8 +285,8 @@ export async function logOut(): Promise<AuthResult> {
     }
     return { ok: true };
   } catch {
-    // Includes the case where no session cookie exists at all — from the
-    // student's point of view they are signed out either way.
-    return { ok: true };
+    // Unexpected failure (e.g. no session cookie at all is fine and lands
+    // above without error; anything reaching here genuinely failed).
+    return { ok: false, code: "unknown", message: MESSAGES.logOutFailed };
   }
 }
