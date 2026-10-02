@@ -32,8 +32,15 @@ const PROVIDER_ID = "openrouter";
 /** Default model when `OPENROUTER_MODEL` is not set. */
 const DEFAULT_MODEL = "qwen/qwen3.8-27b:free";
 
-const API_BASE = "https://openrouter.ai/api/v1";
-const REQUEST_TIMEOUT_MS = 120_000;
+/**
+ * API base. Overridable (`OPENROUTER_API_BASE`) so tests and
+ * proxies can point the provider at a local stub; production
+ * always uses OpenRouter. Read once at module load.
+ */
+const API_BASE =
+  process.env.OPENROUTER_API_BASE?.trim() ||
+  "https://openrouter.ai/api/v1";
+const REQUEST_TIMEOUT_MS = 60_000;
 
 /** Retry 429/5xx/timeouts twice with backoff. No retry on 400/401/403. */
 const MAX_PRIMARY_ATTEMPTS = 2;
@@ -113,22 +120,28 @@ export class OpenRouterProvider implements AIProvider {
   }
 
   /**
-   * Structured path: requests `response_format: json_schema` with the exact
-   * schema and `provider: { require_parameters: true }` so only providers
-   * that support JSON schema parameters are used. The schema is also
-   * appended to the prompt (same as Gemini) so the model returns precisely
-   * those keys. The service still JSON-parses the text and the caller still
-   * Zod-validates — this layer maximizes compliance, it does not declare it.
+   * Structured path: requests `response_format: json_schema` with
+   * the exact schema, `provider: { require_parameters: true }` so
+   * OpenRouter only routes to endpoints that support structured
+   * output, and `reasoning: { effort: "low" }` to keep thinking
+   * overhead down. The schema is also appended to the prompt so
+   * the model returns precisely those keys.
+   *
+   * If the endpoint rejects the strict request (HTTP 400 — some
+   * providers reject strict schemas or the reasoning option), it
+   * retries once with `type: "json_object"` and the schema in the
+   * prompt, dropping the reasoning hint. The service still
+   * JSON-parses the text and the caller still Zod-validates —
+   * this layer maximizes compliance, it does not declare it.
    */
   async generateStructured(
     input: AIStructuredGenerationInput
   ): Promise<AITextGenerationResult> {
     const primary = input.model ?? this.defaultModel;
-    const body = buildRequestBody({
-      ...input,
-      prompt: `${input.prompt}\n\n${describeShape(input.jsonSchema)}`,
-    });
-    body.response_format = {
+    const prompt = `${input.prompt}\n\n${describeShape(input.jsonSchema)}`;
+
+    const strictBody = buildRequestBody({ ...input, prompt });
+    strictBody.response_format = {
       type: "json_schema",
       json_schema: {
         name: input.jsonSchema.name,
@@ -136,31 +149,25 @@ export class OpenRouterProvider implements AIProvider {
         schema: input.jsonSchema.schema,
       },
     };
-    body.provider = { require_parameters: true };
-    const { json, modelUsed, attempts } = await executeWithResilience(primary, body);
+    strictBody.provider = { require_parameters: true };
+    strictBody.reasoning = { effort: "low" };
 
-    const content = json.choices?.[0]?.message?.content;
-    if (!content?.trim()) {
-      throw aiParseError(
-        "The openrouter provider returned empty content.",
-        { provider: PROVIDER_ID, model: modelUsed, detail: "empty content" }
-      );
-    }
-
-    const result = toResult(json, modelUsed);
+    let outcome: Awaited<ReturnType<typeof executeWithResilience>>;
     try {
-      JSON.parse(result.text);
-    } catch {
-      throw aiParseError(
-        "The openrouter provider returned content that is not valid JSON.",
-        { provider: PROVIDER_ID, model: modelUsed, detail: "invalid JSON in content" }
-      );
+      outcome = await executeWithResilience(primary, strictBody);
+    } catch (error) {
+      if (!isBadRequest(error)) throw error;
+      const looseBody = buildRequestBody({ ...input, prompt });
+      looseBody.response_format = { type: "json_object" };
+      outcome = await executeWithResilience(primary, looseBody);
     }
 
-    return {
-      ...result,
-      metadata: { ...result.metadata, attempts, fallbackUsed: modelUsed !== primary },
-    };
+    return extractStructuredResult(
+      outcome.json,
+      outcome.modelUsed,
+      outcome.attempts,
+      primary
+    );
   }
 }
 
@@ -169,9 +176,11 @@ interface OpenRouterRequestBody {
   messages: OpenRouterMessage[];
   temperature?: number;
   max_tokens?: number;
+  /** Low-effort reasoning, where the serving model accepts it. */
+  reasoning?: { effort: "low" };
   response_format?: {
-    type: "json_schema";
-    json_schema: { name: string; strict: true; schema: Record<string, unknown> };
+    type: "json_schema" | "json_object";
+    json_schema?: { name: string; strict: true; schema: Record<string, unknown> };
   };
   provider?: { require_parameters: boolean };
 }
@@ -212,6 +221,66 @@ function describeShape(jsonSchema: AIStructuredGenerationInput["jsonSchema"]): s
     ...lines,
     "Do not rename, add, or omit keys. Respond with JSON only.",
   ].join("\n");
+}
+
+/**
+ * Validates and normalizes a structured-response body.
+ *
+ * Reads only `choices[0].message.content` (any reasoning field
+ * the model emits is ignored), strips a markdown code fence, and
+ * fails with a `parse_failed` the route can retry when the
+ * content is empty or not JSON.
+ */
+function extractStructuredResult(
+  json: OpenRouterResponse,
+  modelUsed: string,
+  attempts: number,
+  primary: string
+): AITextGenerationResult {
+  const content = json.choices?.[0]?.message?.content;
+  if (!content?.trim()) {
+    throw aiParseError(
+      "The openrouter provider returned empty content.",
+      { provider: PROVIDER_ID, model: modelUsed, detail: "empty content" }
+    );
+  }
+
+  const text = stripCodeFence(content);
+  try {
+    JSON.parse(text);
+  } catch {
+    throw aiParseError(
+      "The openrouter provider returned content that is not valid JSON.",
+      {
+        provider: PROVIDER_ID,
+        model: modelUsed,
+        detail: "invalid JSON in content",
+      }
+    );
+  }
+
+  const result = toResult(json, modelUsed);
+  return {
+    ...result,
+    text,
+    metadata: {
+      ...result.metadata,
+      attempts,
+      fallbackUsed: modelUsed !== primary,
+    },
+  };
+}
+
+/** True for HTTP 400 — the one status the structured path retries on. */
+function isBadRequest(error: unknown): boolean {
+  return error instanceof AIError && error.status === 400;
+}
+
+/** Removes a surrounding markdown code fence, if present. */
+function stripCodeFence(text: string): string {
+  const trimmed = text.trim();
+  const fenced = /^```(?:json)?\s*([\s\S]*?)\s*```$/i.exec(trimmed);
+  return fenced ? fenced[1].trim() : trimmed;
 }
 
 async function executeWithResilience(
