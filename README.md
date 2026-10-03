@@ -29,6 +29,14 @@ A full-stack web application built with Next.js, TypeScript, Tailwind CSS, shadc
    - `NEXT_PUBLIC_SUPABASE_URL` — Your Supabase project URL
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — Your Supabase publishable (anon) key
 
+3. Configure the AI provider (see `.env.example` for every variable):
+   - `AI_PROVIDER` — `mock` (deterministic demo, no credentials),
+     `gemini`, or `openrouter`
+   - The matching key: `GEMINI_API_KEY` or `OPENROUTER_API_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` — optional; enables the server-only
+     profile writes (`ai_context`, `onboarding_completed`). Without
+     it the app reports `aiContextPersisted: false` instead.
+
 ### Install Dependencies
 
 ```bash
@@ -62,6 +70,7 @@ policies, and seed data.
 | `npm run start`    | Start production server       |
 | `npm run lint`     | Run ESLint                    |
 | `npm run typecheck`| Run TypeScript type checking  |
+| `npm test`         | Run the test suite (node:test)|
 
 ## Project Structure
 
@@ -101,19 +110,33 @@ policies, and seed data.
 │       ├── label.tsx
 │       └── sheet.tsx
 ├── lib/
+│   ├── ai/                    # Provider-agnostic AI service
+│   │   ├── index.ts           # generateText / generateStructured
+│   │   ├── config.ts          # Provider chain + credential checks
+│   │   ├── logger.ts          # Metadata-only logging
+│   │   ├── prompts/           # System prompts + Zod/JSON schemas
+│   │   └── providers/         # mock, gemini, openrouter adapters
 │   ├── auth/                  # Provider-agnostic authentication layer
-│   │   ├── actions.ts         # signUp() / logIn() service (stub today)
+│   │   ├── actions.ts         # signUp() / logIn() server actions
 │   │   ├── routes.ts          # Post-auth destinations
 │   │   ├── types.ts           # Shared auth types
 │   │   └── validation.ts      # Reusable field + form validators
+│   ├── onboarding/            # Guided onboarding state + validators
+│   ├── profiler/              # Student Profiler (first AI vertical)
+│   ├── resume/                # Optional resume upload + parsing
+│   ├── roadmap/               # Personalized roadmap generation
+│   ├── mock/                  # Static demo data (NEXT_PUBLIC_MOCK_MODE)
 │   ├── supabase/              # Supabase client utilities
 │   │   ├── client.ts          # Browser client
 │   │   ├── server.ts          # Server client
 │   │   └── middleware.ts      # Session refresh + route protection
 │   ├── theme-context.tsx      # Light/dark theme provider
 │   └── utils.ts               # cn() + scrollToSection()
+├── data/                      # Static JSON (careers, copy, fallback questions)
+├── scripts/                   # Verification scripts (real-calls.mjs)
 ├── supabase/
 │   └── migrations/            # Database schema + seed data
+├── tests/                     # node:test suite (prompts + route)
 ├── middleware.ts              # Next.js middleware entry point
 ├── eslint.config.mjs          # ESLint flat config
 ├── .env.example               # Example environment variables

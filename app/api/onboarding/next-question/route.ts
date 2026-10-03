@@ -63,7 +63,7 @@ const nextQuestionRequestSchema = z.object({
   resumeSkills: z.array(z.string().min(1).max(80)).max(20).optional(),
 });
 
-export type NextQuestionRequest = z.infer<
+type NextQuestionRequest = z.infer<
   typeof nextQuestionRequestSchema
 >;
 
