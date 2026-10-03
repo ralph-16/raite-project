@@ -1,215 +1,145 @@
-# Raite Project
+# Ka-Lakbay
 
-A full-stack web application built with Next.js, TypeScript, Tailwind CSS, shadcn/ui, and Supabase.
+**Ka-Lakbay** is an AI-powered career and learning navigator for students. Many students don't know what career they want yet — Ka-Lakbay helps them explore possibilities, understand the skills behind those possibilities, develop those skills, and prove what they can do.
+
+Core loop: **Discover → Diagnose → Map → Learn → Prove → Reassess**
+
+> ⚠️ **Status note: UI only.** The backend, database, and AI features are **not working** in this build. All screens run on static/mock data — no real Supabase calls, no real AI responses. See [Mock mode](#mock-mode-ui-only) below.
+
+## Purpose
+
+Ka-Lakbay addresses three student problems:
+
+1. **Interests ↔ career gap** — students don't know which careers fit their interests.
+2. **Skills gap** — students don't know what skills a career needs or where they stand.
+3. **What-next overload** — too many resources, no clear starting point.
+
+The AI suggests *possible paths* — it never decides for the student. The student explores, learns, and demonstrates skills; Ka-Lakbay guides.
+
+Ka-Lakbay is **not** a job board, resume builder, course marketplace, generic chatbot, career quiz, or LMS.
+
+## Features
+
+- **Landing page** — editorial sections explaining what Ka-Lakbay is, who it's for, how it works, and a call to action.
+- **Sign Up / Log In drawer** — auth UI over the landing page with deep links (`/?auth=signup`, `/?auth=login`). UI only, no real session.
+- **AI introduction** — explains what the AI does and why data is collected.
+- **AI interview (onboarding)** — guided chat-style questions with "Skip" / "I'm not sure yet" always available.
+- **Optional resume upload** — works fully with "Skip for now"; upload UI + parsing layout only.
+- **Student profile** — program, year level, interests, strengths, developing skills, unassessed skills. No opaque AI score.
+- **Career exploration** — career cards with alignment percentage + reason, career detail modal, save/unsave.
+- **Skill-gap view** — career skills vs. the student's status (not-assessed → started → developing → demonstrated → strong).
+- **Personalized roadmap** — leveled learning path per career (levels, activities, proof steps).
+- **Micro-learning activity** — one concept per card: learn one thing, try one example, do one challenge.
+- **Skill challenge / proof** — project submissions that update demonstrated skills (UI only).
+- **Progress tracking** — progress bars, updated skill badges, home dashboard view.
+- **Settings & profile pages** — edit profile info, app preferences (UI only).
+- **Light/dark theme toggle.**
 
 ## Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript
-- **Frontend:** React 19, Tailwind CSS, shadcn/ui
-- **Backend:** Next.js Route Handlers & Server Actions
-- **Database & Auth:** Supabase
+| Layer | Technology |
+| --- | --- |
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| UI library | React 19 |
+| Styling | Tailwind CSS 3.4, tailwindcss-animate |
+| Components | shadcn/ui (Radix Dialog/Slot, class-variance-authority, clsx, tailwind-merge, lucide-react icons) |
+| Validation | Zod |
+| File parsing (UI) | mammoth (`.docx` resume parsing layout) |
+| Backend (intended, not connected) | Next.js Route Handlers & Server Actions |
+| Database & Auth (intended, not connected) | Supabase (Postgres + Auth, `@supabase/ssr`, `@supabase/supabase-js`) |
+| AI (intended, not connected) | Provider-agnostic service (`lib/ai/`) with mock / Gemini / OpenRouter adapters |
+| Package manager | npm |
+
+## Mock Mode (UI only)
+
+This build runs with `NEXT_PUBLIC_MOCK_MODE=true`:
+
+- All screens render from static JSON (`data/`) + localStorage.
+- **Zero** Supabase / API / AI calls are made.
+- Auth, onboarding, careers, roadmaps, and progress are simulated so the UI can be clicked through end to end.
+
+To connect the real backend later: set `NEXT_PUBLIC_MOCK_MODE=false`, fill in `.env.local` (see `.env.example`), and apply `supabase/migrations/`.
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 18.18 or later
-- A [Supabase](https://supabase.com) account and project
 
-### Environment Variables
-
-1. Copy `.env.example` to `.env.local`:
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-2. Fill in your Supabase project credentials in `.env.local`:
-   - `NEXT_PUBLIC_SUPABASE_URL` — Your Supabase project URL
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — Your Supabase publishable (anon) key
-
-3. Configure the AI provider (see `.env.example` for every variable):
-   - `AI_PROVIDER` — `mock` (deterministic demo, no credentials),
-     `gemini`, or `openrouter`
-   - The matching key: `GEMINI_API_KEY` or `OPENROUTER_API_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY` — optional; enables the server-only
-     profile writes (`ai_context`, `onboarding_completed`). Without
-     it the app reports `aiContextPersisted: false` instead.
-
-### Install Dependencies
+### Install & Run (UI only — no credentials needed)
 
 ```bash
 npm install
-```
-
-### Run Development Server
-
-```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-### Apply the Database Schema
-
-```bash
-npx supabase db push
-```
-
-Or paste `supabase/migrations/20260101000000_initial_schema.sql` into the
-Supabase SQL Editor. It creates the tables, enums, indexes, Row Level Security
-policies, and seed data.
+> No `.env.local`, Supabase project, or AI keys are required to view the UI in mock mode.
 
 ## Available Scripts
 
-| Command            | Description                   |
-| ------------------ | ----------------------------- |
-| `npm run dev`      | Start development server      |
-| `npm run build`    | Build for production          |
-| `npm run start`    | Start production server       |
-| `npm run lint`     | Run ESLint                    |
-| `npm run typecheck`| Run TypeScript type checking  |
-| `npm test`         | Run the test suite (node:test)|
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run TypeScript type checking |
+| `npm test` | Run the test suite (node:test) |
 
 ## Project Structure
 
 ```
-├── app/                       # Next.js App Router
+├── app/
+│   ├── (app)/
+│   │   ├── home/            # Post-login dashboard view
+│   │   ├── onboarding/      # AI interview wizard (mock UI)
+│   │   ├── profile/         # Student profile page
+│   │   ├── roadmap/[slug]/  # Personalized roadmap detail
+│   │   ├── settings/        # Settings page
+│   │   └── layout.tsx       # App shell + nav
 │   ├── api/
-│   │   └── health/            # Health check endpoint
+│   │   ├── ai/              # AI diagnostics (not connected)
+│   │   ├── health/          # Health check endpoint
+│   │   ├── onboarding/      # Next-question route (not connected)
+│   │   ├── profiler/        # Profile generation route (not connected)
+│   │   ├── resume/          # Resume parse route (not connected)
+│   │   └── skills/          # Skills route (not connected)
 │   ├── auth/
-│   │   ├── auth-code-error/   # Sign-in failure page
-│   │   └── callback/          # OAuth/PKCE code exchange
-│   ├── home/                  # Placeholder: post-login destination
-│   ├── onboarding/            # Placeholder: post-sign-up destination
-│   ├── layout.tsx             # Root layout (fonts, theme provider)
-│   ├── page.tsx               # Landing page (wraps AuthDrawerProvider)
-│   └── globals.css            # Design tokens & global styles
+│   │   ├── auth-code-error/ # Sign-in failure page
+│   │   └── callback/        # OAuth/PKCE code exchange
+│   ├── roadmap/demo/        # Demo roadmap page
+│   ├── layout.tsx           # Root layout (fonts, theme provider)
+│   ├── page.tsx             # Landing page
+│   └── globals.css          # Design tokens & global styles
 ├── components/
-│   ├── auth/                  # Sign Up / Log In drawer
-│   │   ├── auth-drawer.tsx            # Presentation: header, mode, sections
-│   │   ├── auth-drawer-provider.tsx   # Open/close/mode state + deep links
-│   │   ├── sign-up-form.tsx
-│   │   ├── login-form.tsx
-│   │   └── form-field.tsx             # Label + description + error wiring
-│   ├── navbar.tsx             # Fixed nav with mobile menu
-│   ├── hero-section.tsx
-│   ├── how-it-works.tsx
-│   ├── features.tsx
-│   ├── career-exploration.tsx
-│   ├── learning-structure.tsx
-│   ├── proof-based-learning.tsx
-│   ├── ka-lakbay-introduction.tsx
-│   ├── cta-section.tsx
-│   ├── footer.tsx
-│   ├── theme-toggle.tsx       # Light/dark switch
-│   └── ui/                    # shadcn/ui components
-│       ├── button.tsx
-│       ├── input.tsx
-│       ├── label.tsx
-│       └── sheet.tsx
+│   ├── auth/                # Sign Up / Log In drawer
+│   ├── onboarding/          # Onboarding wizard + flow (mock UI)
+│   ├── roadmap/             # Roadmap views
+│   ├── ui/                  # shadcn/ui primitives
+│   ├── career-card.tsx      # Career exploration card
+│   ├── career-modal.tsx     # Career detail modal
+│   ├── student-profile.tsx  # Readable student profile
+│   ├── home-view.tsx        # Dashboard view
+│   ├── navbar.tsx, hero-section.tsx, how-it-works.tsx, features.tsx, ...
+│   └── theme-toggle.tsx     # Light/dark switch
 ├── lib/
-│   ├── ai/                    # Provider-agnostic AI service
-│   │   ├── index.ts           # generateText / generateStructured
-│   │   ├── config.ts          # Provider chain + credential checks
-│   │   ├── logger.ts          # Metadata-only logging
-│   │   ├── prompts/           # System prompts + Zod/JSON schemas
-│   │   └── providers/         # mock, gemini, openrouter adapters
-│   ├── auth/                  # Provider-agnostic authentication layer
-│   │   ├── actions.ts         # signUp() / logIn() server actions
-│   │   ├── routes.ts          # Post-auth destinations
-│   │   ├── types.ts           # Shared auth types
-│   │   └── validation.ts      # Reusable field + form validators
-│   ├── onboarding/            # Guided onboarding state + validators
-│   ├── profiler/              # Student Profiler (first AI vertical)
-│   ├── resume/                # Optional resume upload + parsing
-│   ├── roadmap/               # Personalized roadmap generation
-│   ├── mock/                  # Static demo data (NEXT_PUBLIC_MOCK_MODE)
-│   ├── supabase/              # Supabase client utilities
-│   │   ├── client.ts          # Browser client
-│   │   ├── server.ts          # Server client
-│   │   └── middleware.ts      # Session refresh + route protection
-│   ├── theme-context.tsx      # Light/dark theme provider
-│   └── utils.ts               # cn() + scrollToSection()
-├── data/                      # Static JSON (careers, copy, fallback questions)
-├── scripts/                   # Verification scripts (real-calls.mjs)
-├── supabase/
-│   └── migrations/            # Database schema + seed data
-├── tests/                     # node:test suite (prompts + route)
-├── middleware.ts              # Next.js middleware entry point
-├── eslint.config.mjs          # ESLint flat config
-├── .env.example               # Example environment variables
-├── components.json            # shadcn/ui configuration
-├── next.config.ts             # Next.js configuration
-├── tailwind.config.ts         # Tailwind CSS configuration
-├── tsconfig.json              # TypeScript configuration
-└── package.json               # Dependencies and scripts
+│   ├── ai/                  # Provider-agnostic AI service (mock/gemini/openrouter)
+│   ├── auth/                # Auth actions, routes, validation
+│   ├── onboarding/          # Guided onboarding state + validators
+│   ├── profiler/            # Student Profiler prompt + schema
+│   ├── resume/              # Resume upload + parsing helpers
+│   ├── roadmap/             # Roadmap generation helpers
+│   ├── mock/                # Static demo backend (flags, auth, seed, scoring)
+│   ├── supabase/            # Supabase clients (not connected in UI mode)
+│   └── utils.ts             # cn() + scrollToSection()
+├── data/                    # Static JSON (careers, copy, fallback questions)
+├── supabase/migrations/     # Database schema + seed (not applied)
+├── tests/                   # node:test suite
+└── package.json             # Dependencies and scripts
 ```
-
-## Auth & Routing
-
-Authentication is a **drawer over the landing page**, not a separate page.
-
-- **Entry points:** "Start My Journey" opens the drawer in **Sign Up** mode,
-  "Log In" opens it in **Log In** mode. Both come from the same component, and
-  the two modes switch in place without closing the drawer.
-- **Deep links:** `/?auth=signup` and `/?auth=login` open the drawer on load.
-  The parameter is kept in sync with `history.replaceState`, so the landing page
-  is never reloaded and its state is never lost.
-- **Route protection:** `PROTECTED_PREFIXES` in `lib/supabase/middleware.ts`
-  (`/home`, `/onboarding`) refreshes the Supabase session and sends
-  unauthenticated visitors to `/?auth=login&next=<destination>`.
-- **After authentication:**
-
-  | Action  | Destination                                                       |
-  | ------- | ------------------------------------------------------------------ |
-  | Sign Up | `/onboarding`                                                      |
-  | Log In  | `/home` — or `/onboarding` while onboarding is incomplete          |
-
-  `lib/auth/routes.ts` resolves the target: the server's decision cookie
-  first (the onboarding gate), then a preserved `?next=` — always validated
-  as a same-origin relative path — then the mode's default route.
-
-### Authentication status: connected (email + password)
-
-`lib/auth/actions.ts` holds real server actions (`"use server"`) using the
-server Supabase client. The forms, drawer and `AuthResult` contract are
-unchanged:
-
-- **Sign Up** calls `supabase.auth.signUp` with `full_name` metadata — the key
-  the `on_auth_user_created` trigger reads for the required
-  `profiles.display_name` (the email local part is only a fallback). Email
-  confirmation must stay **disabled** in the dashboard; if no session comes
-  back, the form reports that confirmation is still enabled instead of
-  pretending success.
-- **Log In** calls `signInWithPassword`. Errors map to plain copy: wrong
-  credentials, too many attempts, network trouble. Wrong password and unknown
-  address return the *identical* message, so an email's existence is never
-  revealed. Raw provider text stays server-side; no password or token is
-  ever logged.
-- **Onboarding gate:** on login, a student whose `profiles.onboarding_completed`
-  is false — or who has no per-device completion record — goes to
-  `/onboarding` instead of `/home`.
-- **Log out:** `logOut()` plus the visible button on `/home`.
-- **Session:** middleware refreshes the cookie for `/home` and `/onboarding`;
-  API routes read the same cookie (the profiler saves the signed-in student's
-  profile, `next-question` returns their `userId`).
-- **Database note:** `profiles.onboarding_completed` is service-role-only
-  (guard trigger). With `SUPABASE_SERVICE_ROLE_KEY` set, the profiler writes
-  it on completion; without it, completion is recorded per device
-  (`kl_onboarded`, value = user id) and other devices re-enter onboarding.
-
-## Supabase Setup
-
-1. Create a new project at [supabase.com](https://supabase.com)
-2. Go to **Project Settings > API** to find your project URL and publishable key
-3. Add the credentials to your `.env.local` file (optionally the service role
-   key too — needed only for the server-reserved writes: `profiles.ai_context`
-   and `profiles.onboarding_completed`)
-4. Apply the migration in `supabase/migrations/`
-5. Under **Authentication → Sign In / Providers → Email**, turn
-   **Confirm email** off (Ka-Lakbay signs students in immediately)
 
 ## Learn More
 
