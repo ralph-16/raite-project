@@ -1,80 +1,86 @@
-# Onboarding persistence fix — summary, audit, workflow
+# Code summary — Ka-Lakbay (`raite-project`)
 
-## 1. Code summary
+> Updated 2026-10-03. Stack: Next.js 15 (App Router) · React 19 · TypeScript ·
+> Tailwind + shadcn/ui · Supabase (auth + Postgres) · Zod. Package manager: npm.
+> Health: `typecheck` pass · `lint` pass (clean) · `npm test` 28/28 pass.
 
-**Problem:** completing onboarding tried to write `public.profiles.career_aspiration_source`
-(and `career_aspiration_set_at`) through the authenticated user's client, which the
-database rejects with `403 / 42501`. The column grants + guard triggers reserve those
-columns (plus `onboarding_completed`, `onboarding_completed_at`, `ai_context` and its
-metadata) for the server. This is by design.
+## 1. Cleanup performed (this session)
 
-**Fix (safe path, no privilege or RLS changes):** `app/api/profiler/route.ts` →
-`persistProfile()` now splits the save:
+- **Moved orphan script into place:** `test-openrouter.ts` (repo root, unreferenced
+  by `package.json`, README, or any import — ad-hoc check superseded by
+  `scripts/real-calls.mjs` + the test suite) → `scripts/test-openrouter.ts`,
+  where the README says verification scripts live. `git mv`, so history is kept.
+- **Scanned for dead code:** none found. Every component under `components/`
+  (landing sections, auth, onboarding ×2 flows, home, roadmap) is imported; all
+  `components/ui/*` primitives are used; `data/onboarding-fallback.json` is read
+  by the mock provider + tests; `lib/roadmap/demo.ts` backs `app/roadmap/demo`.
+  No `streak-counter` file exists (AGENTS.md already says not to surface it).
+- **`console.*` audit:** only legitimate uses remain — `scripts/*` CLI output,
+  metadata-only server logging (`lib/ai/logger.ts`), and missing-file warnings
+  (`lib/mock/roadmaps.ts`). Nothing leaks secrets (no prompt/response logging).
+- Verified after the move: `npm run typecheck` pass, `npm run lint` pass (clean).
 
-- User client (student's own session): only user-writable columns —
-  `year_level`, `program`, `interests`, `learning_preferences`,
-  `career_aspiration`, `career_aspiration_industry`.
-- Service-role client: `career_aspiration_source`, `career_aspiration_set_at`,
-  `ai_context`, `ai_context_model`, `ai_context_generated_at`,
-  `onboarding_completed`, `onboarding_completed_at` — one write, `user_id`
-  taken from the verified session (`supabase.auth.getUser()`), never from the
-  request body.
-- No service key configured → user columns still save; response reports
-  `aiContextPersisted: false` with an honest reason instead of faking it.
+## 2. Codebase map
 
-No migration was added or edited; no RLS policy was touched.
+**Routes (`app/`)** — landing `page.tsx`; `(app)/home`, `(app)/onboarding`,
+`(app)/profile`, `(app)/roadmap/[slug]`, `(app)/settings`; `roadmap/demo`;
+auth callback + error page. API: `health`, `ai/test` (diagnostics),
+`onboarding/next-question`, `profiler`, `resume/parse`, `skills`.
 
-## 2. Audit
+**`lib/`** — `ai/` (server-only; `mock`/`gemini`/`openrouter` providers,
+`AI_PROVIDER_ORDER` chain on 429/503, per-model retries +
+`AI_MODEL_FALLBACKS` in both real providers); `auth/` (server actions, routes,
+validation); `onboarding/` (guided state, questions, validators);
+`profiler/` (Explorer Profile prompt + Zod schema); `resume/`; `roadmap/`;
+`mock/` (demo backend: flags, auth, storage, seed, scoring, careers,
+roadmaps — single `MOCK_MODE` switch in `lib/mock/flags.ts`, defaults ON);
+`supabase/` (browser/server/middleware clients); `constants.ts`
+(`PROTECTED_PREFIXES` + `isProtectedPath`, shared by middleware and mock guard).
 
-| Check | Result |
-|---|---|
-| `npm run typecheck` | pass |
-| `npm run lint` | pass (clean) |
-| Sign-up + sign-in (fresh test user, remote Supabase) | ok — session issued, `userId` verified |
-| User-client update of allowed columns | ok |
-| User-client update of `career_aspiration_source` (old behavior probe) | **403 / 42501** — confirms the boundary is enforced, and the route no longer depends on it |
-| `POST /api/profiler` authenticated, mocked onboarding payload | **200**, `persisted: true`, `provider: gemini`, `model: gemini-3.8-flash` |
-| Profiles row after route call | user columns written (`year_level`, `program`, `interests`, aspiration); server-only columns `null`/`false` (no service key in `.env.local` — expected, reported honestly) |
-| `ONBOARDED_COOKIE` (`kl_onboarded`) | set to the session user id on persisted save |
-| `user_id` source | verified session only; request body carries onboarding answers, never an id |
+**Dual-track design:** `NEXT_PUBLIC_MOCK_MODE=true` (current `.env.local`) runs
+the UI on `data/*.json` + localStorage with zero Supabase/API calls
+(`OnboardingWizard`, mock auth, client-side `mock-guard`); `=false` restores
+real Supabase auth + AI routes (`OnboardingFlow`) without touching call sites.
+Middleware short-circuits in mock mode; otherwise it refreshes the session and
+protects `/home`, `/onboarding`.
 
-**Findings outside this fix (not changed, flagging only):**
+**Onboarding persistence (`app/api/profiler/route.ts → persistProfile()`):**
+user client writes only user-writable columns (`year_level`, `program`,
+`interests`, `learning_preferences`, `career_aspiration[_industry]`);
+service-role client writes server-reserved columns (`career_aspiration_source`,
+`career_aspiration_set_at`, `ai_context*`, `onboarding_completed*`) with
+`user_id` from the verified session only. No service key → user columns still
+save, response reports `aiContextPersisted: false` honestly.
 
-1. `AI_PROVIDER=mock` cannot serve `/api/profiler`: the mock provider echoes
-   text and never satisfies the Explorer Profile schema (`parse_failed` → 503).
-   Mocked-payload tests need the real provider.
-2. `AI_MODEL=gemini-3.5-flash` (`.env.local` default) is over quota (429);
-   `AI_MODEL_FALLBACKS=gemini-3.8-flash` is configured but **no fallback logic
-   consumes it** in `lib/ai` — the route failed instead of falling back.
-   Test was run with `AI_MODEL=gemini-3.8-flash`.
-3. `supabase/migrations/20261002000000_grant_profiles_aspiration_source.sql`
-   still exists; the route no longer relies on that grant. Leaving the file
-   untouched per scope — decide separately whether to keep or supersede it.
-4. Test users/rows remain in the remote project (sign-up + profile writes from
-   this verification); delete them if the project should stay clean.
+**Supabase (`supabase/migrations/`):** initial schema → roadmaps/onboarding
+context → grant of `career_aspiration_source` (superseded, kept for history) →
+revoke of that grant (current intent: service-role-only). Push with
+`npx supabase db push`. Full reference in `supabase/DATABASE.md`; auth findings
+in `docs/AUTH_AUDIT.md`.
 
-## 3. Workflow (onboarding completion)
+**Tests (`tests/`, node:test):** `prompts.test.ts` (prompt/schema contracts) +
+`onboarding-route.test.ts` (live dev-server route tests); `scripts/real-calls.mjs`
+is the manual real-provider verification script.
 
-```
-Sign up / Log in (lib/auth/actions.ts)
-  → new student: post-auth destination = /onboarding
-  → returning student: profiles.onboarding_completed=true  → /home
-     (else ONBOARDED_COOKIE=kl_onboarded device fallback → /home,
-      otherwise /onboarding)
+## 3. Environment (`.env.local`, names only — values never recorded)
 
-Onboarding flow (client, mocked or guided answers)
-  → POST /api/profiler { onboarding }
-  → validate (year level, program, ≥1 interest)
-  → runStudentProfiler (Gemini → Zod Explorer Profile)
-  → persistProfile split:
-       user client      → user-writable profile columns
-       service-role key → aspiration source/timestamp, ai_context*,
-                          onboarding_completed*  (user_id = session user)
-  → persisted → Set-Cookie kl_onboarded=<userId>
+All keys present: Supabase URL + publishable key + service-role key,
+`GEMINI_API_KEY`, `OPENROUTER_API_KEY`. Effective config: mock-mode UI **on**,
+server AI provider resolved per-request from `AI_PROVIDER`/`AI_MODEL`.
 
-Next login: hasCompletedOnboarding sees onboarding_completed=true → /home
-```
+## 4. Follow-ups (not changed — flagging only)
 
-**To get full completion in an environment:** set `SUPABASE_SERVICE_ROLE_KEY`
-(server-side only) and a working `AI_MODEL`. Without the key, the app still
-saves the student's own columns and says exactly what is pending — by design.
+1. **`.env.local` defines `AI_PROVIDER` twice** (line 10 `gemini`, line 20
+   `openrouter`; dotenv last-wins → effective `openrouter`). Harmless today but
+   confusing — delete line 10. Local file, so left for you to edit.
+2. **`AI_MODEL=gemini-3.5-flash` + `AI_MODEL_FALLBACKS=gemini-3.8-flash`:**
+   fallback logic now exists (provider chain in `lib/ai/index.ts`, model
+   fallbacks in both real providers), so the stale "no fallback logic" note from
+   the previous summary is resolved. If 3.5 is over quota, swap primary to 3.8.
+3. **README "Project Structure" (§75) is stale** — missing `profiler`/`skills`/
+   `next-question`/`resume` routes, the `wizard/` onboarding flow, `home-view`,
+   `career-modal`, and several `ui/` primitives; references non-existent
+   `lib/theme-context.tsx`. Refresh it when convenient.
+4. The old "mock provider can't serve `/api/profiler`" note is by design (mock
+   echoes text; real profiling needs a real provider) — no action, recording it
+   so it isn't re-investigated.
