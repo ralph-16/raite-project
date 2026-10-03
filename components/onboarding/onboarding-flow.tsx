@@ -351,8 +351,12 @@ export function OnboardingFlow() {
 
   /* ---------------- completion ---------------- */
 
+  /** Guards the profile build against double-clicks (state lags one render). */
+  const buildInFlight = React.useRef(false);
+
   const buildProfile = React.useCallback(async () => {
-    if (isBuilding) return;
+    if (buildInFlight.current) return;
+    buildInFlight.current = true;
     setIsBuilding(true);
     setBuildError(null);
     try {
@@ -413,9 +417,9 @@ export function OnboardingFlow() {
     } catch {
       setBuildError("Unable to reach Lory right now. Try again.");
     } finally {
+      buildInFlight.current = false;
       setIsBuilding(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   React.useEffect(() => {

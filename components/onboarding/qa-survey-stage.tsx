@@ -52,15 +52,19 @@ export function QaSurveyStage({
   const [single, setSingle] = React.useState<string | undefined>(undefined);
   const [multi, setMulti] = React.useState<string[]>([]);
   const [text, setText] = React.useState("");
+  /** Drops double-clicks on Answer: the parent clears the question async. */
+  const submittedRef = React.useRef<string | null>(null);
 
   React.useEffect(() => {
     setSingle(undefined);
     setMulti([]);
     setText("");
+    submittedRef.current = null;
   }, [question?.key]);
 
   const submit = (answer: string, flags?: { skipped?: boolean }) => {
-    if (!question) return;
+    if (!question || submittedRef.current === question.key) return;
+    submittedRef.current = question.key;
     onAnswer({
       key: question.key,
       topic: question.topic,
