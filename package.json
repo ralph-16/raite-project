@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --import ./tests/register.mjs --test tests/prompts.test.ts tests/onboarding-route.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
